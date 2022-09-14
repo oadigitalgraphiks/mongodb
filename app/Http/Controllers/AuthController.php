@@ -36,16 +36,18 @@ class AuthController extends Controller
             return redirect()->route('home');
         }
 
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ]);
+        if($request->has('email') == false && $request->has('password') == false){
+            return back()->with('message','Email Or Password Wrong');
+        }
+
    
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
+
             return redirect()->route('home');
         }else{
-            return back();
+
+            return back()->with('message','Email Or Password Wrong');
         }
   
     }
@@ -55,9 +57,11 @@ class AuthController extends Controller
      */
     public function register()
     {
+
         if(Auth::check()){
             return redirect()->route('home');
         }
+
 
         return view('register');
     }
@@ -88,6 +92,8 @@ class AuthController extends Controller
 
         if($user){
             return redirect()->route('login');
+        }else{
+            return back()->with('message','Failed To Register');
         }
 
 
