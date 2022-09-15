@@ -53,7 +53,7 @@
                                 <div class="fv-row mb-10">
                                     <div class="d-flex flex-stack mb-2">
                                       <label class="form-label fw-bolder text-dark fs-6 mb-0">Password</label>
-                                            <a href="{{route('register')}}" class="link-primary fs-6 fw-bolder">Dont Have Account ?</a>
+                                            <a href="{{route('login')}}" class="link-primary fs-6 fw-bolder">Already Have Account ?</a>
                                     </div>
                                     <input required type="password"
                                         class="form-control form-control-lg form-control-solid"

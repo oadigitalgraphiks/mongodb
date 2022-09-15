@@ -296,14 +296,13 @@
 
                                             <!--begin::Menu item-->
                                             <div class="menu-item px-5 my-1 d-none">
-                                                <a href="http://localhost/oceanandseas/admin/profile"
+                                                <a href="#"
                                                     class="menu-link px-5">Account Settings</a>
                                             </div>
                                             <!--end::Menu item-->
                                             <!--begin::Menu item-->
                                             <div class="menu-item px-5">
-                                                <a href="http://localhost/oceanandseas/logout"
-                                                    class="menu-link px-5">Sign Out</a>
+                                                <a href="{{route('admin.logout')}}" class="menu-link px-5">Sign Out</a>
                                             </div>
                                             <!--end::Menu item-->
                                             <!--begin::Menu separator-->

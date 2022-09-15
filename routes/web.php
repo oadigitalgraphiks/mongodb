@@ -15,26 +15,23 @@ use Illuminate\Support\Facades\Route;
 
 // dd('asdasd');
 
+Route::get('/', [App\Http\Controllers\AuthController::class, 'login']);
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 Route::get('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');
-Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+
 
 Route::post('/login-submit', [App\Http\Controllers\AuthController::class, 'login_submit'])->name('login_submit');
 Route::post('/register-submit', [App\Http\Controllers\AuthController::class, 'register_submit'])->name('register_submit');
 
 
-Route::get('/', function () {
 
-  return view('welcome');
+Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
+
+  Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+  Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+
 });
-
-
-// Route::middleware('')->group (['prefix' => 'admin','middleware' => ['checkout']], function() {
-
-
-// });
 
 
 // Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

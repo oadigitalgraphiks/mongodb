@@ -19,7 +19,7 @@ class AuthController extends Controller
 
         
         if(Auth::check()){
-            return redirect()->route('home');
+            return redirect()->route('admin.home');
         }
 
 
@@ -33,7 +33,7 @@ class AuthController extends Controller
     public function login_submit(Request $request)
     {
         if(Auth::check()){
-            return redirect()->route('home');
+            return redirect()->route('admin.dashboard');
         }
 
         if($request->has('email') == false && $request->has('password') == false){
@@ -44,7 +44,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
 
-            return redirect()->route('home');
+            return redirect()->route('admin.dashboard');
         }else{
 
             return back()->with('message','Email Or Password Wrong');
@@ -59,7 +59,7 @@ class AuthController extends Controller
     {
 
         if(Auth::check()){
-            return redirect()->route('home');
+            return redirect()->route('admin.dashboard');
         }
 
 
@@ -73,7 +73,7 @@ class AuthController extends Controller
     public function register_submit(Request $request)
     {
         if(Auth::check()){
-            return redirect()->route('home');
+            return redirect()->route('admin.dashboard');
         }
 
         $request->validate([
@@ -107,7 +107,7 @@ class AuthController extends Controller
     {
 
         if(Auth::check() == false){
-            return redirect()->route('home');
+            return redirect()->route('admin.dashboard');
         }
 
         Auth::logout();
