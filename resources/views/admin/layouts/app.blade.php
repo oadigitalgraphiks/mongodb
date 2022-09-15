@@ -8,6 +8,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="app-url" content="{{ url('') }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -50,6 +51,31 @@
 
     </style>
     @yield('css')
+    <script>
+    	var AIZ = AIZ || {};
+        AIZ.local = {
+            nothing_selected: '{{ translate('Nothing selected') }}',
+            nothing_found: '{{ translate('Nothing found') }}',
+            choose_file: '{{ translate('Choose file') }}',
+            file_selected: '{{ translate('File selected') }}',
+            files_selected: '{{ translate('Files selected') }}',
+            add_more_files: '{{ translate('Add more files') }}',
+            adding_more_files: '{{ translate('Adding more files') }}',
+            drop_files_here_paste_or: '{{ translate('Drop files here, paste or') }}',
+            browse: '{{ translate('Browse') }}',
+            upload_complete: '{{ translate('Upload complete') }}',
+            upload_paused: '{{ translate('Upload paused') }}',
+            resume_upload: '{{ translate('Resume upload') }}',
+            pause_upload: '{{ translate('Pause upload') }}',
+            retry_upload: '{{ translate('Retry upload') }}',
+            cancel_upload: '{{ translate('Cancel upload') }}',
+            uploading: '{{ translate('Uploading') }}',
+            processing: '{{ translate('Processing') }}',
+            complete: '{{ translate('Complete') }}',
+            file: '{{ translate('File') }}',
+            files: '{{ translate('Files') }}',
+        }
+	</script>
 
 </head>
 
@@ -373,23 +399,10 @@
                         class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
                         <!--begin::Copyright-->
                         <div class="text-dark order-2 order-md-1">
-                            <span class="text-muted fw-bold me-1">© 2022</span>
-                            <a href="#" target="_blank" class="text-gray-800 text-hover-primary">Biizel v5.5.5</a>
+                            <span class="text-muted fw-bold me-1">© {{date('Y')}}</span>
+                            <a href="#" target="_blank" class="text-gray-800 text-hover-primary">{{env('APP_NAME')}} v5.5.5</a>
                         </div>
                         <!--end::Copyright-->
-                        <!--begin::Menu-->
-                        <ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
-                            <li class="menu-item">
-                                <a href="#" target="_blank" class="menu-link px-2">About</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#" target="_blank" class="menu-link px-2">Support</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#" target="_blank" class="menu-link px-2">Purchase</a>
-                            </li>
-                        </ul>
-                        <!--end::Menu-->
                     </div>
                     <!--end::Container-->
                 </div>
@@ -399,6 +412,7 @@
     </div>
 
     <script src="{{asset('/admin/assets/backend/js/vendorsS.js') }}"></script>
+    <script src="{{asset('/admin/assets/js/aiz-core.js') }}" ></script>
     <script src="{{asset('/admin/assets/backend/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{asset('/admin/assets/backend/js/scripts.bundle.js') }}"></script>
     <script src="{{asset('/admin/assets/backend/plugins/custom/datatables/datatables.bundle.js') }}"></script>

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,4 +37,15 @@ Route::get('/', function () {
 
 // Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/aiz-uploader', [App\Http\Controllers\AizUploadController::class,'show_uploader']);
+Route::post('/aiz-uploader/upload', [App\Http\Controllers\AizUploadController::class,'upload']);
+Route::get('/aiz-uploader/get_uploaded_files', [App\Http\Controllers\AizUploadController::class,'get_uploaded_files']);
+Route::post('/aiz-uploader/get_file_by_ids', [App\Http\Controllers\AizUploadController::class,'get_preview_files']);
+Route::get('/aiz-uploader/download/{id}', [App\Http\Controllers\AizUploadController::class,'attachment_download'])->name('download_attachment');
+
+Route::prefix('admin')->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('admin.dashboard');
+    Route::get('/general-setting', [App\Http\Controllers\SettingController::class, 'general_setting'])->name('general_setting.index');
+    Route::post('/general-setting/update', [App\Http\Controllers\SettingController::class, 'update'])->name('admin.setting.update');
+});
