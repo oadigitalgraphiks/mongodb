@@ -162,11 +162,11 @@
                                                                 <i class="las la-info-circle mr-2"></i>
                                                                 <span>{{ translate('Details Info') }}</span>
                                                             </a>
-                                                            <a href="{{ my_asset($file->file_name) }}" target="_blank" download="{{ $file_name }}.{{ $file->extension }}" class="dropdown-item">
+                                                            <a href="{{ asset($file->file_name) }}" target="_blank" download="{{ $file_name }}.{{ $file->extension }}" class="dropdown-item">
                                                                 <i class="la la-download mr-2"></i>
                                                                 <span>{{ translate('Download') }}</span>
                                                             </a>
-                                                            <a href="javascript:void(0)" class="dropdown-item" onclick="copyUrl(this)" data-url="{{ my_asset($file->file_name) }}">
+                                                            <a href="javascript:void(0)" class="dropdown-item" onclick="copyUrl(this)" data-url="{{ asset($file->file_name) }}">
                                                                 <i class="las la-clipboard mr-2"></i>
                                                                 <span>{{ translate('Copy Link') }}</span>
                                                             </a>
@@ -179,7 +179,8 @@
                                                     <div class="card card-file aiz-uploader-select c-default" title="{{ $file_name }}.{{ $file->extension }}">
                                                         <div class="card-file-thumb">
                                                             @if($file->type == 'image')
-                                                                <img src="{{ my_asset($file->file_name) }}" class="img-fit">
+                                                            @dd($file->file_name)
+                                                                <img src="{{ asset($file->file_name) }}" class="img-fit">
                                                             @elseif($file->type == 'video')
                                                                 <i class="las la-file-video"></i>
                                                             @else

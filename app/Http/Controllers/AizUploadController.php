@@ -21,29 +21,29 @@ class AizUploadController extends Controller
         $search = null;
         $sort_by = null;
 
-        if ($request->search != null) {
-            $search = $request->search;
-            $all_uploads->where('file_original_name', 'like', '%'.$request->search.'%');
-        }
+        // if ($request->search != null) {
+        //     $search = $request->search;
+        //     $all_uploads->where('file_original_name', 'like', '%'.$request->search.'%');
+        // }
 
-        $sort_by = $request->sort;
-        switch ($request->sort) {
-            case 'newest':
-                $all_uploads->orderBy('created_at', 'desc');
-                break;
-            case 'oldest':
-                $all_uploads->orderBy('created_at', 'asc');
-                break;
-            case 'smallest':
-                $all_uploads->orderBy('file_size', 'asc');
-                break;
-            case 'largest':
-                $all_uploads->orderBy('file_size', 'desc');
-                break;
-            default:
-                $all_uploads->orderBy('created_at', 'desc');
-                break;
-        }
+        // $sort_by = $request->sort;
+        // switch ($request->sort) {
+        //     case 'newest':
+        //         $all_uploads->orderBy('created_at', 'desc');
+        //         break;
+        //     case 'oldest':
+        //         $all_uploads->orderBy('created_at', 'asc');
+        //         break;
+        //     case 'smallest':
+        //         $all_uploads->orderBy('file_size', 'asc');
+        //         break;
+        //     case 'largest':
+        //         $all_uploads->orderBy('file_size', 'desc');
+        //         break;
+        //     default:
+        //         $all_uploads->orderBy('created_at', 'desc');
+        //         break;
+        // }
 
         $all_uploads = $all_uploads->paginate(60)->appends(request()->query());
 
@@ -157,9 +157,8 @@ class AizUploadController extends Controller
                 // Return MIME type ala mimetype extension
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
 
-                // Get the MIME type of the file
-                $file_mime = finfo_file($finfo, base_path('public/').$path);
-
+                // Get the MIME type of the file// dd($finfo,base_path('public/'),$path);
+                // $file_mime = finfo_file($finfo, base_path('public/').$path);
                 if($type[$extension] == 'image' && get_setting('disable_image_optimization') != 1){
                     try {
                         $img = Image::make($request->file('aiz_file')->getRealPath())->encode();
@@ -218,32 +217,30 @@ class AizUploadController extends Controller
     public function get_uploaded_files(Request $request)
     {
         // $uploads = Upload::where('user_id', Auth::user()->id);
-        $uploads = Upload::all();
-        // if ($request->search != null) {
-        //     $uploads->where('file_original_name', 'like', '%'.$request->search.'%');
-        // }
-        // if ($request->sort != null) {
-        //     switch ($request->sort) {
-        //         case 'newest':
-        //             $uploads->orderBy('created_at', 'desc');
-        //             break;
-        //         case 'oldest':
-        //             $uploads->orderBy('created_at', 'asc');
-        //             break;
-        //         case 'smallest':
-        //             $uploads->orderBy('file_size', 'asc');
-        //             break;
-        //         case 'largest':
-        //             $uploads->orderBy('file_size', 'desc');
-        //             break;
-        //         default:
-        //             $uploads->orderBy('created_at', 'desc');
-        //             break;
-        //     }
-        // }
-        dd($request->all());
-
-        return $uploads->paginate(60)->appends(request()->query());
+        $uploads = Upload::query();
+        if ($request->search != null) {
+            $uploads->where('file_original_name', 'like', '%'.$request->search.'%');
+        }
+        if ($request->sort != null) {
+            switch ($request->sort) {
+                case 'newest':
+                    $uploads->orderBy('created_at', 'desc');
+                    break;
+                case 'oldest':
+                    $uploads->orderBy('created_at', 'asc');
+                    break;
+                case 'smallest':
+                    $uploads->orderBy('file_size', 'asc');
+                    break;
+                case 'largest':
+                    $uploads->orderBy('file_size', 'desc');
+                    break;
+                default:
+                    $uploads->orderBy('created_at', 'desc');
+                    break;
+            }
+        }
+        return $uploads->paginate(60);
     }
 
     public function destroy(Request $request,$id)

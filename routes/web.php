@@ -33,6 +33,9 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
   // Products
   Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
 
+
+
+
   Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');
     Route::post('/general-setting/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('setting.update');
 
