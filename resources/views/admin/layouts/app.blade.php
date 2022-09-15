@@ -9,7 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ url('') }}">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ get_setting('site_name')}}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -411,7 +411,7 @@
     </div>
 
     <script src="{{asset('/admin/assets/backend/js/vendorsS.js') }}"></script>
-    <script src="{{asset('/admin/assets/js/aiz-core.js') }}" ></script>
+    <script src="{{asset('/admin/assets/backend/js/aiz-core.js') }}" ></script>
     <script src="{{asset('/admin/assets/backend/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{asset('/admin/assets/backend/js/scripts.bundle.js') }}"></script>
     <script src="{{asset('/admin/assets/backend/plugins/custom/datatables/datatables.bundle.js') }}"></script>
