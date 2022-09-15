@@ -30,6 +30,14 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
   Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
   Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
+  // Products
+  Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
+
+
+
+
+
+
 });
 
 
