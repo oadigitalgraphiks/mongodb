@@ -21,35 +21,35 @@ class AizUploadController extends Controller
         $search = null;
         $sort_by = null;
 
-        // if ($request->search != null) {
-        //     $search = $request->search;
-        //     $all_uploads->where('file_original_name', 'like', '%'.$request->search.'%');
-        // }
+        if ($request->search != null) {
+            $search = $request->search;
+            $all_uploads->where('file_original_name', 'like', '%'.$request->search.'%');
+        }
 
-        // $sort_by = $request->sort;
-        // switch ($request->sort) {
-        //     case 'newest':
-        //         $all_uploads->orderBy('created_at', 'desc');
-        //         break;
-        //     case 'oldest':
-        //         $all_uploads->orderBy('created_at', 'asc');
-        //         break;
-        //     case 'smallest':
-        //         $all_uploads->orderBy('file_size', 'asc');
-        //         break;
-        //     case 'largest':
-        //         $all_uploads->orderBy('file_size', 'desc');
-        //         break;
-        //     default:
-        //         $all_uploads->orderBy('created_at', 'desc');
-        //         break;
-        // }
+        $sort_by = $request->sort;
+        switch ($request->sort) {
+            case 'newest':
+                $all_uploads->orderBy('created_at', 'desc');
+                break;
+            case 'oldest':
+                $all_uploads->orderBy('created_at', 'asc');
+                break;
+            case 'smallest':
+                $all_uploads->orderBy('file_size', 'asc');
+                break;
+            case 'largest':
+                $all_uploads->orderBy('file_size', 'desc');
+                break;
+            default:
+                $all_uploads->orderBy('created_at', 'desc');
+                break;
+        }
 
         $all_uploads = $all_uploads->paginate(60)->appends(request()->query());
 
 
-        // return (auth()->user()->user_type == 'seller')
         return view('admin.uploader.index', compact('all_uploads', 'search', 'sort_by'));
+        // return (auth()->user()->user_type == 'seller')
             // ? view('frontend.user.seller.uploads.index', compact('all_uploads', 'search', 'sort_by'))
     }
 
@@ -151,14 +151,14 @@ class AizUploadController extends Controller
                     }
                 }
 
-                $path = $request->file('aiz_file')->store('uploads/all', 'local');
+                $path = $request->file('aiz_file')->store('/uploads/all');
                 $size = $request->file('aiz_file')->getSize();
 
                 // Return MIME type ala mimetype extension
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
 
                 // Get the MIME type of the file// dd($finfo,base_path('public/'),$path);
-                // $file_mime = finfo_file($finfo, base_path('public/').$path);
+                $file_mime = finfo_file($finfo, base_path('public/').$path);
                 if($type[$extension] == 'image' && get_setting('disable_image_optimization') != 1){
                     try {
                         $img = Image::make($request->file('aiz_file')->getRealPath())->encode();
@@ -208,6 +208,7 @@ class AizUploadController extends Controller
                     $upload->width = 0;
                     $upload->height = 0;
                 }
+                // dd($upload);
                 $upload->save();
             }
             return '{}';
@@ -245,35 +246,25 @@ class AizUploadController extends Controller
 
     public function destroy(Request $request,$id)
     {
-        $upload = Upload::findOrFail($id);
-
-        if(auth()->user()->user_type == 'seller' && $upload->user_id != auth()->user()->id){
-            flash(translate("You don't have permission for deleting this!"))->error();
-            return back();
-        }
+        $upload = Upload::where('_id',$id)->first();
         try{
-            if(env('FILESYSTEM_DRIVER') == 's3'){
-                Storage::disk('s3')->delete($upload->file_name);
-                if (file_exists(public_path().'/'.$upload->file_name)) {
-                    unlink(public_path().'/'.$upload->file_name);
-                }
-            }
-            else{
-                unlink(public_path().'/'.$upload->file_name);
-            }
+            // dd(public_path().'/'.$upload->file_name);
+            unlink(public_path().'/'.$upload->file_name);
             $upload->delete();
-            flash(translate('File deleted successfully'))->success();
+            // $upload->delete();
+            // flash(translate('File deleted successfully'))->success();
         }
         catch(\Exception $e){
-            $upload->delete();
-            flash(translate('File deleted successfully'))->success();
+            dd($e);
+            // $upload->delete();
+            // flash(translate('File deleted successfully'))->success();
         }
         return back();
     }
 
     public function get_preview_files(Request $request){
         $ids = explode(',', $request->ids);
-        $files = Upload::whereIn('id', $ids)->get();
+        $files = Upload::whereIn('_id', $ids)->get();
         return $files;
     }
 

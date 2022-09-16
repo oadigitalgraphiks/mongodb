@@ -4,11 +4,10 @@
     data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
     data-kt-drawer-toggle="#kt_aside_mobile_toggle">
 
-
     <!--begin::Brand-->
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <a href="admin.dashboard">
-           <img class="mw-100 h-35px logo" src="{{asset('admin/assets/img/logo.png') }}" alt="site_name">
+           <img class="mw-100 h-35px logo" src="{{ uploaded_asset(get_setting('system_logo_white')) }}" alt="site_name">
         </a>
         <div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle"
             data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body"
@@ -26,7 +25,7 @@
         </div>
     </div>
     <!--end::Brand-->
-  
+
 
     <!-- begin: menu-->
     <div class="aside-menu flex-column-fluid">
@@ -45,7 +44,7 @@
                     </div>
 
                         <div class="menu-item ">
-                            <a class="menu-link active" href="{{route('admin.dashboard')}}">
+                            <a class="menu-link {{ areActiveRoutes(['admin.dashboard', 'admin.dashboard'])}}" href="{{route('admin.dashboard')}}">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                     <span class="svg-icon svg-icon-2">
@@ -63,7 +62,7 @@
                         </div>
 
                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion" >
-                                <a class="menu-link" href="javascript:void(0)">
+                                <a class="menu-link " href="javascript:void(0)">
                                     <span class="menu-icon">
                                         <span class="svg-icon svg-icon-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -289,6 +288,24 @@
                                 </div>
                             </div>
 
+                            <div class="menu-item ">
+                                <a class="menu-link {{ areActiveRoutes(['uploaded-files.index', 'uploaded-files.index'])}}" href="{{route('uploaded-files.index') }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect x="2" y="2" width="9" height="9" rx="2" fill="black"></rect>
+                                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="black"></rect>
+                                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="black"></rect>
+                                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="black"></rect>
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title">Uploads</span></a>
+                                <div class="menu-sub menu-sub-accordion menu-active-bg"></div>
+                            </div>
+
                             <div data-kt-menu-trigger="click" class="menu-item menu-accordion" >
 
                                 <a class="menu-link" href="javascript:void(0)">
@@ -319,8 +336,8 @@
                             </div>
 
 
-                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion" >
-                                <a class="menu-link" href="javascript:void(0)">
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ subareActiveRoutes(['admin.general_setting.index'])}}" >
+                                <a class="menu-link {{ areActiveRoutes(['admin.general_setting.index'])}}" href="javascript:void(0)">
                                     <span class="menu-icon">
                                         <span class="svg-icon svg-icon-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -335,14 +352,13 @@
                                     <span class="menu-arrow"></span>
                                 </a>
                                 <div class="menu-sub menu-sub-accordion menu-active-bg">
-                                        
+
                                          <div class="menu-item">
-                                            <a class="menu-link" href="#?id=1">
+                                            <a class="menu-link {{ areActiveRoutes(['admin.general_setting.index'])}}" href="{{route("admin.general_setting.index")}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Genral</span>
-                                                    <span class="menu-arrow"></span>
                                             </a>
                                         </div>
 
@@ -353,7 +369,7 @@
 
 
 
-                    
+
                </div>
            </div>
        </div>

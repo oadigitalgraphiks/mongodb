@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Upload extends Model
 {
-    use SoftDeletes;
-
     /**
     * The attributes that are mass assignable.
     *

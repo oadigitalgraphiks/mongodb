@@ -32,7 +32,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => public_path(),
         ],
 
         'public' => [
@@ -65,9 +65,5 @@ return [
     | the locations of the links and the values should be their targets.
     |
     */
-
-    'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
 
 ];

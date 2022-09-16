@@ -413,30 +413,30 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             data[i].selected +
                             '">' +
                             '<div class="aiz-file-box">' +
-                            // '<div class="dropdown-file">' +
-                            // '<a class="dropdown-link" data-toggle="dropdown">' +
-                            // '<i class="la la-ellipsis-v"></i>' +
-                            // "</a>" +
-                            // '<div class="dropdown-menu dropdown-menu-right">' +
-                            // '<a href="' +
-                            // AIZ.data.fileBaseUrl +
-                            // data[i].file_name +
-                            // '" target="_blank" download="' +
-                            // data[i].file_original_name +
-                            // "." +
-                            // data[i].extension +
-                            // '" class="dropdown-item"><i class="la la-download mr-2"></i>Download</a>' +
-                            // '<a href="#" class="dropdown-item aiz-uploader-delete" data-id="' +
-                            // data[i].id +
-                            // '"><i class="la la-trash mr-2"></i>Delete</a>' +
-                            // "</div>" +
-                            // "</div>" +
+                            '<div class="dropdown-file">' +
+                            '<a class="dropdown-link" data-toggle="dropdown">' +
+                            '<i class="la la-ellipsis-v"></i>' +
+                            "</a>" +
+                            '<div class="dropdown-menu dropdown-menu-right">' +
+                            '<a href="' +
+                            AIZ.data.fileBaseUrl +
+                            data[i].file_name +
+                            '" target="_blank" download="' +
+                            data[i].file_original_name +
+                            "." +
+                            data[i].extension +
+                            '" class="dropdown-item"><i class="la la-download mr-2"></i>Download</a>' +
+                            '<a href="#" class="dropdown-item aiz-uploader-delete" data-id="' +
+                            data[i].id +
+                            '"><i class="la la-trash mr-2"></i>Delete</a>' +
+                            "</div>" +
+                            "</div>" +
                             '<div class="card card-file aiz-uploader-select" title="' +
                             data[i].file_original_name +
                             "." +
                             data[i].extension +
                             '" data-value="' +
-                            data[i].id +
+                            data[i]._id +
                             '">' +
                             '<div class="card-file-thumb">' +
                             thumb +
@@ -457,7 +457,6 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             "</div>" +
                             "</div>" +
                             "</div>";
-
                         $(".aiz-uploader-all").append(html);
                     }
                 } else {
@@ -503,7 +502,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                                 }
                                 var html =
                                     '<div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="' +
-                                    data[i].id +
+                                    data[i]._id +
                                     '" title="' +
                                     data[i].file_original_name +
                                     "." +
@@ -841,7 +840,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                     }
                     $this.selectpicker({
                         size: 5,
-                        noneSelectedText: AIZ.local.nothing_selected,                     
+                        noneSelectedText: AIZ.local.nothing_selected,
                         virtualScroll: false
                     });
                 }
@@ -929,8 +928,8 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
 
                 var nativeHtmlBuilderFunc = $this.summernote('module', 'videoDialog').createVideoNode;
 
-                $this.summernote('module', 'videoDialog').createVideoNode =  function(url) 
-                {   
+                $this.summernote('module', 'videoDialog').createVideoNode =  function(url)
+                {
                     var wrap = $('<div class="embed-responsive embed-responsive-16by9"></div>');
                     var html = nativeHtmlBuilderFunc(url);
                         html = $(html).addClass('embed-responsive-item');
@@ -1343,7 +1342,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             max: parseInt(c.getAttribute("data-range-value-max")),
                         },
                     }),
-                    
+
                     c.noUiSlider.on("update", function (a, b) {
                         f[b].textContent = a[b];
                     }),

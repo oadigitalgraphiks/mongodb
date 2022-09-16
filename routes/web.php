@@ -36,16 +36,20 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
 
 
-  Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');
+    //settings
+    Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');
     Route::post('/general-setting/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('setting.update');
-
+    // uploader
 });
-
-
-// Auth::routes();
-
+Route::any('/uploaded-files/file-info', [App\Http\Controllers\AizUploadController::class,'file_info'])->name('uploaded-files.info');
+Route::resource('uploaded-files', App\Http\Controllers\AizUploadController::class);
 Route::post('/aiz-uploader', [App\Http\Controllers\AizUploadController::class,'show_uploader']);
 Route::post('/aiz-uploader/upload', [App\Http\Controllers\AizUploadController::class,'upload']);
 Route::get('/aiz-uploader/get_uploaded_files', [App\Http\Controllers\AizUploadController::class,'get_uploaded_files']);
 Route::post('/aiz-uploader/get_file_by_ids', [App\Http\Controllers\AizUploadController::class,'get_preview_files']);
 Route::get('/aiz-uploader/download/{id}', [App\Http\Controllers\AizUploadController::class,'attachment_download'])->name('download_attachment');
+Route::get('/uploaded-files/destroy/{id}', [App\Http\Controllers\AizUploadController::class,'destroy'])->name('uploaded-files.destroy');
+
+
+// Auth::routes();
+

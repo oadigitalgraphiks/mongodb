@@ -1,4 +1,4 @@
-@extends('backend.layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 
@@ -176,10 +176,9 @@
                                                             </a>
                                                         </div>
                                                     </div>
-                                                    <div class="card card-file aiz-uploader-select c-default" title="{{ $file_name }}.{{ $file->extension }}">
+                                                    <div class="card card-file aiz-uploader-select c-default" title="{{ $file_name }}.{{ $file->extension }}" data-value="{{$file->id}}">
                                                         <div class="card-file-thumb">
                                                             @if($file->type == 'image')
-                                                            @dd($file->file_name)
                                                                 <img src="{{ asset($file->file_name) }}" class="img-fit">
                                                             @elseif($file->type == 'video')
                                                                 <i class="las la-file-video"></i>

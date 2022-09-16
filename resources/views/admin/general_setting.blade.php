@@ -145,6 +145,11 @@
                                         <div class="file-preview box sm"></div>
                                     </div>
                                 </div>
+                                <div class="mb-5 fv-row">
+                                    <label class="form-label">{{ translate('Login Background Color') }}</label>
+                                    <input type="hidden" name="types[]" value="bg_color">
+                                    <input type="text" placeholder="#377dff" id="bg_color" name="bg_color" class="form-control mb-2" value="{{ get_setting('bg_color') }}">
+                                </div>
                                 <div class="text-right">
                                     <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
                                 </div>
