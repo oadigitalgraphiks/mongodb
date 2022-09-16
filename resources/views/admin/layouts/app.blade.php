@@ -426,8 +426,11 @@
     <script src="{{asset('/admin/assets/backend/js/custom/modals/create-app.js') }}"></script>
     <script src="{{asset('/admin/assets/backend/js/custom/modals/users-search.js') }}"></script>
 
+    <script type="text/javascript">
 
+    </script>
     @yield('script')
+
 </body>
 
 </html>

@@ -11,18 +11,15 @@ use Image;
 
 class AizUploadController extends Controller
 {
-
-
-    public function index(Request $request){
-
-
-        // $all_uploads = (auth()->user()->user_type == 'seller') ? Upload::where('user_id',auth()->user()->id) : Upload::query();
+    public function index(Request $request)
+    {
         $all_uploads = Upload::query();
         $search = null;
         $sort_by = null;
-
+        $sort_search = null;
         if ($request->search != null) {
             $search = $request->search;
+            $sort_search = $search;
             $all_uploads->where('file_original_name', 'like', '%'.$request->search.'%');
         }
 
@@ -44,25 +41,18 @@ class AizUploadController extends Controller
                 $all_uploads->orderBy('created_at', 'desc');
                 break;
         }
-
         $all_uploads = $all_uploads->paginate(60)->appends(request()->query());
-
-
-        return view('admin.uploader.index', compact('all_uploads', 'search', 'sort_by'));
-        // return (auth()->user()->user_type == 'seller')
-            // ? view('frontend.user.seller.uploads.index', compact('all_uploads', 'search', 'sort_by'))
+        return view('admin.uploader.index', compact('all_uploads', 'search', 'sort_by','sort_search'));
     }
 
     public function create(){
-        // return (auth()->user()->user_type == 'seller')
-        //     ? view('frontend.user.seller.uploads.create')
             return view('admin.uploader.create');
     }
-
 
     public function show_uploader(Request $request){
         return view('admin.uploader.aiz-uploader');
     }
+
     public function upload(Request $request){
         $type = array(
             "jpg"=>"image",
@@ -208,7 +198,6 @@ class AizUploadController extends Controller
                     $upload->width = 0;
                     $upload->height = 0;
                 }
-                // dd($upload);
                 $upload->save();
             }
             return '{}';
@@ -217,7 +206,6 @@ class AizUploadController extends Controller
 
     public function get_uploaded_files(Request $request)
     {
-        // $uploads = Upload::where('user_id', Auth::user()->id);
         $uploads = Upload::query();
         if ($request->search != null) {
             $uploads->where('file_original_name', 'like', '%'.$request->search.'%');
@@ -248,15 +236,12 @@ class AizUploadController extends Controller
     {
         $upload = Upload::where('_id',$id)->first();
         try{
-            // dd(public_path().'/'.$upload->file_name);
             unlink(public_path().'/'.$upload->file_name);
             $upload->delete();
-            // $upload->delete();
             // flash(translate('File deleted successfully'))->success();
         }
         catch(\Exception $e){
-            dd($e);
-            // $upload->delete();
+            $upload->delete();
             // flash(translate('File deleted successfully'))->success();
         }
         return back();

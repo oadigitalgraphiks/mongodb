@@ -27,19 +27,26 @@ Route::post('/register-submit', [App\Http\Controllers\AuthController::class, 're
 
 Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
-  Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
-  Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+    Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+    Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
-  // Products
-  Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
-
-
-
+    // Products
+    Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
 
     //settings
     Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');
     Route::post('/general-setting/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('setting.update');
     // uploader
+
+    //Flash Deal
+    Route::resource('flash_deals', App\Http\Controllers\Admin\FlashDealController::class);
+    Route::get('/flash_deals/edit/{id}', [App\Http\Controllers\Admin\FlashDealController::class,'edit'])->name('flash_deals.edit');
+    Route::get('flash_deal/product/serach', [App\Http\Controllers\Admin\FlashDealController::class,'search'])->name('flash_deal.search');
+    Route::get('/flash_deals/destroy/{id}', [App\Http\Controllers\Admin\FlashDealController::class,'destroy'])->name('flash_deals.destroy');
+    Route::post('/flash_deals/update_status', [App\Http\Controllers\Admin\FlashDealController::class,'update_status'])->name('flash_deals.update_status');
+    Route::post('/flash_deals/update_featured', [App\Http\Controllers\Admin\FlashDealController::class,'update_featured'])->name('flash_deals.update_featured');
+    Route::post('/flash_deals/product_discount', [App\Http\Controllers\Admin\FlashDealController::class,'product_discount'])->name('flash_deals.product_discount');
+    Route::post('/flash_deals/product_discount_edit', [App\Http\Controllers\Admin\FlashDealController::class,'product_discount_edit'])->name('flash_deals.product_discount_edit');
 });
 Route::any('/uploaded-files/file-info', [App\Http\Controllers\AizUploadController::class,'file_info'])->name('uploaded-files.info');
 Route::resource('uploaded-files', App\Http\Controllers\AizUploadController::class);
