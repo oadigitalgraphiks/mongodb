@@ -38,7 +38,7 @@
                                     <label class="form-label fs-6 fw-bolder text-dark">Name</label>
                                     <input required class="form-control form-control-lg form-control-solid " type="text" name="name" autocomplete="off" />
                                     @if($errors->has('name'))
-                                        <div class="error">{{ $errors->first('name') }}</div>
+                                        <div class="error  text-danger">{{ $errors->first('name') }}</div>
                                     @endif
                                 </div>
 
@@ -46,7 +46,7 @@
                                     <label class="form-label fs-6 fw-bolder text-dark">Email</label>
                                     <input required class="form-control form-control-lg form-control-solid " type="text" name="email" id="email" autocomplete="off" />
                                     @if($errors->has('email'))
-                                        <div class="error">{{ $errors->first('firstname') }}</div>
+                                        <div class="error text-danger ">{{ $errors->first('email') }}</div>
                                     @endif
                                 </div>
 
@@ -60,7 +60,7 @@
                                         name="password" required placeholder="Password" />
 
                                         @if($errors->has('password'))
-                                            <div class="error">{{ $errors->first('password') }}</div>
+                                            <div class="error  text-danger">{{ $errors->first('password') }}</div>
                                         @endif
                                 </div>
                                 

@@ -4,15 +4,10 @@ namespace App\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 // use Illuminate\Database\Eloquent\Model;
-// use App;
+use App;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Product extends Model {
-
-    protected $connection = 'mongodb';
-    protected $collection = 'products';
-    protected $guarded = [];   
-
+class ProductTax extends Model {
 
     // protected $fillable = [
     //     'name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
@@ -39,9 +34,9 @@ class Product extends Model {
     //     return $this->belongsTo(Brand::class);
     // }
 
-    // public function user() {
-    //     return $this->belongsTo(User::class);
-    // }
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 
     // public function orderDetails() {
     //     return $this->hasMany(OrderDetail::class);
