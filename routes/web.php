@@ -31,6 +31,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
   Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
   // Products
+  Route::get('products/attribute_type',[App\Http\Controllers\Admin\ProductController::class, 'attribute_type'])->name('products.attribute_type');
   Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
 
 

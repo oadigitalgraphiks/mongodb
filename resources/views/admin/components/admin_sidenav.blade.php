@@ -84,7 +84,6 @@
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">All Products</span>
-                                                    <span class="menu-arrow"></span>
                                             </a>
                                         </div>
                                         <div class="menu-item">
@@ -93,7 +92,6 @@
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Add New Product</span>
-                                                    <span class="menu-arrow"></span>
                                             </a>
                                         </div>
                                 </div>
