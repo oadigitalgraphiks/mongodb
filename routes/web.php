@@ -25,14 +25,18 @@ Route::post('/register-submit', [App\Http\Controllers\AuthController::class, 're
 
 Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
-  Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
-  Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+    Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+    Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
-  // Products
-  Route::get('products/attribute_type',[App\Http\Controllers\Admin\ProductController::class, 'attribute_type'])->name('products.attribute_type');
 
-  Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
+      //Products
+      Route::get('products/attribute_type',[App\Http\Controllers\Admin\ProductController::class, 'attribute_type'])->name('products.attribute_type');
+      Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
 
+      //Units
+      Route::resource('units',App\Http\Controllers\Admin\UnitController::class);
+
+      
 
     //settings
     Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');
