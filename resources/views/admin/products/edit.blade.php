@@ -619,14 +619,7 @@
 
     <script>
       
-            $('.attribute_types').select2();
-            $('.attribute_types').on('change', function() {
-
-                alert('asdasd');
-
-                    // var data = $(".select2 option:selected").text();
-                    // $("#test").val(data);
-            });
+          
         
 
 
@@ -655,46 +648,45 @@
                                     <input type="text" class="form-control"  value="${element.name}" readonly>
                                 </div>
                                 <div class="col-md-8">
-                                    <select class="form-select mb-2" data-control="select2" data-placeholder="Select an option" name="variations[${element._id}][]" data-allow-clear="true" multiple >
+                                    <select class="attribute${element._id} form-select mb-2" data-control="select2" data-placeholder="Select an option" name="variations[${element._id}][]" data-allow-clear="true" multiple >
                                         ${element.attributes.map(l => `
                                             <option  value="${l._id}" >${l.name}</option>
                                     `)}
                                 </div>
                         </div>`);
-                    });
-
+                    });   
+                    
+                    
 
             }).catch((error) => {
 
 
             });    
-
-
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        $('.attributes_onchange').change(function(){
-
+        $('.attribute_types').select2();
+        $('.attribute_types').on('change', function() {
             let values =  $(this).val();
-            getAttributes(values);
-            // console.log(values);
+             getAttributes(values);
         });
+
+
+        $('.variations').childrens().each(function(){
+
+                let element =  $(this);
+                console.log(element.find('select')); 
+           
+    
+        });
+
+
+
+        // $('.attributes_onchange').change(function(){
+
+            // let values =  $(this).val();
+            // getAttributes(values);
+            // console.log(values);
+        // });
 
         $('.product_type').change(function(){
       
