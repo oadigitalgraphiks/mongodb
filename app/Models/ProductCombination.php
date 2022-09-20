@@ -4,15 +4,14 @@ namespace App\Models;
 
 // use Jenssegers\Mongodb\Eloquent\Model;
 // use Illuminate\Database\Eloquent\Model;
-use App;
 
+class ProductCombination extends Model {
 
-class Category extends Model {
-    
     protected $connection = 'mongodb';
-    // protected $primaryKey = 'id';
-    protected $collection = 'categories';
+    protected $collection = 'product_combinations';
+    protected $guarded = [];   
+
     
-
-
+    
+    
 }

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+// use Jenssegers\Mongodb\Eloquent\Model;
 // use Illuminate\Database\Eloquent\Model;
+
 use App;
 use App\Models\Attribute;
 

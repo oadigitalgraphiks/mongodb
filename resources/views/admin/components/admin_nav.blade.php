@@ -19,7 +19,7 @@
         <!--begin::Mobile logo-->
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
             <a href="#" class="d-lg-none">
-                <img alt="Logo" src="assets/media/logos/logo-2.svg" class="h-30px" />
+                <img alt="Logo" src="{{asset("admin/assets/img/logo.svg")}}" class="h-30px" />
             </a>
         </div>
         <!--end::Mobile logo-->
@@ -36,13 +36,13 @@
                                 <span class="menu-title">Dashboard</span>
                             </a>
                         </div>
-                        
+
                             <div class="menu-item me-lg-1">
                                 <a class="py-3 btn btn-light-primary font-weight-bold mr-2" href="#">
                                     <span class="menu-title">POS</span>
                                 </a>
                             </div>
-                        
+
                         <div class="menu-item me-lg-1">
                             <a class="py-3 btn btn-light-danger font-weight-bold mr-2" href="#">
                                 <span class="menu-title">Clear Cache</span>
@@ -61,7 +61,7 @@
                         </div>
 
 
-                        
+
 
                     <!--begin::Notifications-->
                     <div class="d-flex align-items-center ms-1 ms-lg-3">
@@ -108,11 +108,11 @@
                             <!--end::Heading-->
                             <!--begin::Tab content-->
                             <div class="tab-content">
-                               
+
                                 <div class="tab-pane fade show active" id="kt_topbar_notifications_3" role="tabpanel">
                                     <!--begin::Items-->
                                     <div class="scroll-y mh-325px my-5 px-8">
-                                  
+
                                                 <div class="d-flex flex-stack py-4">
                                                     <!--begin::Section-->
                                                     <div class="d-flex align-items-center me-2">
@@ -126,10 +126,10 @@
                                                     <!--end::Section-->
                                                     <!--begin::Label-->
                                                     <span class="badge badge-light fs-8"></span>
-                                                   
+
                                                 </div>
-                                
-                                        
+
+
                                             <!--begin::Wrapper-->
                                                 <div class="d-flex flex-column px-9">
                                                     <!--begin::Section-->
@@ -140,7 +140,7 @@
                                                     </div>
                                                     <!--end::Section-->
                                                 </div>
-                                        
+
                                     </div>
                                     <!--end::Items-->
                                     <!--begin::View more-->
@@ -165,14 +165,10 @@
                         <!--end::Menu wrapper-->
                     </div>
 
-
-                    
-
-
                     <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                         <!--begin::Menu wrapper-->
                         <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                            <img src="#" onerror="this.onerror=null;this.src='{{asset('assets/img/avatar-place.png')}}';" alt="user" />
+                            <img src="#" onerror="this.onerror=null;this.src='{{asset('admin/assets/img/avatar-place.png')}}';" alt="user" />
                         </div>
 
                         <!--begin::Menu-->
@@ -197,12 +193,12 @@
                             <!--end::Menu item-->
                             <!--begin::Menu separator-->
                             <div class="separator my-2"></div>
-                            
+
 
                             <div class="menu-item px-5 d-none" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start" id="lang-change">
-                                
+
                                 <div class="menu-sub menu-sub-dropdown w-175px py-4">
-                                 
+
                                 </div>
                                 <!--end::Menu sub-->
                             </div>

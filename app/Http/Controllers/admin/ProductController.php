@@ -11,7 +11,8 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Attribute;
 use App\Models\AttributeType;
-
+use App\Models\Color;
+use App\Models\ProductCombination;
 
 class ProductController extends Controller
 {
@@ -120,7 +121,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands =  Brand::all();
         $attribute_types = AttributeType::all();
-       
+        $colors = Color::all();
        
         $typeName = [];
         $variations = explode(',',$product->variations);
@@ -131,10 +132,7 @@ class ProductController extends Controller
         $typeName = array_unique($typeName);
         $selectedTypes = AttributeType::whereIn('_id',$typeName)->get();
 
-
-
-
-        return view('admin.products.edit',compact('variations','product','taxes','units','categories','brands','attribute_types','selectedTypes'));
+        return view('admin.products.edit',compact('variations','product','taxes','units','categories','brands','attribute_types','selectedTypes','colors'));
     }
 
 
@@ -147,17 +145,28 @@ class ProductController extends Controller
       {  
 
         // dd($request->all());
-        
+
         $product =  Product::where('_id',$id)->first();
         if(!$product){
             dd('asd');
             return back();
-
         }
 
         $cash_on_delivery = $request->has('cash_on_delivery') ? 1 : 0;
         $is_quantity_multiplied = $request->has('is_quantity_multiplied') ? 1 : 0;
         $taxes = $request->has('taxes') ? $request->taxes : [];
+       
+        $colors = $request->has('colors') ? $request->colors : [];
+        $attribute_types = $request->has('attribute_types') ? $request->attribute_types : [];
+       
+        $atts = [];
+        if($request->has('att')){
+            foreach ($request->att as  $attribute) {
+                foreach ($attribute as $value) {
+                    array_push($atts,$value);
+                }
+            }
+        }
         
         $tags = array();
         if($request->tags[0] != null){
@@ -196,35 +205,33 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
         $product->tags = implode(',', $tags);
-
         $product->shipping_type = $request->shipping_type;
         $product->is_quantity_multiplied = $is_quantity_multiplied;
         $product->flat_shipping_cost = $request->flat_shipping_cost;
         $product->est_shipping_days = $request->est_shipping_days;
-        
+        $product->colors = implode(',',$colors);
+        $product->attribute_types = implode(',',$attribute_types);
+        $product->attributes = implode(',',$atts);
+
         $product->status = $request->status;
         $product->featured = $request->featured;
         if($product->save()){
-
-            if($request->has('variations')){
-
-                $variations = [];
-                foreach ($request->variations as $variation) {
-                    foreach ($variation as $value) {
-                        array_push($variations,$value);
-                    }
+            if($request->has('combinations')){
+                ProductCombination::where('product_id',$product->id)->delete();
+                foreach($request->combinations as $value) {
+                    ProductCombination::create([
+                        "product_id" => $product->id,
+                        "name" => $value['name'],
+                        "price" => $value['price'],
+                        "sku" => $value['sku'],
+                        "qty" => $value['qty'],
+                        "img" => $value['img'],
+                    ]);
                 }
-                $product->variations = implode(',',$variations);   
-            }else{
-                $product->variations = '';
             }
-
-            $product->save();
         }
 
-        
         return back();
-
     }
 
 
@@ -245,14 +252,12 @@ class ProductController extends Controller
          */
         public function attribute_type(Request $request)
         {
-            if($request->has('types')){
-                $types = explode(',',$request->types);
-                $res = AttributeType::whereIn('_id',$types)->with('attributes')->get();
-                 return response()->json($res);
-            }
+            if($request->has('types') && $request->types != '' ){  
 
-            // Product::destroy($id);
-            // return back()->with('success','Deleted');
+                $res = AttributeType::where('_id',$request->types)->first();
+                $res->attributes;
+                return response()->json($res);
+            }
         }
 
 

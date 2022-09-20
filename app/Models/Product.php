@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+// use Jenssegers\Mongodb\Eloquent\Model;
 // use Illuminate\Database\Eloquent\Model;
 // use App;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+
 
 class Product extends Model {
 
@@ -110,9 +111,9 @@ class Product extends Model {
     //     return $this->hasMany(AuctionProductBid::class);
     // }
 
-    // public function inventory()
-    // {
-    //     return $this->hasMany(Inventory::class,'product_id','id');
-    // }
+    public function combinations()
+    {
+        return $this->hasMany(ProductCombination::class,'product_id');
+    }
 
 }

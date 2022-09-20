@@ -8,7 +8,9 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <meta name="app-url" content="{{ getBaseURL() }}">
+    <meta name="file-base-url" content="{{ getFileBaseURL() }}">
+    <title>{{ get_setting('site_name')}}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -50,6 +52,31 @@
 
     </style>
     @yield('css')
+    <script>
+    	var AIZ = AIZ || {};
+        AIZ.local = {
+            nothing_selected: '{{ translate('Nothing selected') }}',
+            nothing_found: '{{ translate('Nothing found') }}',
+            choose_file: '{{ translate('Choose file') }}',
+            file_selected: '{{ translate('File selected') }}',
+            files_selected: '{{ translate('Files selected') }}',
+            add_more_files: '{{ translate('Add more files') }}',
+            adding_more_files: '{{ translate('Adding more files') }}',
+            drop_files_here_paste_or: '{{ translate('Drop files here, paste or') }}',
+            browse: '{{ translate('Browse') }}',
+            upload_complete: '{{ translate('Upload complete') }}',
+            upload_paused: '{{ translate('Upload paused') }}',
+            resume_upload: '{{ translate('Resume upload') }}',
+            pause_upload: '{{ translate('Pause upload') }}',
+            retry_upload: '{{ translate('Retry upload') }}',
+            cancel_upload: '{{ translate('Cancel upload') }}',
+            uploading: '{{ translate('Uploading') }}',
+            processing: '{{ translate('Processing') }}',
+            complete: '{{ translate('Complete') }}',
+            file: '{{ translate('File') }}',
+            files: '{{ translate('Files') }}',
+        }
+	</script>
 
 </head>
 
@@ -92,8 +119,8 @@
 
                         <!--begin::Mobile logo-->
                         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                            <a href="http://localhost/oceanandseas/admin" class="d-lg-none">
-                                <img alt="Logo" src="{{asset('/admin/assets/media/logos/logo-2.svg')}}" class="h-30px">
+                            <a href="{{route('admin.dashboard')}}" class="d-lg-none">
+                                <img alt="Logo" src="{{asset("admin/assets/img/logo.svg")}}" class="h-30px">
                             </a>
                         </div>
                         <!--end::Mobile logo-->
@@ -235,8 +262,8 @@
                                         <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end">
-                                            <img src="http://localhost/oceanandseas/public/assets/img/avatar-place.png"
-                                                onerror="this.onerror=null;this.src='http://localhost/oceanandseas/public/assets/img/avatar-place.png';"
+                                            <img src="{{asset('admin/assets/img/avatar-place.png')}}"
+                                                onerror="this.onerror=null;this.src='{{asset('admin/assets/img/avatar-place.png')}}';"
                                                 alt="user">
                                         </div>
                                         <!--begin::Menu-->
@@ -248,8 +275,8 @@
                                                     <!--begin::Avatar-->
                                                     <div class="symbol symbol-50px me-5">
                                                         <img alt="Logo"
-                                                            src="http://localhost/oceanandseas/public/assets/img/avatar-place.png"
-                                                            onerror="this.onerror=null;this.src='http://localhost/oceanandseas/public/assets/img/avatar-place.png';">
+                                                            src="{{asset('admin/assets/img/avatar-place.png')}}"
+                                                            onerror="this.onerror=null;this.src='{{asset('admin/assets/img/avatar-place.png')}}';">
                                                     </div>
                                                     <!--end::Avatar-->
                                                     <!--begin::Username-->
@@ -276,7 +303,7 @@
                                                         <span
                                                             class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">English
                                                             <img class="w-15px h-15px rounded-1 ms-2"
-                                                                src="http://localhost/oceanandseas/public/assets/img/flags/en.png"
+                                                                src="{{asset('admin/assets/img/flags/en.png')}}"
                                                                 alt=""></span></span>
                                                 </a>
                                                 <!--begin::Menu sub-->
@@ -287,7 +314,7 @@
                                                             class="menu-link d-flex px-5  active ">
                                                             <span class="symbol symbol-20px me-4">
                                                                 <img class="rounded-1"
-                                                                    src="http://localhost/oceanandseas/public/assets/img/flags/en.png"
+                                                                    src="{{asset('admin/assets/img/flags/en.png')}}"
                                                                     alt="English"></span>English</a>
                                                     </div>
                                                 </div>
@@ -372,8 +399,8 @@
                         class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
                         <!--begin::Copyright-->
                         <div class="text-dark order-2 order-md-1">
-                            <span class="text-muted fw-bold me-1">© 2022</span>
-                            <a href="#" target="_blank" class="text-gray-800 text-hover-primary">Biizel v5.5.5</a>
+                            <span class="text-muted fw-bold me-1">© {{date('Y')}}</span>
+                            <a href="#" target="_blank" class="text-gray-800 text-hover-primary">{{env('APP_NAME')}} v5.5.5</a>
                         </div>
                         <!--end::Copyright-->
                         <!--begin::Menu-->
@@ -397,7 +424,10 @@
         </div>
     </div>
 
+    @yield('modal')
+
     <script src="{{asset('/admin/assets/backend/js/vendorsS.js') }}"></script>
+    <script src="{{asset('/admin/assets/backend/js/aiz-core.js') }}" ></script>
     <script src="{{asset('/admin/assets/backend/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{asset('/admin/assets/backend/js/scripts.bundle.js') }}"></script>
     <script src="{{asset('/admin/assets/backend/plugins/custom/datatables/datatables.bundle.js') }}"></script>
@@ -409,7 +439,9 @@
     <script src="{{asset('/admin/assets/backend/js/custom/modals/create-app.js') }}"></script>
     <script src="{{asset('/admin/assets/backend/js/custom/modals/users-search.js') }}"></script>
 
+    <script type="text/javascript">
 
+    </script>
     @yield('script')
 
         

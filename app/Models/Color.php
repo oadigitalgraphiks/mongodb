@@ -7,11 +7,11 @@ namespace App\Models;
 use App;
 
 
-class Category extends Model {
+class Color extends Model {
     
     protected $connection = 'mongodb';
     // protected $primaryKey = 'id';
-    protected $collection = 'categories';
+    protected $collection = 'colors';
     
 
 

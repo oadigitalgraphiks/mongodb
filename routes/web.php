@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,8 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\AuthController::class, 'login']);
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 Route::get('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');
-
-
 Route::post('/login-submit', [App\Http\Controllers\AuthController::class, 'login_submit'])->name('login_submit');
 Route::post('/register-submit', [App\Http\Controllers\AuthController::class, 'register_submit'])->name('register_submit');
 
@@ -32,14 +30,36 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
   // Products
   Route::get('products/attribute_type',[App\Http\Controllers\Admin\ProductController::class, 'attribute_type'])->name('products.attribute_type');
+
   Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
 
 
+    //settings
+    Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');
+    Route::post('/general-setting/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('setting.update');
+    // uploader
 
 
-
-
+    //Flash Deal
+    Route::resource('flash_deals', App\Http\Controllers\Admin\FlashDealController::class);
+    Route::get('/flash_deals/edit/{id}', [App\Http\Controllers\Admin\FlashDealController::class,'edit'])->name('flash_deals.edit');
+    Route::get('flash_deal/product/serach', [App\Http\Controllers\Admin\FlashDealController::class,'search'])->name('flash_deal.search');
+    Route::get('/flash_deals/destroy/{id}', [App\Http\Controllers\Admin\FlashDealController::class,'destroy'])->name('flash_deals.destroy');
+    Route::post('/flash_deals/update_status', [App\Http\Controllers\Admin\FlashDealController::class,'update_status'])->name('flash_deals.update_status');
+    Route::post('/flash_deals/update_featured', [App\Http\Controllers\Admin\FlashDealController::class,'update_featured'])->name('flash_deals.update_featured');
+    Route::post('/flash_deals/product_discount', [App\Http\Controllers\Admin\FlashDealController::class,'product_discount'])->name('flash_deals.product_discount');
+    Route::post('/flash_deals/product_discount_edit', [App\Http\Controllers\Admin\FlashDealController::class,'product_discount_edit'])->name('flash_deals.product_discount_edit');
 });
+
+
+Route::any('/uploaded-files/file-info', [App\Http\Controllers\AizUploadController::class,'file_info'])->name('uploaded-files.info');
+Route::resource('uploaded-files', App\Http\Controllers\AizUploadController::class);
+Route::post('/aiz-uploader', [App\Http\Controllers\AizUploadController::class,'show_uploader']);
+Route::post('/aiz-uploader/upload', [App\Http\Controllers\AizUploadController::class,'upload']);
+Route::get('/aiz-uploader/get_uploaded_files', [App\Http\Controllers\AizUploadController::class,'get_uploaded_files']);
+Route::post('/aiz-uploader/get_file_by_ids', [App\Http\Controllers\AizUploadController::class,'get_preview_files']);
+Route::get('/aiz-uploader/download/{id}', [App\Http\Controllers\AizUploadController::class,'attachment_download'])->name('download_attachment');
+Route::get('/uploaded-files/destroy/{id}', [App\Http\Controllers\AizUploadController::class,'destroy'])->name('uploaded-files.destroy');
 
 
 // Auth::routes();

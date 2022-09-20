@@ -1,17 +1,28 @@
 @extends('admin.layouts.app')
-
-
 @section('css')
+    <style>
+        
+        .type_delete_button{
+            font-size:23px;
+            cursor: pointer;
+        }
 
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        .combination_delete_button{
+            font-size:23px;
+            cursor: pointer;
+        }
 
-
+    </style>
 @endsection
-
 @section('content')
 
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+<?php
+ 
+//  dd($product->combinations);
 
+?>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="toolbar" id="kt_toolbar">
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
             <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">            
@@ -37,7 +48,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xxl">
@@ -90,17 +100,17 @@
                                             </select>
                                           </div>
 
-                                          <div class="pt-3 col-md-6 fv-row fv-plugins-icon-container">
+                                          <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
                                             <label class="required form-label">Unit price</label>
                                             <input type="number" min="1" step="0.01" placeholder="Unit price" value="{{$product->unit_price}}" name="unit_price" class="form-control mb-2"  required>
                                           </div>
 
-                                          <div class="pt-3 col-md-6 fv-row fv-plugins-icon-container">
+                                           <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
                                                 <label class="required form-label">Quantity</label>
                                                 <input type="number" class="form-control mb-2" min="0" step="0.01" value="{{$product->quantity}}" placeholder="Quantity" name="quantity" required>
                                             </div>
 
-                                            <div class="pt-3 col-md-6 fv-row fv-plugins-icon-container">
+                                            <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
                                                 <label class="required form-label">SKU</label>
                                                 <input value="{{$product->sku}}" type="text" placeholder="SKU" name="sku" class="form-control mb-2">
                                             </div>
@@ -113,26 +123,41 @@
 
                                {{-- Variations --}}
 
-                               <div class="mb-3 card card-flush py-4">
+                               <div class="variation_show mb-3 card card-flush py-4">
                                 <div class="card-header">
                                     <div class="card-title">
                                         <h3>Product Variation</h3>
                                     </div>
                                 </div>
                                 <div class="card-body pt-0">
-
-                                        
-                                    <?php  $selectedTypesId = $selectedTypes->pluck('id')->toArray(); ?>
-                                    <div class="mb-6 fv-row row">
-                                        <label class="form-label">Attributes</label>
-                                       
-                                        <select class="attribute_types  form-select mb-2"  name="choice_attributes[]" multiple >
-
-                                            @foreach ($attribute_types as  $attribute_type)
-                                               <option @if(in_array($attribute_type->id,$selectedTypesId)) {{'selected'}} @endif value="{{$attribute_type->id}}">{{$attribute_type->name}}</option>
+                                    <div>
+                                        <?php 
+                                          $selectedColors = explode(',',$product->colors);   
+                                        ?>
+                                        <label class="form-label">Colors</label>
+                                        <select name="colors[]" class="colors form-select mb-2" data-control="select2" multiple >
+                                            @foreach ($colors as $colorItem)
+                                            <option @if(in_array($colorItem->name,$selectedColors)) {{'selected'}} @endif  >{{$colorItem->name}}</option>     
                                             @endforeach
                                         </select>
+                                    </div>
 
+                                    <?php  $selectedTypesId = $selectedTypes->pluck('id')->toArray(); ?>
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label class="form-label">Attributes</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <select class="attribute_types form-select mb-2" data-control="select2" >
+                                                @foreach ($attribute_types as  $attribute_type)
+                                                   <option value="{{$attribute_type->id}}">{{$attribute_type->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button class="create_type btn btn-info" type="button" >Add</button>
+                                        </div>
                                     </div>
                                     <div>
                                         <div class="text-muted fs-7">
@@ -141,43 +166,85 @@
                                         <br>
                                     </div>
                                     
+                                    <?php 
+                                        $selectedAttributeTypes = explode(',',$product->attribute_types);
+                                        $selectedAttributes = explode(',',$product->attributes);
+                                     
+                                    ?>
                                     <div class="variations">
-                                        @foreach ($selectedTypes as $var)
-                                        <?php  $variationsids = $variations->pluck('id')->toArray(); ?>
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <input type="text" class="form-control"  value="{{$var->name}}" readonly>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <select name="variations[{{$var->id}}][]" class="form-control form-control mb-2"  multiple >
-                                                        @foreach ($var->attributes as $item)
-                                                              <option @if(in_array($item->id,$variationsids)) {{'selected'}} @endif  value="{{$item->id}}" >{{$item->name}}</option>         
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                           </div>
-                                        @endforeach
+                                        @foreach ($attribute_types->whereIn('_id',$selectedAttributeTypes) as  $attribute_type)
+                                    
+                                        <div class="type_id{{$attribute_type->id}} mb-6 fv-row row">
+                                            <div class="col-md-1 align-self-center text-center">
+                                                <i class="type_delete_button fas fa-times"></i>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="hidden" name="attribute_types[]" value="{{$attribute_type->id}}" />
+                                                <input type="text" class="keyname form-control"  value="{{$attribute_type->name}}" readonly>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select required class="single_attribute attribute{{$attribute_type->id}} form-select mb-2" data-control="select2" data-placeholder="Select an option" name="att[{{$attribute_type->id}}][]" multiple >
+                                                    @foreach($attribute_type->attributes as $att)
+                                                    <option 
+                                                    @if(in_array($att->name,$selectedAttributes)) {{'selected'}} @endif >{{$att->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>        
+                                        </div>
+                                        @endforeach 
                                     </div>
 
-                                    {{-- <div class="size-image">
-                                        <div class="fv-row mb-2">
-                                            <label class="form-label">Size Image</label>
-                                            <div class="dropzone" id="kt_ecommerce_add_product_mediaa" data-toggle="aizuploader" data-type="image" data-multiple="false">
-                                                <div class="dz-message needsclick">
-                                                    <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                                    <input type="hidden" name="size_image" class="selected-files">
-                                                    <div class="ms-4">
-                                                        <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Click to upload.</h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="file-preview box sm">
-                                            </div>
-                                        </div>  
-                                    </div> --}}
-                                </div>
-                            </div>
-                            {{-- Variations --}}
+                                    <div class="sku_combination" id="sku_combination">
+                                      <div class="table-responsive">
+                                        <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+                                            <thead>
+                                                <tr class="fw-bolder text-muted bg-light">
+                                                    <th class="min-w-120px text-center">Variant</th>
+                                                    <th class="min-w-140pxtext-center">Variant Price</th>
+                                                    <th class="min-w-120px text-center">SKU</th>
+                                                    <th class="min-w-120px text-center">Quantity</th>
+                                                    <th class="min-w-200px text-center">Photo</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="combination_list" >
+                                                @foreach ($product->combinations as $key => $comb)
+                                                    <tr class="variant">
+                                                        <td> 
+                                                            <input class="form-control mb-2" name="combinations[{{$key}}][name]" value="{{$comb->name}}" />
+                                                        </td>
+                                                        <td>
+                                                            <input name="combinations[{{$key}}][price]" type="number" value="{{$comb->price}}" min="0" step="0.01" class="form-control mb-2" required />
+                                                        </td>
+                                                        <td>
+                                                            <input name="combinations[{{$key}}][sku]" value="{{$comb->sku}}" class="form-control mb-2" />
+                                                        </td>
+                                                        <td>
+                                                            <input name="combinations[{{$key}}][qty]" type="number" value="{{$comb->qty}}" min="0" step="1" class="form-control mb-2" required />
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group" data-toggle="aizuploader" data-type="image" >
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                                                                </div>
+                                                                <div class="form-control file-amount text-truncate">Choose File</div>
+                                                                <input type="hidden" name="combinations[{{$key}}][img]" class="selected-files" />
+                                                            </div>
+                                                            <div class="file-preview box sm"></div>
+                                                        </td>
+                                                        <td class="text-center" >
+                                                            <i class="combination_delete_button fas fa-times"></i>
+                                                        </td>
+                                                    </tr>
+                                               @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>     
+
+                           </div>
+                      </div>
+                   {{-- Variations --}}
 
 
                                 {{-- Description --}}
@@ -261,10 +328,7 @@
                                 {{-- Product Tax --}}
 
 
-                             
-
-                                
-                                  {{-- Thumbnail --}}
+                                {{-- Thumbnail --}}
                                   <div class=" thumbnail-section card card-flush py-4 mb-3">
                                     <div class="card-header">
                                         <div class="card-title">
@@ -343,7 +407,6 @@
                                     </div>
                                 </div>
                                 {{-- PDF --}}
-
 
                             </div>
                           </div>
@@ -430,11 +493,6 @@
                             {{-- Seo Tags --}}
                                
                                
-                               
-                               
-
-
-
                             </div>
                         </div>
                     </div>            
@@ -486,7 +544,6 @@
                                 </select>
                             </div>
 
-                            
 
                         </div>
                     </div>
@@ -593,6 +650,8 @@
     <div class="container mb-4">
         <div class="col-12 text-center ">
             <button type="button" name="button" class="form-submit-button btn btn-primary mx-2">Submit</button>
+
+        
         </div>
     </div>
 
@@ -602,8 +661,53 @@
     <script src="{{ asset('/admin/assets/backend/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
     <script src="{{ asset('/admin/assets/backend/js/custom/apps/ecommerce/catalog/save-product.js') }}"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+   
     <script>
+
+        function convertObjectToValues(data) {
+            let res = [];
+            $.each(data, function() {        
+                var key = Object.keys(this)[0];
+                var value = this[key];
+                res.push(value);
+            }); 
+        }
+
+        function generateCombination(attributes){
+        
+                let getProducts = (arrays) => {
+                    if (arrays.length === 0) {
+                        return [[]];
+                    }
+
+                    let results = [];
+
+                    getProducts(arrays.slice(1)).forEach((product) => {
+                        arrays[0].forEach((value) => {
+                            results.push([value].concat(product));
+                        });
+                    });
+
+                    return results;
+                };
+
+                let getAllCombinations = (attributes) => {
+                    let attributeNames = Object.keys(attributes);
+
+                    let attributeValues = attributeNames.map((name) => attributes[name]);
+
+                    return getProducts(attributeValues).map((product) => {
+                        obj = {};
+
+                        attributeNames.forEach((name, i) => {
+                            obj[name] = product[i];
+                        });
+                        return obj;
+                    });
+                };
+
+               return getAllCombinations(attributes)
+            }
         
         ClassicEditor.create( document.querySelector( '#editor' ) )
         .then( editor => {
@@ -616,219 +720,218 @@
 
 
     </script>
-
     <script>
-      
-          
-        
+
+            // setCombinations();
 
 
+        function getAttributes(id) {
 
-
-
-
-        // debugger
-        // getAttributes(['type','name']);
-
-        function getAttributes(att) {
-
-            let attturl = "{{route('admin.products.attribute_type')}}";
-            data = att.toString();
             $.ajax({
-                url: attturl,
-                data:{types:data},
+                url: "{{route('admin.products.attribute_type')}}",
+                data:{types:id},
             }).then((res) => {
 
-                    let resData = res;
-                    $('.variations').empty();
-                    resData.forEach(element => {
-                        $('.variations').append(`
-                            <div class="mb-6 fv-row row">
-                                <div class="col-md-3">
-                                    <input type="text" class="form-control"  value="${element.name}" readonly>
-                                </div>
-                                <div class="col-md-8">
-                                    <select class="attribute${element._id} form-select mb-2" data-control="select2" data-placeholder="Select an option" name="variations[${element._id}][]" data-allow-clear="true" multiple >
-                                        ${element.attributes.map(l => `
-                                            <option  value="${l._id}" >${l.name}</option>
-                                    `)}
-                                </div>
-                        </div>`);
-                    });   
-                    
-                    
+                $('.variations').append(`
+                    <div class="type_id${res._id} mb-6 fv-row row">
+                        <div class="col-md-1 align-self-center text-center">
+                            <i class="type_delete_button fas fa-times"></i>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="hidden" name="attribute_types[]" value="${res._id}" />
+                            <input type="text" class="keyname form-control"  value="${res.name}" readonly>
+                        </div>
+                        <div class="col-md-8">
+                            <select required class="single_attribute attribute${res._id} form-select mb-2" data-control="select2" data-placeholder="Select an option" name="att[${res._id}][]" multiple >
+                                ${res.attributes.map(l => `
+                                <option>${l.name}</option>
+                            `)}
+                        </div>        
+                </div>`);
 
+                $('.attribute'+res._id).select2();  
+
+                setCombinations();
+            
             }).catch((error) => {
 
-
-            });    
+            });        
         }
 
-        $('.attribute_types').select2();
-        $('.attribute_types').on('change', function() {
-            let values =  $(this).val();
-             getAttributes(values);
-        });
 
 
-        $('.variations').childrens().each(function(){
+        function setCombinations(){
 
-                let element =  $(this);
-                console.log(element.find('select')); 
-           
-    
-        });
+            $('.combination_list').empty();
+            let colors = $('.colors').val();
+            let variationsArray = {};
 
+            if(colors.length > 0){
+                variationsArray.combination = colors;
+            }
 
+            $variations = $('.variations').children().each(function () { 
+                 let target =  $(this).find('.single_attribute');
+                 let keyName =  $(this).find('.keyname').val();
+                 variationsArray[keyName] = target.val();
+            });
 
-        // $('.attributes_onchange').change(function(){
+            let combinations = generateCombination(variationsArray);
+            combinations.forEach( (element,index) => {
+                 
+                var objtostring = Object.keys(element).map((key) => element[key]);
 
-            // let values =  $(this).val();
-            // getAttributes(values);
-            // console.log(values);
-        // });
+                $('.combination_list').append(`
+                    <tr class="variant">
+                        <td> 
+                            <input class="form-control mb-2" name="combinations[${index}][name]" value="${objtostring.toString()}" />
+                        </td>
+                        <td>
+                            <input name="combinations[${index}][price]" type="number" value="0" min="0" step="0.01" class="form-control mb-2" required />
+                        </td>
+                        <td>
+                            <input name="combinations[${index}][sku]" value="${objtostring.toString()}" class="form-control mb-2" />
+                        </td>
+                        <td>
+                            <input name="combinations[${index}][qty]" type="number" value="0" min="0" step="1" class="form-control mb-2" required />
+                        </td>
+                        <td>
+                            <div class="input-group" data-toggle="aizuploader" data-type="image" >
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                                </div>
+                                <div class="form-control file-amount text-truncate">Choose File</div>
+                                <input type="hidden" name="combinations[${index}][img]" class="selected-files" />
+                            </div>
+                            <div class="file-preview box sm"></div>
+                        </td>
+                        <td class="text-center" >
+                            <i class="combination_delete_button fas fa-times"></i>
+                        </td>
+                    </tr>
+                 `);
+
+            });
+        }
 
         $('.product_type').change(function(){
-      
-            // let product_type = $(this).val();
-            // alert(product_type);
+            
+            let pptype = $(this).val();
+            if(pptype == 'simple'){
+                $('.simple_show').show();
+                $('.variation_show').hide();
+            }else{
+                $('.simple_show').hide();
+                $('.variation_show').show();
+            }
 
+        }).change();
+
+
+        $('.colors').change(function(){
+            setCombinations();
         });
 
+        $('.combination').click(function(){
+            // setCombinations();
+        });
+
+        $(".variations").delegate(".type_delete_button", "click", function(){
+            $(this).parent().parent().remove();
+            setCombinations();
+        });
+
+        $(".combination_list").delegate(".combination_delete_button", "click", function(){
+            $(this).parent().parent().remove();
+        });
+
+
+        $(".variations").delegate(".single_attribute", "change", function(){
+            setCombinations();
+        });
+
+
+        $('.create_type').click(function(){
+            let selected_types_id = $('.attribute_types').val();
+            let findtypeid = $(`.type_id${selected_types_id}`);
+            if(findtypeid[0]){
+                alert('Cannot Add Duplicate Type');
+            }else{
+                getAttributes(selected_types_id); 
+            }
+        });
+
+       
         $('.form-submit-button').click(function(){
-
-            $('.my_product_form').submit();
-            // alert('adasd');
-
+             $('.my_product_form').submit();
         });
-
-        
-
     </script>
 
 
-    {{-- <script type="text/javascript">
-        $('form').bind('submit', function(e) {
-            // Disable the submit button while evaluating if the form should be submitted
-            // $("button[type='submit']").prop('disabled', true);
-            $("button[type='submit']").hide();
+    <script type="text/javascript">
 
-            var valid = true;
+        // $('form').bind('submit', function(e) {
+        //     // Disable the submit button while evaluating if the form should be submitted
+        //     // $("button[type='submit']").prop('disabled', true);
+        //     $("button[type='submit']").hide();
+        //     var valid = true;
+        //     if (!valid) {
+        //         e.preventDefault();
+        //         // Reactivate the button if the form was not submitted
+        //         // $("button[type='submit']").button.prop('disabled', false);
+        //         $("button[type='submit']").show();
+        //     }
+        // });
 
-            if (!valid) {
-                e.preventDefault();
 
-                // Reactivate the button if the form was not submitted
-                // $("button[type='submit']").button.prop('disabled', false);
-                $("button[type='submit']").show();
-            }
-        });
+        // $('input[name="colors_active"]').on('change', function() {
+        //     if (!$('input[name="colors_active"]').is(':checked')) {
+        //         $('#colors').prop('disabled', true);
+        //         AIZ.plugins.bootstrapSelect('refresh');
+        //     } else {
+        //         $('#colors').prop('disabled', false);
+        //         AIZ.plugins.bootstrapSelect('refresh');
+        //     }
+        //     update_sku();
+        // });
 
-        $("[name=shipping_type]").on("change", function() {
-            $(".flat_rate_shipping_div").hide();
+        // $(document).on("change", ".attribute_choice", function() {
+        //     update_sku();
+        // });
 
-            if ($(this).val() == 'flat_rate') {
-                $(".flat_rate_shipping_div").show();
-            }
+        // $('#colors').on('change', function() {
+        //     update_sku();
+        // });
 
-        });
+        // $('input[name="unit_price"]').on('keyup', function() {
+        //     update_sku();
+        // });
 
-        function add_more_customer_choice_option(i, name) {
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: '{{ route('products.add-more-choice-option') }}',
-                data: {
-                    attribute_id: i
-                },
-                success: function(data) {
-                    var obj = JSON.parse(data);
-                    $('#customer_choice_options').append('\
-                            <div class="mb-6 fv-row row">\
-                                <div class="col-md-3">\
-                                <label class="required form-label">' + name + '</label>\
-                                    <input type="hidden" name="choice_no[]" value="' + i + '">\
-                                    <input type="text" class="form-control" name="choice[]" value="' + name +
-                        '" placeholder="{{ translate('Choice Title') }}" readonly>\
-                                </div>\
-                                <div class="col-md-8">\
-                                <label class=" form-label">&nbsp;</label>\
-                                <select class="form-select attribute_choice" data-control="select2" data-hide-search="false" data-live-search="true" name="choice_options_' +
-                        i + '[]" multiple>\
-                                ' + obj + '\
-                                </select>\
-                                </div>\
-                            </div>');
-                    $('.attribute_choice').select2();
-                    AIZ.plugins.bootstrapSelect('refresh');
-                }
-            });
-        }
+        // $('input[name="name"]').on('keyup', function() {
+        //     update_sku();
+        // });
 
-        $('input[name="colors_active"]').on('change', function() {
-            if (!$('input[name="colors_active"]').is(':checked')) {
-                $('#colors').prop('disabled', true);
-                AIZ.plugins.bootstrapSelect('refresh');
-            } else {
-                $('#colors').prop('disabled', false);
-                AIZ.plugins.bootstrapSelect('refresh');
-            }
-            update_sku();
-        });
+        // function delete_row(em) {
+        //     $(em).closest('.form-group row').remove();
+        //     update_sku();
+        // }
 
-        $(document).on("change", ".attribute_choice", function() {
-            update_sku();
-        });
+        // function delete_variant(em) {
+        //     $(em).closest('.variant').remove();
+        // }
 
-        $('#colors').on('change', function() {
-            update_sku();
-        });
+        // function update_sku() {
 
-        $('input[name="unit_price"]').on('keyup', function() {
-            update_sku();
-        });
+        // }
 
-        $('input[name="name"]').on('keyup', function() {
-            update_sku();
-        });
+        // $('#choice_attributes').on('change', function() {
+        //     $('#customer_choice_options').html(null);
+        //     $.each($("#choice_attributes option:selected"), function() {
+        //         add_more_customer_choice_option($(this).val(), $(this).text());
+        //     });
+        //     update_sku();
+        // });
 
-        function delete_row(em) {
-            $(em).closest('.form-group row').remove();
-            update_sku();
-        }
 
-        function delete_variant(em) {
-            $(em).closest('.variant').remove();
-        }
-
-        function update_sku() {
-            $.ajax({
-                type: "POST",
-                url: '{{ route('products.sku_combination') }}',
-                data: $('#choice_form').serialize(),
-                success: function(data) {
-                    $('#sku_combination').html(data);
-                    AIZ.uploader.previewGenerate();
-                    AIZ.plugins.fooTable();
-                    if (data.length > 1) {
-                        $('#show-hide-div').hide();
-                    } else {
-                        $('#show-hide-div').show();
-                    }
-                }
-            });
-        }
-
-        $('#choice_attributes').on('change', function() {
-            $('#customer_choice_options').html(null);
-            $.each($("#choice_attributes option:selected"), function() {
-                add_more_customer_choice_option($(this).val(), $(this).text());
-            });
-
-            update_sku();
-        });
-    </script> --}}
-
+    </script>
 @endsection
