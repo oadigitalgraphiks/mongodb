@@ -32,10 +32,17 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
       Route::resource('brands',App\Http\Controllers\Admin\BrandController::class);
 
+      Route::get('categories/delete', [App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('categories.delete');
+      
+      Route::get('categories/destroy/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
+
+      Route::resource('categories',App\Http\Controllers\Admin\CategoryController::class)->only(['index', 'store', 'edit', 'update','create']);
+    
+
+
+
       //Units
       Route::resource('units',App\Http\Controllers\Admin\UnitController::class);
-
-
 
     //settings
     Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');

@@ -36,6 +36,7 @@ class BrandController extends Controller
      */
     public function create()
     {
+        
     }
 
     /**
@@ -63,15 +64,14 @@ class BrandController extends Controller
         $brand_translation = BrandTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'brand_id' => $brand->id]);
         $brand_translation->name = $request->name;
         $brand_translation->save();
-
         // flash(translate('Brand has been inserted successfully'))->success();
+        
         return redirect()->route('admin.brands.index');
-
     }
+
 
     /**
      * Display the specified resource.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -80,9 +80,9 @@ class BrandController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -93,11 +93,10 @@ class BrandController extends Controller
         return view('admin.brands.edit', compact('brand','lang'));
     }
 
+
     /**
      * Update the specified resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
