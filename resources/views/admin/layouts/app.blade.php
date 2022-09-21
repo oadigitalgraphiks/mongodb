@@ -403,6 +403,19 @@
                             <a href="#" target="_blank" class="text-gray-800 text-hover-primary">{{env('APP_NAME')}} v5.5.5</a>
                         </div>
                         <!--end::Copyright-->
+                        <!--begin::Menu-->
+                        <ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
+                            <li class="menu-item">
+                                <a href="#" target="_blank" class="menu-link px-2">About</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" target="_blank" class="menu-link px-2">Support</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" target="_blank" class="menu-link px-2">Purchase</a>
+                            </li>
+                        </ul>
+                        <!--end::Menu-->
                     </div>
                     <!--end::Container-->
                 </div>
@@ -429,7 +442,6 @@
     <script type="text/javascript">
         $(document).ready(function(){
             @if (Session::has('flash_notification'))
-            session('flash_notification')
                 @foreach (session('flash_notification') as $message)
                     AIZ.plugins.notify('{{ $message['level'] }}', '{{ $message['message'] }}');
                 @endforeach
@@ -437,6 +449,8 @@
         });
     </script>
     @yield('script')
+
+
 
 </body>
 
