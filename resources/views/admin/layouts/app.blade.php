@@ -427,7 +427,14 @@
     <script src="{{asset('/admin/assets/backend/js/custom/modals/users-search.js') }}"></script>
 
     <script type="text/javascript">
-
+        $(document).ready(function(){
+            @if (Session::has('flash_notification'))
+            session('flash_notification')
+                @foreach (session('flash_notification') as $message)
+                    AIZ.plugins.notify('{{ $message['level'] }}', '{{ $message['message'] }}');
+                @endforeach
+            @endif
+        });
     </script>
     @yield('script')
 

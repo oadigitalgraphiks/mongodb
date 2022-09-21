@@ -13,17 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// dd('asdasd');
 
 Route::get('/', [App\Http\Controllers\AuthController::class, 'login']);
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 Route::get('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');
 
-
 Route::post('/login-submit', [App\Http\Controllers\AuthController::class, 'login_submit'])->name('login_submit');
 Route::post('/register-submit', [App\Http\Controllers\AuthController::class, 'register_submit'])->name('register_submit');
-
-
 
 Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
@@ -38,6 +34,12 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
     Route::post('/general-setting/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('setting.update');
     // uploader
 
+    //customer
+    Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class);
+    Route::get('customers_ban/{customer}', [App\Http\Controllers\Admin\CustomerController::class,'ban'])->name('customers.ban');
+    Route::get('/customers/login/{id}', [App\Http\Controllers\Admin\CustomerController::class,'login'])->name('customers.login');
+    Route::get('/customers/destroy/{id}', [App\Http\Controllers\Admin\CustomerController::class,'destroy'])->name('customers.destroy');
+    Route::post('/bulk-customer-delete', [App\Http\Controllers\Admin\CustomerController::class,'bulk_customer_delete'])->name('bulk-customer-delete');
     //Flash Deal
     Route::resource('flash_deals', App\Http\Controllers\Admin\FlashDealController::class);
     Route::get('/flash_deals/edit/{id}', [App\Http\Controllers\Admin\FlashDealController::class,'edit'])->name('flash_deals.edit');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class AuthController extends Controller
     public function login()
     {
 
-        
+
         if(Auth::check()){
             return redirect()->route('admin.home');
         }
@@ -40,16 +41,13 @@ class AuthController extends Controller
             return back()->with('message','Email Or Password Wrong');
         }
 
-   
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-
             return redirect()->route('admin.dashboard');
         }else{
-
             return back()->with('message','Email Or Password Wrong');
         }
-  
+
     }
 
     /*
@@ -81,14 +79,25 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
         ]);
-           
+
         $data = $request->all();
 
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'user_type' => $data['user_type'] ?? 'admin',
             'password' => Hash::make($data['password'])
         ]);
+
+        if ($data['user_type'] == 'customer') {
+            $customer = new Customer;
+            $customer->user_id = $user->id;
+            $customer->save();
+        }
+
+        if ($data['user_type'] == 'customer') {
+            return redirect()->route('login')->with('');
+        }
 
         if($user){
             return redirect()->route('login');
@@ -96,16 +105,13 @@ class AuthController extends Controller
             return back()->with('message','Failed To Register');
         }
 
-
     }
-
 
       /*
      * Write code on Method
      */
     public function logout()
     {
-
         if(Auth::check() == false){
             return redirect()->route('admin.dashboard');
         }
@@ -114,8 +120,5 @@ class AuthController extends Controller
         return redirect()->route('login');
 
     }
-    
 
-
-   
 }

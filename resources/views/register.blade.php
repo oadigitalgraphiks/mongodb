@@ -6,21 +6,20 @@
         <div class="d-flex flex-column flex-root">
             <div class="d-flex flex-column flex-lg-row flex-column-fluid">
                 <div class="d-flex flex-column flex-lg-row-auto w-xl-600px positon-xl-relative"
-                    style="background-color: #F2C98A">
+                    style="background-color: {{ get_setting('bg_color') }};">
                     <div class="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px scroll-y">
                         <div class="d-flex flex-row-fluid flex-column text-center p-10 pt-lg-20">
-                            <img src="http://localhost/oceanandseas/public/uploads/all/SE1WWMI91bw1dCQEUk82AiXaUxiBhfuraXKCX902.svg" class="h-60px" height="60">
+                            <img src="{{ uploaded_asset(get_setting('admin_login_background')) }}" class="h-60px" height="60">
                              <br>
-                
-                            <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #986923;">Welcome to Register</h1>
-                            <p class="fw-bold fs-2" style="color: #986923;">Discover Amazing Biizel
-                                <br />Login to your account.</p>
+
+                            <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #986923;">{{translate("Welcome to Register")}}</h1>
+                            <p class="fw-bold fs-2" style="color: #986923;">{{translate("Discover Amazing")}} {{ get_setting('site_name')}}
+                                <br />{{translate("Login to your account")}}.</p>
                         </div>
                         <div class="d-flex flex-row-auto bgi-no-repeat bgi-position-x-center bgi-size-contain bgi-position-y-bottom min-h-100px min-h-lg-350px"
                             style="background-image: url("></div>
                     </div>
                 </div>
-                
 
         <div class="d-flex flex-column flex-lg-row-fluid py-20">
             <div class="d-flex flex-center flex-column flex-column-fluid">
@@ -63,7 +62,7 @@
                                             <div class="error">{{ $errors->first('password') }}</div>
                                         @endif
                                 </div>
-                                
+
                                 <div class="text-center">
                                     <button type="submit" id="kt_sign_in_submit" class="btn btn-lg btn-primary w-100 mb-5"><span class="indicator-label">Submit</span>
                                     </button>

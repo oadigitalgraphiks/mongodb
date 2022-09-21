@@ -131,7 +131,7 @@
                                 </div> --}}
                                 <div class="fv-row mb-2">
 
-                                    <label for="kt_ecommerce_add_product_store_template"
+                                <label for="kt_ecommerce_add_product_store_template"
                                 class="form-label">{{translate('Admin login page background')}}</label>
                                     <div class="col-sm-12">
                                         <div class="input-group" data-toggle="aizuploader" data-type="image">

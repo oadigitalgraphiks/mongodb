@@ -96,3 +96,12 @@ if (!function_exists('formatBytes')) {
     }
 }
 
+if (!function_exists("flash")) {
+    function flash($message = null, $level = 'info')
+    {
+        if (! is_null($message)) {
+            $message = Session::put('flash_notification',$message);
+            return $message;
+        }
+    }
+}
