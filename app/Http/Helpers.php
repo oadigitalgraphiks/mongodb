@@ -50,6 +50,11 @@ if (!function_exists('getFileBaseURL')) {
     }
 }
 
+function languages()
+{
+    $languages = \App\Models\Language::where('status','1')->get();
+    return $languages;
+}
 
 if (!function_exists('uploaded_asset')) {
     function uploaded_asset($id)

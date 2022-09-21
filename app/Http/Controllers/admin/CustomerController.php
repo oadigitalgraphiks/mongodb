@@ -52,7 +52,6 @@ class CustomerController extends Controller
         $request->validate([
             'name'          => 'required',
             'email'         => 'required|unique:users|email',
-            'user_name'     => 'required|unique:users',
             'phone'         => 'required|unique:users',
         ]);
 
@@ -60,29 +59,29 @@ class CustomerController extends Controller
 
         $user = User::create($request->all());
 
-        $customer = new Customer;
+        // $customer = new Customer;
 
-        $customer->user_id = $user->id;
-        $customer->save();
+        // $customer->user_id = $user->id;
+        // $customer->save();
 
-        if (isset($user->id)) {
-            $html = '';
-            $html .= '<option value="">
-                        '. translate("Walk In Customer") .'
-                    </option>';
-            foreach(Customer::all() as $key => $customer){
-                if ($customer->user) {
-                    $html .= '<option value="'.$customer->user->id.'" data-contact="'.$customer->user->email.'">
-                                '.$customer->user->name.'
-                            </option>';
-                }
-            }
+        // if (isset($user->id)) {
+        //     $html = '';
+        //     $html .= '<option value="">
+        //                 '. translate("Walk In Customer") .'
+        //             </option>';
+        //     foreach(Customer::all() as $key => $customer){
+        //         if ($customer->user) {
+        //             $html .= '<option value="'.$customer->user->id.'" data-contact="'.$customer->user->email.'">
+        //                         '.$customer->user->name.'
+        //                     </option>';
+        //         }
+        //     }
 
-            $response['status'] = 'Success';
-            $response['html'] = $html;
-        }
+        //     $response['status'] = 'Success';
+        //     $response['html'] = $html;
+        // }
 
-        echo json_encode($response);
+        // echo json_encode($response);
     }
 
     /**

@@ -20,7 +20,7 @@ class AuthController extends Controller
 
 
         if(Auth::check()){
-            return redirect()->route('admin.home');
+            return redirect()->route('admin.dashboard');
         }
 
 
