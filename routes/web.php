@@ -40,6 +40,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
     Route::get('/customers/login/{id}', [App\Http\Controllers\Admin\CustomerController::class,'login'])->name('customers.login');
     Route::get('/customers/destroy/{id}', [App\Http\Controllers\Admin\CustomerController::class,'destroy'])->name('customers.destroy');
     Route::post('/bulk-customer-delete', [App\Http\Controllers\Admin\CustomerController::class,'bulk_customer_delete'])->name('bulk-customer-delete');
+ 
     //Flash Deal
     Route::resource('flash_deals', App\Http\Controllers\Admin\FlashDealController::class);
     Route::get('/flash_deals/edit/{id}', [App\Http\Controllers\Admin\FlashDealController::class,'edit'])->name('flash_deals.edit');
@@ -50,6 +51,8 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
     Route::post('/flash_deals/product_discount', [App\Http\Controllers\Admin\FlashDealController::class,'product_discount'])->name('flash_deals.product_discount');
     Route::post('/flash_deals/product_discount_edit', [App\Http\Controllers\Admin\FlashDealController::class,'product_discount_edit'])->name('flash_deals.product_discount_edit');
 });
+
+
 Route::any('/uploaded-files/file-info', [App\Http\Controllers\AizUploadController::class,'file_info'])->name('uploaded-files.info');
 Route::resource('uploaded-files', App\Http\Controllers\AizUploadController::class);
 Route::post('/aiz-uploader', [App\Http\Controllers\AizUploadController::class,'show_uploader']);
