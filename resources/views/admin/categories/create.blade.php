@@ -62,10 +62,10 @@
                                     </div>
 
                                     <div class="mt-3 mb-10">
-                                        <label class="form-label">{{ translate('Status') }}</label>
-                                        <select data-control="select2" name="status" class="form-select form-control">
-                                            <option value="0">Hide</option> 
-                                            <option value="1">Show</option>
+                                        <label class="form-label">{{ translate('Active') }}</label>
+                                        <select data-control="select2" name="active" class="form-select form-control">
+                                            <option value="1">Active</option> 
+                                            <option value="0">Not Active</option>
                                         </select>
                                     </div>
 
@@ -88,8 +88,6 @@
                                         <textarea name="description" rows="5" class="form-control mb-2"></textarea>
                                     </div>
 
-                                    
-        
                                     <div class="fv-row mb-2">
                                         <label class="form-label">{{ translate('Image') }}</label>
                                         <div class="dropzone" id="kt_ecommerce_add_product_mediaa"

@@ -21,35 +21,42 @@
     <div class="toolbar" id="kt_toolbar">
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
             <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Product Form</h1>
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Edit Product</h1>
                 <span class="h-20px border-gray-300 border-start mx-4"></span>
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <li class="breadcrumb-item text-muted">
-                        <a href="http://localhost/oceanandseas/admin" class="text-muted text-hover-primary">Home</a>
+                        <a href="{{route('admin.dashboard')}}" class="text-muted text-hover-primary">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-300 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">eCommerce</li>
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
-                    </li>
-                    <li class="breadcrumb-item text-muted">Catalog</li>
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
-                    </li>
-                    <li class="breadcrumb-item text-dark">Add New Product</li>
+                    <li class="breadcrumb-item text-muted"><a class="text-muted" href="{{route('admin.products.index')}}" target="_blank" rel="noopener noreferrer">{{translate('Products')}}</a></li>
                 </ul>
             </div>
         </div>
     </div>
 
+
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xxl">
 
+            <ul class="nav nav-tabs nav-fill border-light">
+                @foreach (languages() as $key => $language)
+                    <li class="nav-item">
+                        <a class="nav-link text-reset @if ($language->code == $lang) active @else bg-soft-dark border-light border-left-0 @endif py-3" href="{{ route('admin.products.edit',$product->id).'?lang='.$language->code }}">
+                            <img src="{{ asset('admin/assets/img/flags/' . $language->code . '.png') }}" height="11"
+                                class="mr-1">
+                            <span>{{ $language->name }}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+            <br>
+
             <form id="choice_form" class="my_product_form form d-flex flex-column flex-lg-row gap-7 gap-lg-6" action="{{route('admin.products.update',$product->id)}}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('put')
+                <input name="_method" type="hidden" value="PATCH">
+                <input type="hidden" name="lang" value="{{ $lang }}">
 
                 <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-6">
                     <div class="card card-flush py-4">
@@ -76,14 +83,13 @@
                                         <div class="mb-6 row">
 
                                             <div class="col-md-12">
-                                                <label class="required form-label">Product Name</label>
-                                                <input type="text" class="form-control mb-2" name="name" placeholder="Product Name" value="{{$product->name}}"  required>
+                                                <label class="required form-label">Name</label>
+                                                <input type="text" class="form-control mb-2" name="name" placeholder="Product Name" value="{{$product->getTranslation('name', $lang)}}"  required>
                                            </div>
 
                                            <div class="pt-3 col-md-12">
-                                            <label class="required form-label">Product Slug</label>
+                                            <label class="required form-label">Slug</label>
                                             <input value="{{$product->slug}}" class="form-control mb-2" name="slug" placeholder="Product Slug" required>
-                                            <div class="text-muted fs-7">A product Slug is required and recommended to be unique.</div>
                                           </div>
 
                                           <div class="pt-3 col-md-6 fv-row fv-plugins-icon-container">
@@ -322,7 +328,7 @@
                                 </div>
                                 {{-- Product Tax --}}
 
-
+            
                                 {{-- Thumbnail --}}
                                   <div class=" thumbnail-section card card-flush py-4 mb-3">
                                     <div class="card-header">
@@ -335,7 +341,7 @@
                                             <div class="dropzone" id="kt_ecommerce_add_product_mediaa" data-toggle="aizuploader" data-type="image">
                                                 <div class="dz-message needsclick">
                                                     <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                                    <input type="hidden" name="thumbnail" class="selected-files">
+                                                    <input type="hidden" name="thumbnail" value="{{$product->thumbnail}}"  class="selected-files">
                                                     <div class="ms-4">
                                                         <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Click to upload.</h3>
                                                     </div>
@@ -365,7 +371,7 @@
                                             <div class="dropzone" id="kt_ecommerce_add_product_mediaa" data-toggle="aizuploader" data-type="image" data-multiple="true">
                                                 <div class="dz-message needsclick">
                                                     <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                                    <input type="hidden" name="photos" class="selected-files">
+                                                    <input value="{{$product->photos}}" type="hidden" name="photos" class="selected-files">
                                                     <div class="ms-4">
                                                         <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Click to upload.</h3>
                                                     </div>
@@ -391,7 +397,7 @@
                                             <div class="dropzone" id="kt_ecommerce_add_product_mediaa" data-toggle="aizuploader" data-type="document">
                                                 <div class="dz-message needsclick">
                                                     <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                                    <input type="hidden" name="pdf" class="selected-files">
+                                                    <input value="{{$product->pdf}}" type="hidden" name="pdf" class="selected-files">
                                                     <div class="ms-4">
                                                         <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Click to upload..</h3>
                                                     </div>
@@ -523,6 +529,17 @@
                                 <input type="number" value="{{$product->min_purchase_quantity}}" name="min_purchase_quantity" value="1" min="0" step="1" class="form-control">
                             </div>
 
+                           
+
+                            <div class="pt-5 mb-5">
+                                <label class="form-label">Low Stock Quantity Warning</label>
+                                <select required data-control="select2"  class="d-block form-select " name="stock_visibility">
+                                    <option @if($product->stock_visibility == 'show_stock_quantity') {{'selected'}} @endif value="show_stock_quantity" >Show Stock Quantity</option>
+                                    <option @if($product->stock_visibility == 'show_stock_with_text_only') {{'selected'}} @endif value="show_stock_with_text_only" >Show Stock With Text Only</option>
+                                    <option @if($product->stock_visibility == 'hide_stock') {{'selected'}} @endif value="hide_stock" >Hide Stock</option>
+                                </select>
+                            </div>
+
                             <div class="pt-5">
                                 <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
                                     <span class="m-0 form-label ">Cash On Delivery Status</span>
@@ -531,12 +548,10 @@
                             </div>
 
                             <div class="pt-5">
-                                <label class="form-label">Low Stock Quantity Warning</label>
-                                <select required data-control="select2"  class="d-block form-select " name="stock_visibility">
-                                    <option @if($product->stock_visibility == 'show_stock_quantity') {{'selected'}} @endif value="show_stock_quantity" >Show Stock Quantity</option>
-                                    <option @if($product->stock_visibility == 'show_stock_with_text_only') {{'selected'}} @endif value="show_stock_with_text_only" >Show Stock With Text Only</option>
-                                    <option @if($product->stock_visibility == 'hide_stock') {{'selected'}} @endif value="hide_stock" >Hide Stock</option>
-                                </select>
+                                <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
+                                    <span class="m-0 form-label ">Is Active</span>
+                                    <input @if($product->cash_on_delivery == 1) {{'checked'}} @endif class="form-check-input" type="checkbox" name="active" value="1">
+                                </label>
                             </div>
 
 
@@ -550,18 +565,24 @@
                                         <h3>Product Details</h3>
                                     </div>
                               </div>
+                              
+                              
                               <div class="card-body pt-0">
 
                                 <label class="form-label">Categories</label>
                                 <select class="form-select mb-2" data-control="select2" data-placeholder="Select an option"  name="category_id" id="category_id">
                                     @foreach ($categories as $cat)
-                                    <option @if($cat->id == $product->category_id) {{'selected'}} @endif value="{{$cat->id}}" >{{$cat->name}}</option>
+                                    <option disabled >{{$cat->name}}</option>
+                                    @foreach ($cat->children as $child)
+                                        <option @if($child->id == $product->category_id) {{'selected'}} @endif value="{{$child->id}}" >--- {{$child->name}}</option>
+                                    @endforeach
                                     @endforeach
                                 </select>
                                 <br>
 
                                 <label class="form-label">Brand</label>
                                 <select class="form-select mb-2 select2-hidden-accessible" data-control="select2" data-placeholder="Select an option" name="brand_id" id="brand_id" >
+                                    <option value="0">Select Brand</option>
                                     @foreach ($brands as $item)
                                     <option @if($item->id == $product->brand_id) {{'selected'}} @endif value="{{$item->id}}">{{$item->name}}</option>
                                     @endforeach
@@ -624,7 +645,7 @@
                         {{-- Submit --}}
                             <div class="card card-flush py-4">
                                 <div class="card-header">
-                                    <div class="card-title"><h3>Product Status</h3></div>
+                                    <div class="card-title"><h3>Status</h3></div>
                                 </div>
                                 <div class="card-body pt-0">
                                     <select class="form-select  mb-2 select2-hidden-accessible" name="status" data-control="select2">

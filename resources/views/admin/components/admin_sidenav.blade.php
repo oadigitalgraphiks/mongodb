@@ -61,7 +61,7 @@
                             <div class="menu-sub menu-sub-accordion menu-active-bg"></div>
                         </div>
 
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{subareActiveRoutes(['admin.brands.index','admin.brands.create','admin.brands.edit'])}}">
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{subareActiveRoutes(['admin.brands.index','admin.brands.create','admin.brands.edit','admin.products.index','admin.products.edit'])}}">
                                 <a class="menu-link " href="javascript:void(0)">
                                     <span class="menu-icon">
                                         <span class="svg-icon svg-icon-2">
@@ -78,21 +78,23 @@
                                 </a>
                                 <div class="menu-sub menu-sub-accordion menu-active-bg">
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{route('admin.products.index')}}">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">All Products</span>
-                                            </a>
-                                        </div>
-                                        <div class="menu-item">
-                                            <a class="menu-link" href="{{route('admin.products.create')}}">
+                                            <a class="menu-link {{Request::segment(2) == "products" ? "active" : ""}}" href="{{route('admin.products.create')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Add New Product</span>
                                             </a>
                                         </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link {{Request::segment(2) == "products" ? "active" : ""}}" href="{{route('admin.products.index')}}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">All Products</span>
+                                            </a>
+                                        </div>
+
 
                                         <div class="menu-item">
                                             <a class="menu-link" href="{{route('admin.categories.index')}}">
@@ -102,7 +104,7 @@
                                                 <span class="menu-title">Categories</span>
                                             </a>
                                         </div>
-                                        
+
                                         <div class="menu-item">
                                             <a class="menu-link {{areActiveRoutes(['admin.brands.index','admin.brands.create','admin.brands.edit'])}}" href="{{route('admin.brands.index')}}">
                                                 <span class="menu-bullet">
