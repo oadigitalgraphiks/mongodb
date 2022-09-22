@@ -44,6 +44,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
     //customer
     Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class);
+    Route::get('customer/delete/{id}', [App\Http\Controllers\Admin\CustomerController::class,'destroy'])->name('customer.delete');
     Route::get('customers_ban/{customer}', [App\Http\Controllers\Admin\CustomerController::class,'ban'])->name('customers.ban');
     Route::get('/customers/login/{id}', [App\Http\Controllers\Admin\CustomerController::class,'login'])->name('customers.login');
     Route::post('/bulk-customer-delete', [App\Http\Controllers\Admin\CustomerController::class,'bulk_customer_delete'])->name('bulk-customer-delete');
