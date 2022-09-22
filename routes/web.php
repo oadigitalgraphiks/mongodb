@@ -27,11 +27,17 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
 
       //Products
+      Route::get('products/delete', [App\Http\Controllers\Admin\ProductController::class, 'delete'])->name('products.delete');
+      
+      Route::get('products/destroy/{id}', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('products.destroy');
+      
       Route::get('products/attribute_type',[App\Http\Controllers\Admin\ProductController::class, 'attribute_type'])->name('products.attribute_type');
-      Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
+
+      Route::resource('products',App\Http\Controllers\Admin\ProductController::class)->only(['index', 'store', 'edit', 'update','create']);
 
       Route::resource('brands',App\Http\Controllers\Admin\BrandController::class);
 
+      // Categories
       Route::get('categories/delete', [App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('categories.delete');
       
       Route::get('categories/destroy/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
@@ -39,10 +45,12 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
       Route::resource('categories',App\Http\Controllers\Admin\CategoryController::class)->only(['index', 'store', 'edit', 'update','create']);
     
 
-
-
       //Units
-      Route::resource('units',App\Http\Controllers\Admin\UnitController::class);
+      Route::get('units/delete', [App\Http\Controllers\Admin\UnitController::class, 'delete'])->name('units.delete');
+      Route::get('units/destroy/{id}', [App\Http\Controllers\Admin\UnitController::class, 'destroy'])->name('units.destroy');
+      Route::resource('units',App\Http\Controllers\Admin\UnitController::class)->only(['index', 'store', 'edit', 'update','create']);
+
+
 
     //settings
     Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');

@@ -1,45 +1,48 @@
 @extends('admin.layouts.app')
+@section('css')
+    <style>
 
+        .type_delete_button{
+            font-size:23px;
+            cursor: pointer;
+        }
+
+        .combination_delete_button{
+            font-size:23px;
+            cursor: pointer;
+        }
+
+    </style>
+@endsection
 @section('content')
 
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="toolbar" id="kt_toolbar">
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-            <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">            
-                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Product Form</h1>
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Add New Product</h1>
                 <span class="h-20px border-gray-300 border-start mx-4"></span>
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <li class="breadcrumb-item text-muted">
-                        <a href="http://localhost/oceanandseas/admin" class="text-muted text-hover-primary">Home</a>
+                        <a href="{{route('admin.dashboard')}}" class="text-muted text-hover-primary">Home</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-300 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">eCommerce</li>
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
-                    </li>
-                    <li class="breadcrumb-item text-muted">Catalog</li>
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
-                    </li>
-                    <li class="breadcrumb-item text-dark">Add New Product</li>
+                    <li class="breadcrumb-item text-muted"><a class="text-muted" href="{{route('admin.products.index')}}" target="_blank" rel="noopener noreferrer">{{translate('Products')}}</a></li>
                 </ul>
             </div>
         </div>
     </div>
-
 
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xxl">
 
             <form id="choice_form" class="my_product_form form d-flex flex-column flex-lg-row gap-7 gap-lg-6" action="{{route('admin.products.store')}}" method="POST" enctype="multipart/form-data">
                 @csrf
-              
-                
-                <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-6">
 
+                <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-6">
                     <div class="card card-flush py-4">
                         <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-n2 nav nav-tabs nav-fill border-light">
                             <li class="nav-item">
@@ -64,44 +67,114 @@
                                         <div class="mb-6 row">
 
                                             <div class="col-md-12">
-                                                <label class="required form-label">Product Name</label>
-                                                <input type="text" class="form-control mb-2" name="name" placeholder="Product Name"  required="">
+                                                <label class="required form-label">Name</label>
+                                                <input type="text" class="form-control mb-2" name="name" placeholder="Product Name" required>
                                            </div>
 
                                            <div class="pt-3 col-md-12">
-                                            <label class="required form-label">Product Slug</label>
-                                            <input class="form-control mb-2" name="slug" placeholder="Product Slug" required="">
-                                            <div class="text-muted fs-7">A product Slug is required and recommended to be unique.</div>
+                                            <label class="required form-label">Slug</label>
+                                            <input  class="form-control mb-2" name="slug" placeholder="Product Slug" required>
                                           </div>
 
-                                          <div class="pt-3 col-md-6 fv-row fv-plugins-icon-container">
+                                          <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
                                             <label class="required form-label">Unit Type</label>
                                             <select class="form-control" name="unit_id">
-                                               <option value="1">KG</option>
-                                               <option value="2">PC</option>
-                                               <option value="2">Other</option>
+                                                @foreach ($units as $item)
+                                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                                @endforeach
                                             </select>
                                           </div>
 
-                                          <div class="pt-3 col-md-6 fv-row fv-plugins-icon-container">
+                                          <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
                                             <label class="required form-label">Unit price</label>
-                                            <input type="number" lang="en" min="0" value="0" step="0.01" placeholder="Unit price" name="unit_price" class="form-control mb-2"  required="">
+                                            <input type="number" min="1" step="0.01" placeholder="Unit price" name="unit_price" class="form-control mb-2"  required>
                                           </div>
 
-                                          <div class="pt-3 col-md-6 fv-row fv-plugins-icon-container">
+                                           <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
                                                 <label class="required form-label">Quantity</label>
-                                                <input type="number" class="form-control mb-2" lang="en" min="0" value="0" step="1" placeholder="Quantity" name="quantity" required>
+                                                <input type="number" class="form-control mb-2" min="0" step="0.01"  placeholder="Quantity" name="quantity" required>
                                             </div>
 
-                                            <div class="pt-3 col-md-6 fv-row fv-plugins-icon-container">
+                                            <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
                                                 <label class="required form-label">SKU</label>
-                                                <input type="text" placeholder="SKU" name="sku" class="form-control mb-2">
+                                                <input  type="text" placeholder="SKU" name="sku" class="form-control mb-2">
                                             </div>
 
-                                        </div> 
+                                        </div>
                                  </div>
                             </div>
                             <!--end::General options-->
+
+
+                               {{-- Variations --}}
+
+                               <div class="variation_show mb-3 card card-flush py-4">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <h3>Product Variation</h3>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-0">
+                                    <div>
+
+                                        <label class="form-label">Colors</label>
+                                        <select name="colors[]" class="colors form-select mb-2" data-control="select2" multiple >
+                                            @foreach ($colors as $colorItem)
+                                            <option >{{$colorItem->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label class="form-label">Attributes</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <select class="attribute_types form-select mb-2" data-control="select2" >
+                                                @foreach ($attribute_types as  $attribute_type)
+                                                   <option value="{{$attribute_type->id}}">{{$attribute_type->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button class="create_type btn btn-info" type="button" >Add</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-muted fs-7">
+                                            Choose the attributes of this product and then input values of each attribute
+                                        </div>
+                                        <br>
+                                    </div>
+
+                                    <div class="variations">
+                                       
+                                    </div>
+
+                                    <div class="sku_combination" id="sku_combination">
+                                      <div class="table-responsive">
+                                        <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+                                            <thead>
+                                                <tr class="fw-bolder text-muted bg-light">
+                                                    <th class="min-w-120px text-center">Variant</th>
+                                                    <th class="min-w-140pxtext-center">Variant Price</th>
+                                                    <th class="min-w-120px text-center">SKU</th>
+                                                    <th class="min-w-120px text-center">Quantity</th>
+                                                    <th class="min-w-200px text-center">Photo</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="combination_list" >
+                                             
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                           </div>
+                      </div>
+                   {{-- Variations --}}
 
 
                                 {{-- Description --}}
@@ -110,15 +183,13 @@
                                         <div class="card-title"><h3>Description</h3></div>
                                     </div>
                                     <div class="card-body pt-0">
-                                        <textarea name="description" id="editor"></textarea>
+                                        <textarea name="description" class="aiz-text-editor"> </textarea>
                                     </div>
                                 </div>
                                 {{-- Description --}}
 
 
-                              
-
-                                       {{-- Product Discount --}}
+                                {{-- Product Discount --}}
                                 <div class="card card-flush py-4">
                                     <div class="card-header">
                                         <div class="card-title"><h3>Discount</h3></div>
@@ -127,7 +198,7 @@
                                         <div class="d-flex flex-wrap gap-5">
                                             <div class="mb-6 fv-row">
                                                 <label class="required form-label" for="start_date">Discount Date Range</label>
-                                                <input type="text" class="form-control aiz-date-range mb-2" name="discount_date_range" placeholder="Select Date" data-time-picker="true" data-format="DD-MM-Y HH:mm:ss" data-separator=" to " autocomplete="off">
+                                                <input type="text" class="form-control aiz-date-range mb-2" name="discount_date_range" placeholder="Select Date" data-time-picker="true" data-format="DD-MM-Y HH:mm:ss" data-separator="to" autocomplete="off"  >
                                             </div>
 
                                             <div class="fv-row w-100 flex-md-root">
@@ -140,7 +211,7 @@
 
                                             <div class="fv-row w-100 flex-md-root">
                                                 <label class="form-label">Discount Amount (%)</label>
-                                                <input type="number" lang="en" min="0" step="0.01" placeholder="Discount" name="discount_value" class="form-control mb-2" required="">
+                                                <input type="number" lang="en" min="0" step="0.01" placeholder="Discount"  name="discount_value" class="form-control mb-2" required>
                                             </div>
                                         </div>
                                     </div>
@@ -176,24 +247,22 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                                
-                                            @endforeach
-                                            
 
-                                        
+                                        @endforeach
+
                                         </div>
                                     </div>
                                 </div>
                                 {{-- Product Tax --}}
 
-                                
-                                  {{-- Thumbnail --}}
+
+                                {{-- Thumbnail --}}
                                   <div class=" thumbnail-section card card-flush py-4 mb-3">
                                     <div class="card-header">
                                         <div class="card-title">
                                             <h3>Thumbnail Image<b>(1500 x 1500)</b></h3>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="card-body pt-0">
                                         <div class="fv-row mb-2">
                                             <div class="dropzone" id="kt_ecommerce_add_product_mediaa" data-toggle="aizuploader" data-type="image">
@@ -223,7 +292,7 @@
                                         <div class="card-title">
                                             <h3>Gallery Images <b>(1500 x 1500)</b></h3>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="card-body pt-0">
                                         <div class="fv-row ">
                                             <div class="dropzone" id="kt_ecommerce_add_product_mediaa" data-toggle="aizuploader" data-type="image" data-multiple="true">
@@ -244,7 +313,7 @@
                                 </div>
                                  <!--Gallaery Images-->
 
-                               
+
                                 <!--begin::PDF-->
                                 <div class=" card card-flush py-4">
                                     <div class="card-header">
@@ -267,12 +336,8 @@
                                 </div>
                                 {{-- PDF --}}
 
-
-                                
-
                             </div>
                           </div>
-                        
                         <!--end::Tab pane-->
 
 
@@ -293,7 +358,7 @@
                                                 <label class="form-label">Dimension</label>
                                                 <div class="d-flex flex-wrap flex-sm-nowrap gap-3">
                                                     <input type="number" name="width" class="form-control mb-2" placeholder="Width (w)">
-                                                    <input type="number" name="height" class="form-control mb-2" placeholder="Height (h)">
+                                                    <input  type="number" name="height" class="form-control mb-2" placeholder="Height (h)">
                                                     <input type="number" name="length" class="form-control mb-2" placeholder="Lengtn (l)">
                                                 </div>
                                                 <div class="text-muted fs-7">Enter the product dimensions in
@@ -301,7 +366,7 @@
                                             </div>
                                             <div class="pt-3 col-md-6">
                                                 <label class="form-label">Weight</label>
-                                                <input type="number" name="weight" class="form-control mb-2" placeholder="Product weight">
+                                                <input type="number"  name="weight" class="form-control mb-2" placeholder="Product weight">
                                                 <div class="text-muted fs-7">Set a product weight in kilograms (kg).
                                                 </div>
                                             </div>
@@ -321,24 +386,18 @@
                                     <div class="row mb-6">
                                         <div class="col-md-6 fv-row fv-plugins-icon-container">
                                             <label class="required form-label">External link</label>
-                                            <input type="text" class="form-control mb-2" name="external_link" placeholder="Leave it blank if you do not use external site link">
-                                            <div class="text-muted fs-7">
-                                                Leave it blank if you do not use external site link
-                                            </div>
+                                            <input type="text" class="form-control mb-2" name="external_link" placeholder="Leave it blank if you do not use external site link" >
                                         </div>
                                         <div class="col-md-6 fv-row fv-plugins-icon-container">
                                             <label class="required form-label">External link button text</label>
                                             <input type="text" placeholder="External link button text" name="external_link_btn" class="form-control mb-2">
-                                            <div class="text-muted fs-7">
-                                                Leave it blank if you do not use external site link
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                                 {{-- External Links --}}
 
-                           
+
 
 
                                  {{-- Seo Tags --}}
@@ -349,103 +408,24 @@
                                 <div class="card-body pt-0">
                                     <div class="mb-10">
                                         <label class="form-label">Meta Title</label>
-                                        <input type="text" class="form-control mb-2" name="meta_title" placeholder="Meta tag name">
-                                        <div class="text-muted fs-7">
-                                            Set a meta tag title. Recommended to be simple and precise keywords.
-                                        </div>
+                                        <input type="text" class="form-control mb-2" name="meta_title" placeholder="Meta tag name"  >
                                     </div>
                                     <div class="mb-10">
                                         <label class="form-label">Description</label>
                                         <div class="text-muted fs-7">
-                                            <textarea name="meta_description" class="form-control" >Set a meta tag description to the product for increased SEO ranking.</textarea>
+                                            <textarea name="meta_description" class="form-control"></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             {{-- Seo Tags --}}
-                               
-                               
-                               
-                                <div class="d-none card card-flush py-4">
-                                    <div class="card-header">
-                                        <div class="card-title">
-                                            <h3>Product Variation</h3>
-                                        </div>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <div class="mb-6 fv-row row">
-                                            <div class="col-md-10 fv-row fv-plugins-icon-container">
-                                                <label class="required form-label">Colors</label>
-                                                <select class="form-select mb-2 select2-hidden-accessible" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" name="colors[]" id="colors" multiple="" disabled="" data-select2-id="select2-data-colors" tabindex="-1" aria-hidden="true">
-                                                    <option value="#FFFF00">Yellow</option>
-                                                    <option value="#9ACD32">YellowGreen</option>
-                                                </select>   
-                                            </div>
 
-                                            <div class="col-md-2 fv-row fv-plugins-icon-container">
-                                                <p>&nbsp;</p>
-                                                <label class="form-check form-switch form-check-custom form-check-solid">
-                                                    <input class="form-check-input" type="checkbox" name="colors_active" value="1">
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="mb-6 fv-row row">
-                                            <label class="required form-label">Attributes</label>
-                                            <select class="form-select mb-2 select2-hidden-accessible" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" name="choice_attributes[]" id="choice_attributes">
-                                                    <option value="5">Size</option>
-                                                    <option value="6">Color</option>
-                                            </select>
-                                            
-
-                                        </div>
-                                        <div>
-                                            <div class="text-muted fs-7">
-                                                Choose the attributes of this product and then input values of each attribute
-                                            </div>
-                                            <br>
-                                        </div>
-
-                                        <div class="customer_choice_options" id="customer_choice_options">
-
-                                        </div>
-                                        <div class="size-image">
-                                            <div class="fv-row mb-2">
-                                                <label class="form-label">Size Image</label>
-                                                <!--begin::Dropzone-->
-                                                <div class="dropzone" id="kt_ecommerce_add_product_mediaa" data-toggle="aizuploader" data-type="image" data-multiple="false">
-                                                    <!--begin::Message-->
-                                                    <div class="dz-message needsclick">
-                                                        <!--begin::Icon-->
-                                                        <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                                        <!--end::Icon-->
-                                                        <!--begin::Info-->
-                                                        <input type="hidden" name="size_image" class="selected-files">
-                                                        <div class="ms-4">
-                                                            <h3 class="fs-5 fw-bolder text-gray-900 mb-1">
-                                                                Click to upload.
-                                                            </h3>
-                                                        </div>
-                                                        <!--end::Info-->
-                                                    </div>
-                                                </div>
-                                                <!--end::Dropzone-->
-                                                <div class="file-preview box sm">
-                                                </div>
-
-                                            </div>  
-                                        </div>
-                                    </div>
-                                </div>
 
                             </div>
                         </div>
-
-
-
-                    </div>            
-              
+                    </div>
                 </div>
-            
+
 
                 <!--end::Main column-->
                 <div class="d-flex flex-column gap-7 gap-lg-6 w-100 w-lg-300px">
@@ -461,8 +441,8 @@
                             <div class="pt-3 col-md-12 fv-row fv-plugins-icon-container">
                                 <label class="required form-label">Product Type</label>
                                 <select required data-control="select2" class="form-select product_type " name="product_type">
-                                    <option value="1">Simple</option>
-                                    <option value="2">Variation</option>
+                                    <option value="simple">Simple</option>
+                                    <option value="variation">Variation</option>
                                 </select>
                             </div>
 
@@ -486,13 +466,12 @@
                             <div class="pt-5">
                                 <label class="form-label">Low Stock Quantity Warning</label>
                                 <select required data-control="select2"  class="d-block form-select " name="stock_visibility">
-                                    <option>Show Stock Quantity</option>
-                                    <option>Show Stock With Text Only</option>
-                                    <option>Hide Stock</option>
+                                    <option  value="show_stock_quantity" >Show Stock Quantity</option>
+                                    <option  value="show_stock_with_text_only" >Show Stock With Text Only</option>
+                                    <option  value="hide_stock" >Hide Stock</option>
                                 </select>
                             </div>
 
-                            
 
                         </div>
                     </div>
@@ -507,31 +486,28 @@
                               <div class="card-body pt-0">
 
                                 <label class="form-label">Categories</label>
-                                <select class="form-select mb-2 select2-hidden-accessible" data-control="select2" data-placeholder="Select an option"  name="category_id" id="category_id">
-                                    <option value="1" data-select2-id="select2-data-20-4qkp">Organic Olive</option>
-                                    <option value="6">Premium Spreads</option>
-                                    <option value="7">Chocolates</option>
-                                    <option value="8">Organic Honey</option>
-                                    <option value="10">Organic Pasta</option>
-                                    <option value="11">Premium Chocolates</option>
+                                <select class="form-select mb-2" data-control="select2" data-placeholder="Select an option"  name="category_id" id="category_id">
+                                    @foreach ($categories as $cat)
+                                    <option disabled >{{$cat->name}}</option>
+                                    @foreach ($cat->children as $child)
+                                     <option value="{{$child->id}}" >--- {{$child->name}}</option>
+                                    @endforeach
+                                    @endforeach
                                 </select>
                                 <br>
 
                                 <label class="form-label">Brand</label>
                                 <select class="form-select mb-2 select2-hidden-accessible" data-control="select2" data-placeholder="Select an option" name="brand_id" id="brand_id" >
-                                    <option value="">Select Brand</option>
-                                    <option value="1">SCYAVURU</option>
-                                    <option value="4">PERSIANI</option>
-                                    <option value="5">NOAN</option>
-                                    <option value="6">NOALYA</option>
-                                    <option value="7">HAPPY MAMA</option>
-                                    <option value="8">STAUDS</option>
+                                    <option value="0">Select Brand</option>
+                                    @foreach ($brands as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                    @endforeach
                                 </select>
-                                
+
                                 <!--begin::Label-->
                                 <label class="form-label d-block">Tags</label>
                                 <input id="kt_ecommerce_add_product_tags" class="form-control mb-2" name="tags[]"
-                                    placeholder="Type & add tag">
+                                    placeholder="Type & add tag" >
                                 <div class="text-muted fs-7">
                                     <span class="text-danger"> Type & hit enter add tag.</span>
                                     This is used for search. Input those words by which customer can find this product.
@@ -550,23 +526,21 @@
                             </div>
                             <div class="card-body pt-0">
                                 <div class="mb-4">
-                                        <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
-                                            <span class="form-check-label ms-0 fw-bolder fs-6 text-gray-700">Free Shipping</span>
-                                            <input class="form-check-input" type="radio" name="shipping_type" checked="checked" value="free">
-                                        </label>
-                                    
-                                        <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
-                                            <span class="form-check-label ms-0 fw-bolder fs-6 text-gray-700">Flat Rate</span>
-                                            <input class="form-check-input" type="radio" name="shipping_type" value="flat_rate">
-                                        </label>
 
-                                        <div class="col-md-12 fv-row fv-plugins-icon-container flat_rate_shipping_div" style="display: none">
+                                        <label class="form-label">Shipping Type</label>
+                                        <select required data-control="select2"  class="d-block form-select " name="shipping_type">
+                                            <option value="free" >Free Shipping</option>
+                                            <option value="flate" >Flat Rate</option>
+                                        </select>
+
+                                        <div class="mt-3 col-md-12 fv-row fv-plugins-icon-container flat_rate_shipping_div" >
                                             <label class=" form-label">Shipping cost</label>
-                                            <input type="number" lang="en" min="0" value="0" step="0.01" placeholder="Shipping cost" name="flat_shipping_cost" class="form-control mb-2" required="">
+                                            <input type="number" lang="en" min="0" value="0" step="0.01" placeholder="Shipping cost" name="flat_shipping_cost" class="form-control mb-2" >
                                         </div>
-                                        
-                                        <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack">
-                                        <span class="form-check-label ms-0 fw-bolder fs-6 text-gray-700">Is Product Quantity Mulitiply</span><input class="form-check-input" type="checkbox" name="is_quantity_multiplied" value="1">
+
+                                        <label class="mt-5 form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack">
+                                        <span class="form-check-label ms-0 fw-bolder fs-6 text-gray-700">Is Product Quantity Mulitiply</span>
+                                        <input class="form-check-input" type="checkbox" name="is_quantity_multiplied" value="1">
                                         </label>
 
                                         <label for="kt_ecommerce_add_product_store_template" class="mt-5 form-check-label ms-0 fw-bolder fs-6 text-gray-700 mb-3">Shipping Days</label>
@@ -590,15 +564,15 @@
                                     <div class="card-title"><h3>Product Status</h3></div>
                                 </div>
                                 <div class="card-body pt-0">
-                                    <select class="form-select  mb-2 select2-hidden-accessible" name="submit_type" data-control="select2">
-                                        <option value="draft">Drafts</option>
-                                        <option value="unpublish">Unpublish</option>
-                                        <option value="publish">Publish</option>
-                                    </select>                 
+                                    <select class="form-select  mb-2 select2-hidden-accessible" name="status" data-control="select2">
+                                        <option value="draft">Draft</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="published">Published</option>
+                                    </select>
                                 </div>
                             </div>
                         {{-- Submit --}}
-                 
+
                     </div>
                 </form>
             </div>
@@ -617,158 +591,212 @@
     <script src="{{ asset('/admin/assets/backend/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
     <script src="{{ asset('/admin/assets/backend/js/custom/apps/ecommerce/catalog/save-product.js') }}"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+
     <script>
-         ClassicEditor.create( document.querySelector( '#editor' ) )
+
+        function convertObjectToValues(data) {
+            let res = [];
+            $.each(data, function() {
+                var key = Object.keys(this)[0];
+                var value = this[key];
+                res.push(value);
+            });
+        }
+
+        function generateCombination(attributes){
+
+                let getProducts = (arrays) => {
+                    if (arrays.length === 0) {
+                        return [[]];
+                    }
+
+                    let results = [];
+
+                    getProducts(arrays.slice(1)).forEach((product) => {
+                        arrays[0].forEach((value) => {
+                            results.push([value].concat(product));
+                        });
+                    });
+
+                    return results;
+                };
+
+                let getAllCombinations = (attributes) => {
+                    let attributeNames = Object.keys(attributes);
+
+                    let attributeValues = attributeNames.map((name) => attributes[name]);
+
+                    return getProducts(attributeValues).map((product) => {
+                        obj = {};
+
+                        attributeNames.forEach((name, i) => {
+                            obj[name] = product[i];
+                        });
+                        return obj;
+                    });
+                };
+
+               return getAllCombinations(attributes)
+            }
+
+        ClassicEditor.create( document.querySelector( '#editor' ) )
         .then( editor => {
                 console.log( editor );
         } )
         .catch( error => {
                 console.error( error );
         } );
+
+
+
     </script>
     <script>
 
-        $('.product_type').change(function(){
-      
-            // let product_type = $(this).val();
-            // alert(product_type);
+        function getAttributes(id) {
 
+            $.ajax({
+                url: "{{route('admin.products.attribute_type')}}",
+                data:{types:id},
+            }).then((res) => {
+
+                $('.variations').append(`
+                    <div class="type_id${res._id} mb-6 fv-row row">
+                        <div class="col-md-1 align-self-center text-center">
+                            <i class="type_delete_button fas fa-times"></i>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="hidden" name="attribute_types[]" value="${res._id}" />
+                            <input type="text" class="keyname form-control"  value="${res.name}" readonly>
+                        </div>
+                        <div class="col-md-8">
+                            <select required class="single_attribute attribute${res._id} form-select mb-2" data-control="select2" data-placeholder="Select an option" name="att[${res._id}][]" multiple >
+                                ${res.attributes.map(l => `
+                                <option>${l.name}</option>
+                            `)}
+                        </div>
+                </div>`);
+
+                $('.attribute'+res._id).select2();
+
+                setCombinations();
+
+            }).catch((error) => {
+
+            });
+        }
+
+
+
+        function setCombinations(){
+
+            $('.combination_list').empty();
+            let colors = $('.colors').val();
+            let variationsArray = {};
+
+            if(colors.length > 0){
+                variationsArray.combination = colors;
+            }
+
+            $variations = $('.variations').children().each(function () {
+                 let target =  $(this).find('.single_attribute');
+                 let keyName =  $(this).find('.keyname').val();
+                 variationsArray[keyName] = target.val();
+            });
+
+            let combinations = generateCombination(variationsArray);
+            combinations.forEach( (element,index) => {
+
+                var objtostring = Object.keys(element).map((key) => element[key]);
+
+                $('.combination_list').append(`
+                    <tr class="variant">
+                        <td>
+                            <input class="form-control mb-2" name="combinations[${index}][name]" value="${objtostring.toString()}" />
+                        </td>
+                        <td>
+                            <input name="combinations[${index}][price]" type="number" value="0" min="0" step="0.01" class="form-control mb-2" required />
+                        </td>
+                        <td>
+                            <input name="combinations[${index}][sku]" value="${objtostring.toString()}" class="form-control mb-2" />
+                        </td>
+                        <td>
+                            <input name="combinations[${index}][qty]" type="number" value="0" min="0" step="1" class="form-control mb-2" required />
+                        </td>
+                        <td>
+                            <div class="input-group" data-toggle="aizuploader" data-type="image" >
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                                </div>
+                                <div class="form-control file-amount text-truncate">Choose File</div>
+                                <input type="hidden" name="combinations[${index}][img]" class="selected-files" />
+                            </div>
+                            <div class="file-preview box sm"></div>
+                        </td>
+                        <td class="text-center" >
+                            <i class="combination_delete_button fas fa-times"></i>
+                        </td>
+                    </tr>
+                 `);
+
+            });
+        }
+
+        $('.product_type').change(function(){
+
+            let pptype = $(this).val();
+            if(pptype == 'simple'){
+                $('.simple_show').show();
+                $('.variation_show').hide();
+            }else{
+                $('.simple_show').hide();
+                $('.variation_show').show();
+            }
+
+        }).change();
+
+
+        $('.colors').change(function(){
+            setCombinations();
         });
+
+        $('.combination').click(function(){
+            // setCombinations();
+        });
+
+        $(".variations").delegate(".type_delete_button", "click", function(){
+            $(this).parent().parent().remove();
+            setCombinations();
+        });
+
+        $(".combination_list").delegate(".combination_delete_button", "click", function(){
+            $(this).parent().parent().remove();
+        });
+
+
+        $(".variations").delegate(".single_attribute", "change", function(){
+            setCombinations();
+        });
+
+
+        $('.create_type').click(function(){
+            let selected_types_id = $('.attribute_types').val();
+            let findtypeid = $(`.type_id${selected_types_id}`);
+            if(findtypeid[0]){
+                alert('Cannot Add Duplicate Type');
+            }else{
+                getAttributes(selected_types_id);
+            }
+        });
+
 
         $('.form-submit-button').click(function(){
-
-            $('.my_product_form').submit();
-            // alert('adasd');
-
+             $('.my_product_form').submit();
         });
-
-        
 
     </script>
+    <script type="text/javascript">
 
 
-    {{-- <script type="text/javascript">
-        $('form').bind('submit', function(e) {
-            // Disable the submit button while evaluating if the form should be submitted
-            // $("button[type='submit']").prop('disabled', true);
-            $("button[type='submit']").hide();
 
-            var valid = true;
-
-            if (!valid) {
-                e.preventDefault();
-
-                // Reactivate the button if the form was not submitted
-                // $("button[type='submit']").button.prop('disabled', false);
-                $("button[type='submit']").show();
-            }
-        });
-
-        $("[name=shipping_type]").on("change", function() {
-            $(".flat_rate_shipping_div").hide();
-
-            if ($(this).val() == 'flat_rate') {
-                $(".flat_rate_shipping_div").show();
-            }
-
-        });
-
-        function add_more_customer_choice_option(i, name) {
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: '{{ route('products.add-more-choice-option') }}',
-                data: {
-                    attribute_id: i
-                },
-                success: function(data) {
-                    var obj = JSON.parse(data);
-                    $('#customer_choice_options').append('\
-                            <div class="mb-6 fv-row row">\
-                                <div class="col-md-3">\
-                                <label class="required form-label">' + name + '</label>\
-                                    <input type="hidden" name="choice_no[]" value="' + i + '">\
-                                    <input type="text" class="form-control" name="choice[]" value="' + name +
-                        '" placeholder="{{ translate('Choice Title') }}" readonly>\
-                                </div>\
-                                <div class="col-md-8">\
-                                <label class=" form-label">&nbsp;</label>\
-                                <select class="form-select attribute_choice" data-control="select2" data-hide-search="false" data-live-search="true" name="choice_options_' +
-                        i + '[]" multiple>\
-                                ' + obj + '\
-                                </select>\
-                                </div>\
-                            </div>');
-                    $('.attribute_choice').select2();
-                    AIZ.plugins.bootstrapSelect('refresh');
-                }
-            });
-        }
-
-        $('input[name="colors_active"]').on('change', function() {
-            if (!$('input[name="colors_active"]').is(':checked')) {
-                $('#colors').prop('disabled', true);
-                AIZ.plugins.bootstrapSelect('refresh');
-            } else {
-                $('#colors').prop('disabled', false);
-                AIZ.plugins.bootstrapSelect('refresh');
-            }
-            update_sku();
-        });
-
-        $(document).on("change", ".attribute_choice", function() {
-            update_sku();
-        });
-
-        $('#colors').on('change', function() {
-            update_sku();
-        });
-
-        $('input[name="unit_price"]').on('keyup', function() {
-            update_sku();
-        });
-
-        $('input[name="name"]').on('keyup', function() {
-            update_sku();
-        });
-
-        function delete_row(em) {
-            $(em).closest('.form-group row').remove();
-            update_sku();
-        }
-
-        function delete_variant(em) {
-            $(em).closest('.variant').remove();
-        }
-
-        function update_sku() {
-            $.ajax({
-                type: "POST",
-                url: '{{ route('products.sku_combination') }}',
-                data: $('#choice_form').serialize(),
-                success: function(data) {
-                    $('#sku_combination').html(data);
-                    AIZ.uploader.previewGenerate();
-                    AIZ.plugins.fooTable();
-                    if (data.length > 1) {
-                        $('#show-hide-div').hide();
-                    } else {
-                        $('#show-hide-div').show();
-                    }
-                }
-            });
-        }
-
-        $('#choice_attributes').on('change', function() {
-            $('#customer_choice_options').html(null);
-            $.each($("#choice_attributes option:selected"), function() {
-                add_more_customer_choice_option($(this).val(), $(this).text());
-            });
-
-            update_sku();
-        });
-    </script> --}}
-
+    </script>
 @endsection

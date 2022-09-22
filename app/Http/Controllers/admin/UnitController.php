@@ -2,55 +2,68 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App;
 use Illuminate\Http\Request;
 use App\Models\Unit;
+use App\Models\UnitTranslation;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
+
 
 class UnitController extends Controller
 {
     
     /**
-     * Display a listing of the resource
-     * @return \Illuminate\Http\Response
+     * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $sort_search =null;
-        $units = Unit::orderBy('created_at', 'desc');
-        if ($request->has('search')){
+
+        $data = Unit::query();
+        if ($request->has('search') && $request->search  != ''){
             $sort_search = $request->search;
-            $units = $units->where('name', 'like', '%'.$sort_search.'%');
+            $data = $data->where('name', 'like', '%'.$sort_search.'%');
         }
 
-        $units = $units->paginate(15);
-        return view('admin.units.index', compact('units', 'sort_search'));
+        $data = $data->get();
+        return view('admin.units.index', compact('data'));
+
     }
 
 
     /**
      * Show the form for creating a new resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        return view('admin.units.create');
+
+        return view('admin.categories.create');
     }
 
 
     /**
      * Store a newly created resource in storage.
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
      */
     public function store(Request $request)
     {
-        $unit = new Unit;
-        $unit->name = $request->unit;
-        $unit->short_name = $unit->short_name;
-        $unit->save();
-        
-        return redirect()->route('admin.units.index');
+
+       $data = Unit::create([
+            "name" => $request->name,
+            "slug" => $request->slug,
+            "description" => $request->description,
+            "logo" =>  $request->logo,
+            "sorting" =>  $request->sorting,
+            "active" =>  $request->active,
+        ]);
+
+        $this->translate('en',$data->id,[
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('admin.units.index')->with('success', translate('Record Added'));
     }
 
 
@@ -60,38 +73,70 @@ class UnitController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $lang = $request->lang;
-        $unit = Unit::findOrFail($id);
-        return view('admin.units.edit', compact('unit','lang'));
+        $lang = $request->lang ?? App::getLocale();
+        $data = Unit::findOrFail($id);
+        return view('admin.units.edit', compact('data','lang'));
     }
+
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
+    {              
+
+        $data = Unit::findOrFail($id);
+        
+        if($request->lang == env("DEFAULT_LANGUAGE")){
+            $data->name = $request->name;
+            $data->description = $request->description;
+            $data->logo = $request->logo;
+            $data->save();
+        }
+
+        $data->slug = $request->slug;
+        $data->active = $request->active;
+        $data->sorting = $request->sorting;
+        $data->save();
+
+        $this->translate($request->lang,$data->id,[
+             'name' => $request->name,
+             'description' => $request->description,
+             'logo' => $request->logo,
+            ]);
+
+        return back()->with('success', translate('Record Updated'));
+
+    }
+
+    public function translate($lang,$id,$data)
     {
 
-        $unit = Unit::findOrFail($id);
-        $unit->name = $request->name;
-        $unit->short_name = $request->short_name;
-        $unit->save();
-        return back()->with('success','Record Upated');
+        $translation = UnitTranslation::firstOrNew(['lang' => $lang, 'unit_id' => $id]);
+        foreach ($data as $key => $value) {
+            $translation[$key] = $data[$key];
+        }
+        $translation->save();
+
     }
 
 
-    /*
+
+    /**
      * Remove the specified resource from storage.
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $unit = Unit::findOrFail($id);
-        return back()->with('success','Record Deleted');
+        foreach ($unit->translations as $translation) {
+            $translation->delete();
+        }
+        Unit::destroy($id);
+       
+        return redirect()->route('admin.units.index')->with('success', translate('Record Deleted'));
     }
+
 
 
 

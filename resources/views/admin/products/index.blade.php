@@ -16,24 +16,16 @@
     <div class="toolbar" id="kt_toolbar">
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
             <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Product Form</h1>
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{translate('Products')}}</h1>
                 <span class="h-20px border-gray-300 border-start mx-4"></span>
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <li class="breadcrumb-item text-muted">
-                        <a href="http://localhost/oceanandseas/admin" class="text-muted text-hover-primary">Home</a>
+                        <a href="{{route('admin.dashboard')}}" class="text-muted text-hover-primary">{{translate('Home')}}</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-300 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">eCommerce</li>
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
-                    </li>
-                    <li class="breadcrumb-item text-muted">Catalog</li>
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
-                    </li>
-                    <li class="breadcrumb-item text-dark">Add New Product</li>
+                    <li class="breadcrumb-item text-muted"> <a class="text-muted" href="{{route('admin.products.index')}}" target="_blank" rel="noopener noreferrer">{{translate('Products')}}</a> </li>
                 </ul>
             </div>
         </div>
@@ -41,47 +33,69 @@
     
     <div class="post d-flex flex-column-fluid" id="kt_post">
         
-
             <div id="kt_content_container" class="container-fluid">
-                <form class="" id="sort_products" action="" method="GET">
+                <form class="" id="sort_products" method="GET">
                     <div class="card card-flush">
                         <div class="card-header align-items-center py-5 gap-2 gap-md-5">
                             <div class="card-title">
                                 <div class="d-flex align-items-center position-relative my-1">
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black"></rect>
-                                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" class="form-control form-control-solid w-250px ps-14" id="search" name="search" placeholder="Type &amp; Enter">
+                                    <i class="fa fa-search position-absolute ms-4"></i>
+                                    <form class="search-form" >
+                                        <input type="text" class="search-data form-control form-control-solid w-250px ps-14"
+                                            placeholder="Search" id="search" name="search" value="{{request()->has('search')? request()->search:''}}" />
+                                    </form>
                                 </div>
                             </div>
 
                             <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                                <a href="{{route('admin.products.create')}}" class="btn btn-primary">Add New Product</a>
+                                <a href="{{route('admin.products.create')}}" class="btn btn-primary">Add New</a>
+                                <div class="mx-1 dropdown">
+                                    <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i></button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                      <button type="button" class="dropdown-item action_button ">{{translate('Delete')}} </button>
+                                    </div>
+                                </div>
+
                               </div>
                         </div>
 
                         <div class="card-body pt-0">
                             <div class="table-responsive">
-                                <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3 dataTable no-footer" id="kt_ecommerce_products_table">
+                                <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3  no-footer" id="kt_ecommerce_products_table">
                                     <thead>
                                         <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="w-10px pe-2">#</th>
-                                            <th class="min-w-200px">Product Name</th>
-                                            <th class="min-w-200px">SKU</th>
-                                            <th class="text-center min-w-75px">Added By</th>
-                                            <th class="text-center min-w-100px">Status</th>
-                                            <th class="text-center min-w-70px">Featured</th>
-                                            <th class="text-center min-w-150px">Actions</th>
+                                            <th class="w-10px pe-2">
+                                                <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                    <input class="form-check-input" type="checkbox" data-kt-check="true"
+                                                        data-kt-check-target="#kt_ecommerce_products_table .form-check-input"
+                                                        value="1" />
+                                                </div>
+                                            </th>
+                                            <th class="text-center">{{translate('Image')}}</th>
+                                            <th class="">{{translate('Name')}}</th>
+                                            <th class="">{{translate('SKU')}}</th>
+                                            <th class="">{{translate('Category')}}</th>
+                                          
+                                            <th class="text-center">{{translate('Featured')}}</th>
+                                            <th class="text-center">{{translate('Status')}}</th>
+                                            <th class="text-center">{{translate('Active')}}</th>
+                                            <th class="text-center min-w-150px">{{translate('Actions')}}</th>
                                         </tr>
                                     </thead>
                                     
                                     <tbody class="fw-bold text-gray-600">
                                            @foreach ($products as $key => $item)
                                            <tr>
-                                                <td>{{$key + 1}}</td>
+                                              <td>
+                                                <div
+                                                    class="row_selected_checkbox form-check form-check-sm form-check-custom form-check-solid">
+                                                    <input class=" form-check-input" type="checkbox" value="{{$item->id}}" />
+                                                </div>
+                                              </td>
+                                               <td class="text-center" >
+                                                <img class="img-fluid" src="{{ uploaded_asset($item->thumbnail)}}" />
+                                               </td>
                                                 <td class="text-center" >{{$item->name}}</td>
                                                 
                                                 <td class="text-center pe-0">
@@ -89,28 +103,33 @@
                                                 </td>
 
                                                 <td class="text-center pe-0">
-                                                    <span class="fw-bolder">Admin</span>
+                                                    <span class="fw-bolder">{{$item->category->name}}</span>
+                                                </td>
+
+                                                <td class="text-center pe-0">
+                                                    <span class="fw-bolder">{{$item->brand ? $item->brand->name : 'None'}}</span>
+                                                </td>
+
+                                                <td class="text-center pe-0">
+                                                    {{ $item->featured == 1 ? 'Yes' : 'No'}} 
                                                 </td>
 
                                                 <td class="text-center pe-0">
                                                     {{ $item->status ? $item->status :'none'}} 
                                                 </td>
-                                                
+                                                  
                                                 <td class="text-center pe-0">
-                                                    {{ $item->featured == 1 ? 'Enabled' : 'Disabled'}} 
+                                                    {{ $item->active == 1 ? 'Active' : 'Not Active'}} 
                                                 </td>
 
                                                 <td class="text-center">
 
-                                                    <a href="{{route('admin.products.edit',$item->id)}}" class="btn btn-info">Edit
+                                                    <a href="{{ route('admin.products.edit',$item->id)}}" class="menu-link px-3"><i class="fa-lg text-primary fas fa-edit" ></i></a>
+    
+                                                    <a data-href="{{ route('admin.products.destroy',$item->id)}}" class="confirm-delete bg-white border-0 menu-link px-3">
+                                                      <i  class="text-danger fa-lg far fa-trash-alt" ></i>
                                                     </a>
-
-                                                    <form class="d-inline" action="{{ route('admin.products.destroy',$item->id) }}" method="POST">
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
-
-                                                    <button class="btn btn-danger" type="submit" >Delete</button>
-                                                    </form>
+                                                        
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -118,145 +137,29 @@
                                 </table>
                             </div>
 
-                            <div class="aiz-pagination">
-                                
-                            </div>
-                            <!--end::Card body-->
+                           
                         </div>
                     </div>
                 </form>
-                <!--end::Products-->
             </div>
-    
-    </div>
+       </div>
 </div>
 @endsection
 
+@section('modal')
+    @include('admin.components.delete_modal')
+
+@endsection
+
 @section('script')
-    <script src="{{ asset('assets/backend/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
-    <script src="{{ asset('assets/backend/js/custom/apps/ecommerce/catalog/save-product.js') }}"></script>
-    {{-- <script type="text/javascript">
-        $('form').bind('submit', function(e) {
-            // Disable the submit button while evaluating if the form should be submitted
-            // $("button[type='submit']").prop('disabled', true);
-            $("button[type='submit']").hide();
 
-            var valid = true;
+    <script>
+        
+        $('.search-data').change(function(){
+            $('.search-form').submit();
+         });
 
-            if (!valid) {
-                e.preventDefault();
 
-                // Reactivate the button if the form was not submitted
-                // $("button[type='submit']").button.prop('disabled', false);
-                $("button[type='submit']").show();
-            }
-        });
-
-        $("[name=shipping_type]").on("change", function() {
-            $(".flat_rate_shipping_div").hide();
-
-            if ($(this).val() == 'flat_rate') {
-                $(".flat_rate_shipping_div").show();
-            }
-
-        });
-
-        function add_more_customer_choice_option(i, name) {
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: '{{ route('products.add-more-choice-option') }}',
-                data: {
-                    attribute_id: i
-                },
-                success: function(data) {
-                    var obj = JSON.parse(data);
-                    $('#customer_choice_options').append('\
-                            <div class="mb-6 fv-row row">\
-                                <div class="col-md-3">\
-                                <label class="required form-label">' + name + '</label>\
-                                    <input type="hidden" name="choice_no[]" value="' + i + '">\
-                                    <input type="text" class="form-control" name="choice[]" value="' + name +
-                        '" placeholder="{{ translate('Choice Title') }}" readonly>\
-                                </div>\
-                                <div class="col-md-8">\
-                                <label class=" form-label">&nbsp;</label>\
-                                <select class="form-select attribute_choice" data-control="select2" data-hide-search="false" data-live-search="true" name="choice_options_' +
-                        i + '[]" multiple>\
-                                ' + obj + '\
-                                </select>\
-                                </div>\
-                            </div>');
-                    $('.attribute_choice').select2();
-                    AIZ.plugins.bootstrapSelect('refresh');
-                }
-            });
-        }
-
-        $('input[name="colors_active"]').on('change', function() {
-            if (!$('input[name="colors_active"]').is(':checked')) {
-                $('#colors').prop('disabled', true);
-                AIZ.plugins.bootstrapSelect('refresh');
-            } else {
-                $('#colors').prop('disabled', false);
-                AIZ.plugins.bootstrapSelect('refresh');
-            }
-            update_sku();
-        });
-
-        $(document).on("change", ".attribute_choice", function() {
-            update_sku();
-        });
-
-        $('#colors').on('change', function() {
-            update_sku();
-        });
-
-        $('input[name="unit_price"]').on('keyup', function() {
-            update_sku();
-        });
-
-        $('input[name="name"]').on('keyup', function() {
-            update_sku();
-        });
-
-        function delete_row(em) {
-            $(em).closest('.form-group row').remove();
-            update_sku();
-        }
-
-        function delete_variant(em) {
-            $(em).closest('.variant').remove();
-        }
-
-        function update_sku() {
-            $.ajax({
-                type: "POST",
-                url: '{{ route('products.sku_combination') }}',
-                data: $('#choice_form').serialize(),
-                success: function(data) {
-                    $('#sku_combination').html(data);
-                    AIZ.uploader.previewGenerate();
-                    AIZ.plugins.fooTable();
-                    if (data.length > 1) {
-                        $('#show-hide-div').hide();
-                    } else {
-                        $('#show-hide-div').show();
-                    }
-                }
-            });
-        }
-
-        $('#choice_attributes').on('change', function() {
-            $('#customer_choice_options').html(null);
-            $.each($("#choice_attributes option:selected"), function() {
-                add_more_customer_choice_option($(this).val(), $(this).text());
-            });
-
-            update_sku();
-        });
-    </script> --}}
+    </script>
 
 @endsection

@@ -71,7 +71,7 @@
                                             <th class="min-w-200px">{{translate('Name')}}</th>
                                             <th class="text-center">{{translate('Order')}}</th>
                                             <th class="text-center">{{translate('Featured')}}</th>
-                                            <th class="text-center">{{translate('Status')}}</th>
+                                            <th class="text-center">{{translate('Active')}}</th>
                                             <th class="text-end min-w-70px">{{translate('Action')}}</th>
                                         </tr>
                                     </thead>
@@ -88,11 +88,9 @@
                                                     <img class="img-fluid" src="{{ uploaded_asset($item->logo)}}" />
                                                 </td>
                                                 <td>{{ $item->getTranslation('name') }}</td>
-                                                <td>{{ $item->sorting}}</td>
-                                                <td>{{ $item->featured}}</td>
-                                                <td>{{ $item->status}}</td>
-                                            
-                                                
+                                                <td class="text-center">{{ $item->sorting}}</td>
+                                                <td class="text-center" >{{ $item->featured == '1' ? 'Yes' : 'No'}}</td>
+                                                <td class="text-center" >{{ $item->Active == '1' ? 'Active' :'Not Active'}}</td>
                                                 <td class="text-end">
                                                     <a href="{{ route('admin.categories.edit',$item->id)}}" class="menu-link px-3"><i class="fa-lg text-primary fas fa-edit" ></i></a>
 
@@ -115,9 +113,9 @@
                                                             <img class="img-fluid" src="{{ uploaded_asset($child->logo)}}" />
                                                         </td>
                                                         <td>--- {{ $child->getTranslation('name') }}</td>
-                                                        <td>{{ $item->sorting}}</td>
-                                                        <td>{{ $item->featured}}</td>
-                                                        <td>{{ $item->status}}</td>
+                                                        <td class="text-center">{{ $item->sorting}}</td>
+                                                        <td class="text-center">{{ $item->featured == '1' ? 'Yes' : 'No'}}</td>
+                                                        <td class="text-center" >{{ $item->active == '1' ? 'Active' : 'Not Active'}}</td>
                                                         
                                                         
                                                         <td class="text-end">
@@ -127,19 +125,14 @@
                                                                         <i  class="text-danger fa-lg far fa-trash-alt" ></i>
                                                                     </a>
                                                                 </td>
-                                                            </tr>
-    
-    
-                                            @endforeach
-
-                                        @endforeach
-
-
-                                     
-
+                                                        </tr>
+                                                 @endforeach
+                                        
+                                          @endforeach
 
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>
@@ -148,34 +141,37 @@
          </div>
        </div>
     </div>
-@endsection
 
+@endsection
 @section('modal')
     @include('admin.components.delete_modal')
 @endsection
 
+
+
 @section('script')
-    <script type="text/javascript">
 
-        $('.saerch_data').change(function(){
-            $('.search-form').submit();
-        });
+<script type="text/javascript">
+     (function($){
 
+                $('.saerch_data').change(function(){
+                    $('.search-form').submit();
+                });
 
-        $('.action_button').click(function(){
+                $('.action_button').click(function(){
 
-            let selected = [];
-            $('.row_selected_checkbox input:checked').each(function() {
-                selected.push($(this).attr('value'));
-            });
+                    let selected = [];
+                    $('.row_selected_checkbox input:checked').each(function() {
+                        selected.push($(this).attr('value'));
+                    });
 
-            if(selected.length == 0){
-                alert('Please Select Value');
-                return false;
-            }
+                    if(selected.length == 0){
+                        alert('Please Select Value');
+                        return false;
+                    }
 
-            window.location = "{{route('admin.categories.delete')}}?ids="+selected.toString();
-        });
-    
+                });
+
+    })(jQuery); 
     </script>
 @endsection

@@ -79,16 +79,18 @@
                                         <select data-control="select2" name="parent" class="form-select form-control">
                                             <option value="0">{{ translate('None')}}</option> 
                                             @foreach ($category as $item)
-                                              <option @if($data->parent == $item->id) {{'selected'}} @endif  value="{{$item->id}}">{{$item->name}}</option>    
-                                            @endforeach 
+                                                @if($item->id != $data->id)
+                                                <option @if($data->parent == $item->id) {{'selected'}} @endif  value="{{$item->id}}">{{$item->name}}</option>    
+                                                @endif
+                                            @endforeach                                          
                                         </select>
                                     </div>
 
                                     <div class="mt-3 mb-10">
-                                        <label class="form-label">{{ translate('Status') }}</label>
-                                        <select data-control="select2" name="status" class="form-select form-control">
-                                            <option @if($data->featured == '0') {{'selected'}} @endif value="0">Hide</option> 
-                                            <option @if($data->featured == '1') {{'selected'}} @endif value="1">Show</option>
+                                        <label class="form-label">{{ translate('Active') }}</label>
+                                        <select data-control="select2" name="active" class="form-select form-control">
+                                            <option @if($data->active == '1') {{'selected'}} @endif value="0">Active</option> 
+                                            <option @if($data->active == '0') {{'selected'}} @endif value="1">Not Active</option>
                                         </select>
                                     </div>
 
