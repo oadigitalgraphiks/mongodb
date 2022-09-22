@@ -25,17 +25,17 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
     Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
     Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
-
       //Products
       Route::get('products/attribute_type',[App\Http\Controllers\Admin\ProductController::class, 'attribute_type'])->name('products.attribute_type');
       Route::resource('products',App\Http\Controllers\Admin\ProductController::class);
 
+      //Brand
+      Route::post('/bulk-brand-delete', [App\Http\Controllers\Admin\BrandController::class,'bulk_brand_delete'])->name('bulk-brand-delete');
+      Route::get('brands/{id}/destory', [App\Http\Controllers\Admin\BrandController::class,'destroy'])->name('brands.destory');
       Route::resource('brands',App\Http\Controllers\Admin\BrandController::class);
 
       //Units
       Route::resource('units',App\Http\Controllers\Admin\UnitController::class);
-
-
 
     //settings
     Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');

@@ -440,13 +440,27 @@
     <script src="{{asset('/admin/assets/backend/js/custom/modals/users-search.js') }}"></script>
 
     <script type="text/javascript">
-        $(document).ready(function(){
-            @if (Session::has('flash_notification'))
-                @foreach (session('flash_notification') as $message)
-                    AIZ.plugins.notify('{{ $message['level'] }}', '{{ $message['message'] }}');
-                @endforeach
-            @endif
-        });
+        @if ($message = Session::get('success'))
+            AIZ.plugins.notify('success','{{ $message }}');
+        @endif
+
+        @if ($message = Session::get('danger'))
+            AIZ.plugins.notify('danger','{{ $message }}');
+        @endif
+
+        @if ($message = Session::get('warning'))
+            AIZ.plugins.notify('warning','{{ $message }}');
+        @endif
+
+        @if ($message = Session::get('info'))
+            AIZ.plugins.notify('info','{{ $message }}');
+        @endif
+
+        // $(document).ready(function(){
+        //     @if (Session::has('flash_notification'))
+        //         AIZ.plugins.notify('{{ Session::get('flash_notification')[1] }}', '{{ Session::get('flash_notification')[0] }}');
+        //     @endif
+        // });
     </script>
     @yield('script')
 

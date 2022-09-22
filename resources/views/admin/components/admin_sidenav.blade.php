@@ -61,7 +61,7 @@
                             <div class="menu-sub menu-sub-accordion menu-active-bg"></div>
                         </div>
 
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion" >
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{subareActiveRoutes(['admin.brands.index','admin.brands.create','admin.brands.edit'])}}">
                                 <a class="menu-link " href="javascript:void(0)">
                                     <span class="menu-icon">
                                         <span class="svg-icon svg-icon-2">
@@ -103,7 +103,7 @@
                                             </a>
                                         </div>
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{route('admin.brands.index')}}">
+                                            <a class="menu-link {{areActiveRoutes(['admin.brands.index','admin.brands.create','admin.brands.edit'])}}" href="{{route('admin.brands.index')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>

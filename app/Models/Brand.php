@@ -14,6 +14,8 @@ class Brand extends Model {
 
     protected $with = ['brand_translations'];
 
+    protected $guarded = [];
+
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
         $brand_translation = $this->brand_translations->where('lang', $lang)->first();
