@@ -41,9 +41,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
       // Categories
       Route::get('categories/delete', [App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('categories.delete');
-
       Route::get('categories/destroy/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
-
       Route::resource('categories',App\Http\Controllers\Admin\CategoryController::class)->only(['index', 'store', 'edit', 'update','create']);
 
 
@@ -52,6 +50,24 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
       Route::get('units/destroy/{id}', [App\Http\Controllers\Admin\UnitController::class, 'destroy'])->name('units.destroy');
       Route::resource('units',App\Http\Controllers\Admin\UnitController::class)->only(['index', 'store', 'edit', 'update','create']);
 
+
+      //Taxes
+      Route::get('taxes/destroy/{id}', [App\Http\Controllers\Admin\TaxController::class, 'destroy'])->name('taxes.destroy');
+      Route::resource('taxes',App\Http\Controllers\Admin\TaxController::class)->only(['index', 'store', 'edit', 'update','create']);
+
+
+      //Attribute Types
+      Route::get('attribute_types/destroy/{id}', [App\Http\Controllers\Admin\AttributetypeController::class, 'destroy'])->name('attribute_types.destroy');
+      Route::resource('attribute_types',App\Http\Controllers\Admin\AttributetypeController::class)->only(['index', 'store', 'edit', 'update','create']);
+
+      //Attributes
+      Route::get('attributes/destroy/{id}', [App\Http\Controllers\Admin\AttributeController::class, 'destroy'])->name('attributes.destroy');
+      Route::resource('attributes',App\Http\Controllers\Admin\AttributeController::class)->only(['index','store', 'edit', 'update','create']);
+
+      
+      //Colors
+      Route::get('colors/destroy/{id}', [App\Http\Controllers\Admin\ColorController::class, 'destroy'])->name('colors.destroy');
+      Route::resource('colors',App\Http\Controllers\Admin\ColorController::class)->only(['index', 'store', 'edit', 'update','create']);
 
 
     //settings

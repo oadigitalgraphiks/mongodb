@@ -7,6 +7,7 @@ class Attribute extends Model {
     
     protected $connection = 'mongodb';
     protected $collection = 'attributes';
+    protected $guarded = [];
     
 
     public function type() {

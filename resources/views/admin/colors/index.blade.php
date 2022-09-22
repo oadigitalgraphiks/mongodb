@@ -9,14 +9,14 @@
                 <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{translate('Units')}}</h1>
+                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{translate('Color')}}</h1>
                     <span class="h-20px border-gray-300 border-start mx-4"></span>
                     <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                         <li class="breadcrumb-item text-muted">
                             <a href="{{ route("admin.dashboard") }}" class="text-muted text-hover-primary">{{translate('Home')}}</a>
                         </li>
                         <li class="breadcrumb-item"><span class="bullet bg-gray-300 w-5px h-2px"></span></li>
-                        <li class="breadcrumb-item text-muted"><a class="text-muted text-hover-primary" href="{{route('admin.units.index')}}">{{translate('Unit')}}</a></li>
+                        <li class="breadcrumb-item text-muted"><a class="text-muted text-hover-primary" href="{{route('admin.colors.index')}}">{{translate('Colors')}}</a></li>
                     </ul>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                                     
                                 </div>
                                 <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                                    <a href="{{route('admin.units.create')}}" class="btn btn-primary">{{translate('Add New')}}</a>
+                                    <a href="{{route('admin.colors.create')}}" class="btn btn-primary">{{translate('Add New')}}</a>
                                 </div>
                             </div>
 
@@ -69,18 +69,15 @@
                                                 <td class="text-center">{{ $item->sorting}}</td>
                                                 <td class="text-center" >{{ $item->active == '1' ? 'Active' :'Not Active'}}</td>
                                                 <td class="text-end">
-                                                    <a href="{{ route('admin.units.edit',$item->id)}}" class="menu-link px-3"><i class="fa-lg text-primary fas fa-edit" ></i></a>
-
-                                                    <a data-href="{{ route('admin.units.destroy',$item->id)}}" class="confirm-delete bg-white border-0 menu-link px-3">
+                                                    <a href="{{ route('admin.colors.edit',$item->id)}}" class="menu-link px-3"><i class="fa-lg text-primary fas fa-edit" ></i></a>
+                                                    <a data-href="{{ route('admin.colors.destroy',$item->id)}}" class="confirm-delete bg-white border-0 menu-link px-3">
                                                         <i  class="text-danger fa-lg far fa-trash-alt" ></i>
                                                     </a>
                                                 </td>
-
-                                                </tr>
+                                            </tr>
                                           @endforeach
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>

@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App;
 use Illuminate\Http\Request;
-use App\Models\Unit;
-use App\Models\UnitTranslation;
+use App\Models\Tax;
+use App\Models\TaxTranslation;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 
-
-class UnitController extends Controller
+class TaxController extends Controller
 {
     
     /**
@@ -19,14 +18,14 @@ class UnitController extends Controller
     public function index(Request $request)
     {
 
-        $data = Unit::query();
+        $data = Tax::query();
         if ($request->has('search') && $request->search  != ''){
             $sort_search = $request->search;
             $data = $data->where('name', 'like', '%'.$sort_search.'%');
         }
 
         $data = $data->get();
-        return view('admin.units.index', compact('data'));
+        return view('admin.taxes.index', compact('data'));
 
     }
 
@@ -38,7 +37,7 @@ class UnitController extends Controller
     public function create()
     {
 
-        return view('admin.units.create');
+        return view('admin.taxes.create');
     }
 
 
@@ -49,7 +48,7 @@ class UnitController extends Controller
     public function store(Request $request)
     {
 
-       $data = Unit::create([
+       $data = Tax::create([
             "name" => $request->name,
             "slug" => $request->slug,
             "description" => $request->description,
@@ -63,7 +62,7 @@ class UnitController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('admin.units.index')->with('success', translate('Record Added'));
+        return redirect()->route('admin.taxes.index')->with('success', translate('Record Added'));
     }
 
 
@@ -74,8 +73,8 @@ class UnitController extends Controller
     public function edit(Request $request, $id)
     {
         $lang = $request->lang ?? App::getLocale();
-        $data = Unit::findOrFail($id);
-        return view('admin.units.edit', compact('data','lang'));
+        $data = Tax::findOrFail($id);
+        return view('admin.taxes.edit', compact('data','lang'));
     }
 
 
@@ -86,7 +85,7 @@ class UnitController extends Controller
     public function update(Request $request, $id)
     {              
 
-        $data = Unit::findOrFail($id);
+        $data = Tax::findOrFail($id);
         
         if($request->lang == env("DEFAULT_LANGUAGE")){
             $data->name = $request->name;
@@ -113,7 +112,7 @@ class UnitController extends Controller
     public function translate($lang,$id,$data)
     {
 
-        $translation = UnitTranslation::firstOrNew(['lang' => $lang, 'unit_id' => $id]);
+        $translation = TaxTranslation::firstOrNew(['lang' => $lang, 'tax_id' => $id]);
         foreach ($data as $key => $value) {
             $translation[$key] = $data[$key];
         }
@@ -122,19 +121,18 @@ class UnitController extends Controller
     }
 
 
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        $unit = Unit::findOrFail($id);
-        foreach ($unit->translations as $translation) {
+        $item = Tax::findOrFail($id);
+        foreach ($item->translations as $translation) {
             $translation->delete();
         }
-        Unit::destroy($id);
+        Tax::destroy($id);
        
-        return redirect()->route('admin.units.index')->with('success', translate('Record Deleted'));
+        return redirect()->route('admin.taxes.index')->with('success', translate('Record Deleted'));
     }
 
 

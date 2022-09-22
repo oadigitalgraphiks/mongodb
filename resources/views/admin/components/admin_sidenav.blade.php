@@ -44,7 +44,7 @@
                     </div>
 
                         <div class="menu-item ">
-                            <a class="menu-link {{ areActiveRoutes(['admin.dashboard', 'admin.dashboard'])}}" href="{{route('admin.dashboard')}}">
+                            <a class="menu-link ">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                     <span class="svg-icon svg-icon-2">
@@ -61,7 +61,7 @@
                             <div class="menu-sub menu-sub-accordion menu-active-bg"></div>
                         </div>
 
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{subareActiveRoutes(['admin.brands.index','admin.brands.create','admin.brands.edit','admin.products.index','admin.products.edit'])}}">
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{Request::segment(1) == "admin" ? "active" : ""}}">
                                 <a class="menu-link " href="javascript:void(0)">
                                     <span class="menu-icon">
                                         <span class="svg-icon svg-icon-2">
@@ -96,7 +96,7 @@
                                         </div>
 
 
-                                        <div class="menu-item">
+                                        <div class="menu-item {{Request::segment(2) == "categories" ? "active" : ""}} ">
                                             <a class="menu-link" href="{{route('admin.categories.index')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
@@ -114,22 +114,24 @@
                                             </a>
                                         </div>
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{route('admin.products.create')}}">
+                                            <a class="menu-link" href="{{route('admin.taxes.index')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Taxes</span>
                                             </a>
                                         </div>
-                                        <div class="menu-item">
-                                            <a class="menu-link" href="{{route('admin.products.create')}}">
+
+                                        <div class="menu-item {{Request::segment(2) == "attribute_types" ? "active" : ""}}  ">
+                                            <a class="menu-link" href="{{route('admin.attribute_types.index')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Atrributes</span>
+                                                <span class="menu-title">Attribute Types</span>
                                             </a>
                                         </div>
-                                        <div class="menu-item">
+                                        
+                                        <div class="menu-item {{Request::segment(2) == "units" ? "active" : ""}} ">
                                             <a class="menu-link" href="{{route('admin.units.index')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
@@ -137,14 +139,16 @@
                                                 <span class="menu-title">Units</span>
                                             </a>
                                         </div>
-                                        <div class="menu-item">
-                                            <a class="menu-link" href="{{route('admin.products.create')}}">
+                                        
+                                        <div class="menu-item {{Request::segment(3) == "colors" ? "active" : ""}} ">
+                                            <a class="menu-link" href="{{route('admin.colors.index')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Colors</span>
                                             </a>
                                         </div>
+
                                         <div class="menu-item">
                                             <a class="menu-link" href="{{route('admin.products.create')}}">
                                                 <span class="menu-bullet">

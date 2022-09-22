@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App;
 use Illuminate\Http\Request;
-use App\Models\Unit;
-use App\Models\UnitTranslation;
+use App\Models\Color;
+use App\Models\ColorTranslation;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 
 
-class UnitController extends Controller
+class ColorController extends Controller
 {
     
     /**
@@ -19,14 +19,14 @@ class UnitController extends Controller
     public function index(Request $request)
     {
 
-        $data = Unit::query();
+        $data = Color::query();
         if ($request->has('search') && $request->search  != ''){
             $sort_search = $request->search;
             $data = $data->where('name', 'like', '%'.$sort_search.'%');
         }
 
         $data = $data->get();
-        return view('admin.units.index', compact('data'));
+        return view('admin.colors.index', compact('data'));
 
     }
 
@@ -38,7 +38,7 @@ class UnitController extends Controller
     public function create()
     {
 
-        return view('admin.units.create');
+        return view('admin.colors.create');
     }
 
 
@@ -49,7 +49,7 @@ class UnitController extends Controller
     public function store(Request $request)
     {
 
-       $data = Unit::create([
+       $data = Color::create([
             "name" => $request->name,
             "slug" => $request->slug,
             "description" => $request->description,
@@ -63,7 +63,7 @@ class UnitController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('admin.units.index')->with('success', translate('Record Added'));
+        return redirect()->route('admin.colors.index')->with('success', translate('Record Added'));
     }
 
 
@@ -74,8 +74,8 @@ class UnitController extends Controller
     public function edit(Request $request, $id)
     {
         $lang = $request->lang ?? App::getLocale();
-        $data = Unit::findOrFail($id);
-        return view('admin.units.edit', compact('data','lang'));
+        $data = Color::findOrFail($id);
+        return view('admin.colors.edit', compact('data','lang'));
     }
 
 
@@ -86,7 +86,7 @@ class UnitController extends Controller
     public function update(Request $request, $id)
     {              
 
-        $data = Unit::findOrFail($id);
+        $data = Color::findOrFail($id);
         
         if($request->lang == env("DEFAULT_LANGUAGE")){
             $data->name = $request->name;
@@ -113,30 +113,29 @@ class UnitController extends Controller
     public function translate($lang,$id,$data)
     {
 
-        $translation = UnitTranslation::firstOrNew(['lang' => $lang, 'unit_id' => $id]);
+        $translation = ColorTranslation::firstOrNew(['lang' => $lang, 'color_id' => $id]);
         foreach ($data as $key => $value) {
             $translation[$key] = $data[$key];
         }
         $translation->save();
-
     }
 
 
+    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        $unit = Unit::findOrFail($id);
+        $unit = Color::findOrFail($id);
         foreach ($unit->translations as $translation) {
             $translation->delete();
         }
-        Unit::destroy($id);
-       
-        return redirect()->route('admin.units.index')->with('success', translate('Record Deleted'));
-    }
 
+        Color::destroy($id);   
+        return redirect()->route('admin.colors.index')->with('success', translate('Record Deleted'));
+    }
 
 
 
