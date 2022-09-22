@@ -34,6 +34,15 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
       Route::get('brands/{id}/destory', [App\Http\Controllers\Admin\BrandController::class,'destroy'])->name('brands.destory');
       Route::resource('brands',App\Http\Controllers\Admin\BrandController::class);
 
+      Route::get('categories/delete', [App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('categories.delete');
+
+      Route::get('categories/destroy/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
+
+      Route::resource('categories',App\Http\Controllers\Admin\CategoryController::class)->only(['index', 'store', 'edit', 'update','create']);
+
+
+
+
       //Units
       Route::resource('units',App\Http\Controllers\Admin\UnitController::class);
 

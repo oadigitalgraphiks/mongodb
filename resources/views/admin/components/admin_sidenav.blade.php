@@ -95,13 +95,14 @@
                                         </div>
 
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{route('admin.products.create')}}">
+                                            <a class="menu-link" href="{{route('admin.categories.index')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Categories</span>
                                             </a>
                                         </div>
+                                        
                                         <div class="menu-item">
                                             <a class="menu-link {{areActiveRoutes(['admin.brands.index','admin.brands.create','admin.brands.edit'])}}" href="{{route('admin.brands.index')}}">
                                                 <span class="menu-bullet">
