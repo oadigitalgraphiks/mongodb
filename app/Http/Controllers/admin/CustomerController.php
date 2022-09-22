@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\User;
+use Hash;
+
 // use App\Models\Order;
 
 class CustomerController extends Controller
@@ -18,8 +20,8 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $sort_search = null;
-        $users = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc');
-        if ($request->has('search')){
+        $users = User::where('type', 'customer')->orderBy('created_at', 'desc');
+        if ($request->has('search') && $request->search != null){
             $sort_search = $request->search;
             $users->where(function ($q) use ($sort_search){
                 $q->where('name', 'like', '%'.$sort_search.'%')->orWhere('email', 'like', '%'.$sort_search.'%');
@@ -52,36 +54,18 @@ class CustomerController extends Controller
         $request->validate([
             'name'          => 'required',
             'email'         => 'required|unique:users|email',
-            'phone'         => 'required|unique:users',
         ]);
 
-        $response['status'] = 'Error';
+        $data = [
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->name),
+            'type' => 'customer',
+            'banned' => '0'
+        ];
 
-        $user = User::create($request->all());
-
-        // $customer = new Customer;
-
-        // $customer->user_id = $user->id;
-        // $customer->save();
-
-        // if (isset($user->id)) {
-        //     $html = '';
-        //     $html .= '<option value="">
-        //                 '. translate("Walk In Customer") .'
-        //             </option>';
-        //     foreach(Customer::all() as $key => $customer){
-        //         if ($customer->user) {
-        //             $html .= '<option value="'.$customer->user->id.'" data-contact="'.$customer->user->email.'">
-        //                         '.$customer->user->name.'
-        //                     </option>';
-        //         }
-        //     }
-
-        //     $response['status'] = 'Success';
-        //     $response['html'] = $html;
-        // }
-
-        // echo json_encode($response);
+        $user = User::create($data);
+        return redirect()->route('admin.customers.index')->with('success','Customer Add Successfully');
     }
 
     /**
@@ -127,8 +111,8 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         User::destroy($id);
-        // flash(translate('Customer has been deleted successfully'))->success();
-        return redirect()->route('customers.index');
+
+        return redirect()->route('admin.customers.index')->with('danger','Customer has been deleted successfully');
     }
 
     public function bulk_customer_delete(Request $request) {
@@ -155,10 +139,8 @@ class CustomerController extends Controller
 
         if($user->banned == 1) {
             $user->banned = 0;
-            // flash(translate('Customer UnBanned Successfully'))->success();
         } else {
             $user->banned = 1;
-            // flash(translate('Customer Banned Successfully'))->success();
         }
 
         $user->save();
