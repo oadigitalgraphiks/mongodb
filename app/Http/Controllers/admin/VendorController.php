@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Customer;
+use App\Models\Vendor;
 use App\Models\User;
 use Hash;
 
-class CustomerController extends Controller
+class VendorController extends Controller
 {
 
     /*
@@ -17,7 +17,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $sort_search = null;
-        $users = User::where('type', 'customer')->orderBy('created_at', 'desc');
+        $users = User::where('type', 'vendor')->orderBy('created_at', 'desc');
         if ($request->has('search') && $request->search != null){
             $sort_search = $request->search;
             $users->where(function ($q) use ($sort_search){
@@ -25,7 +25,7 @@ class CustomerController extends Controller
             });
         }
         $users = $users->paginate(15);
-        return view('admin.customers.index', compact('users', 'sort_search'));
+        return view('admin.vendors.index', compact('users', 'sort_search'));
     }
 
     /*
@@ -35,7 +35,7 @@ class CustomerController extends Controller
     public function create()
     {
 
-        return view('admin.customers.create');
+        return view('admin.vendors.create');
     }
 
 
@@ -54,12 +54,12 @@ class CustomerController extends Controller
             "name" => $request->name,
             "email" => $request->email,
             "password" => Hash::make($request->name),
-            'type' => 'customer',
+            'type' => 'vendor',
             'active' => '0'
         ];
 
         $user = User::create($data);
-        return redirect()->route('admin.customers.index')->with('success', translate('Customer Add Successfully'));
+        return redirect()->route('admin.vendors.index')->with('success', translate('Vendor Add Successfully'));
     }
 
 
@@ -68,8 +68,8 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $customer = User::find($id);
-        return view('admin.customers.edit',compact('customer'));
+        $vendor = User::find($id);
+        return view('admin.vendors.edit',compact('vendor'));
     }
 
 
@@ -78,9 +78,9 @@ class CustomerController extends Controller
      */
     public function profile($id)
     {
-
-        $customer = User::find($id);
-        return view('admin.customers.profile',compact('customer'));
+        
+        $vendor = User::find($id);
+        return view('admin.vendor.profile',compact('vendor'));
     }
 
 
@@ -90,10 +90,10 @@ class CustomerController extends Controller
     public function update(Request $request,$id)
     {
 
-        $customer = User::find($id);
+        $vendor = User::find($id);
         $request->validate([
             'name' => 'required|min:5|string|max:100',
-            'email' => 'required|unique:users,email'.$customer->id,
+            'email' => 'required|unique:users,email'.$vendor->id,
         ]);
 
         if($request->has('password') && $request->password != ''){
@@ -102,14 +102,14 @@ class CustomerController extends Controller
             ]);
         }
 
-        $customer->name = $request->name;
-        $customer->email = $request->email;
+        $vendor->name = $request->name;
+        $vendor->email = $request->email;
         if($request->has('password') && $request->password != '' ){
-           $customer->password = Hash::make($request->password);
+           $vendor->password = Hash::make($request->password);
         }
-        $customer->save();
+        $vendor->save();
        
-        return back()->with('success', translate('Customer Updated'));
+        return back()->with('success', translate('Vendor Updated'));
 
     }
 
@@ -120,21 +120,8 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-
         User::destroy($id);
-        return redirect()->route('admin.customers.index')->with('danger', translate('Customer has been deleted successfully'));
-    }
-
-
-
-    public function bulk_customer_delete(Request $request) {
-        if($request->id) {
-            foreach ($request->id as $customer_id) {
-                $this->destroy($customer_id);
-            }
-        }
-
-        return 1;
+        return redirect()->route('admin.vendors.index')->with('danger', translate('Vendor has been deleted successfully'));
     }
 
 
@@ -147,13 +134,13 @@ class CustomerController extends Controller
     }
 
 
-    public function ban($id) {
-        $user = User::findOrFail(decrypt($id));
+    public function status($id) {
 
-        if($user->banned == 1) {
-            $user->banned = 0;
+        $user = User::findOrFail($id);
+        if($user->status == 1) {
+            $user->status = 0;
         } else {
-            $user->banned = 1;
+            $user->status = 1;
         }
 
         $user->save();

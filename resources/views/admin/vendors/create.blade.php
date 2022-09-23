@@ -1,5 +1,4 @@
 @extends('admin.layouts.app')
-
 @section('content')
 
 <div class="d-flex flex-column flex-column-fluid" id="kt_content">
@@ -8,40 +7,37 @@
             <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Customers</h1>
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1"> {{ translate('Vendor Add') }} </h1>
                 <span class="h-20px border-gray-300 border-start mx-4"></span>
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <li class="breadcrumb-item text-muted">
-                        <a href="{{ route("admin.dashboard") }}" class="text-muted text-hover-primary">Home</a>
+                        <a href="{{ route("admin.dashboard") }}" class="text-muted text-hover-primary"> {{ trans('Home') }} </a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-300 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-dark">Customers</li>
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
-                    </li>
-                    <li class="breadcrumb-item text-dark">Customer Add</li>
+                    <li class="breadcrumb-item text-dark"> {{trans('vendors')}}</li>
                 </ul>
             </div>
         </div>
     </div>
+
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xxl ">
             <form class="form d-flex flex-column flex-lg-row gap-7 gap-lg-10"
-                action="{{ route('admin.customers.store') }}" method="POST" enctype="multipart/form-data">
+                action="{{ route('admin.vendors.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card card-flush py-4">
                         <div class="card-header">
                             <div class="card-title">
-                                <h2>{{translate('Customer')}}</h2>
+                                <h2>{{translate('Vendor')}}</h2>
                             </div>
                         </div>
                         <div class="card-body pt-0 row">
                             <div class="mb-5 fv-row col-6">
                                 <label class="required form-label">{{ translate('Name') }}</label>
-                                <input type="text" placeholder="{{ translate('Name') }}" id="name" name="name"
+                                <input type="text" placeholder="{{ translate('Name') }}"  name="name"
                                     class="form-control mb-2" required>
                                 @if($errors->has('name'))
                                     <div class="error  text-danger">{{ $errors->first('name') }}</div>
@@ -52,7 +48,6 @@
                                 <label class="required form-label">{{ translate('Email') }}</label>
                                 <input type="email" placeholder="{{ translate('Email') }}" id="email" name="email"
                                     class="form-control mb-2" required>
-                                <div class="text-muted fs-7">{{translate('A Email must be an Unique')}}.</div>
                                 @if($errors->has('email'))
                                     <div class="error  text-danger">{{ $errors->first('email') }}</div>
                                 @endif
@@ -63,17 +58,13 @@
                                 <input type="password" placeholder="{{ translate('Password') }}" id="password" name="password" class="form-control mb-2" required>
                             </div>
 
+                            <div class="mb-5 fv-row col-12 text-center">
+                                <button type="submit" class="btn btn-primary">{{ translate('Submit') }}</button>
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-end">
-
-                        <button type="submit" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
-                            <span class="indicator-label">{{ translate('Add Customers') }}</span>
-                            <span class="indicator-progress">Please wait...
-                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                        </button>
-                    </div>
                 </div>
             </form>
         </div>

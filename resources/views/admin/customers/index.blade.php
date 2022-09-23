@@ -22,7 +22,6 @@
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-300 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-dark">Customers List</li>
                 </ul>
             </div>
         </div>
@@ -62,7 +61,8 @@
                                         </th>
                                         <th class="min-w-200px">{{ translate('Name') }}</th>
                                         <th class="text-center min-w-75px">{{ translate('Email Address') }}</th>
-                                        <th class="text-center min-w-100px">{{ translate('Options') }}</th>
+                         
+                                        <th class="text-center min-w-100px">{{ translate('Actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="fw-bold text-gray-600">
@@ -88,48 +88,62 @@
                                                         {{ $user->email }}
                                                     </span>
                                                 </td>
+                                              
+                                             
                                                 <td class="text-center">
-                                                    @if ($user->banned != 1)
-                                                        <a href="#" data-toggle="tooltip" title="{{ translate('Ban this Customer') }}" class="btn btn-icon btn-bg-light btn-color-primary btn-active-color-danger btn-sm me-1" onclick="confirm_ban('{{ route('admin.customers.ban', encrypt($user->id)) }}');">
-                                                            <i class="fas fa-lock-open"></i>
-                                                        </a>
-                                                    @else
-                                                        <a href="#" data-toggle="tooltip" title="{{ translate('Unban this Customer') }}" class="btn btn-icon btn-bg-light btn-color-danger btn-active-color-primary btn-sm me-1" onclick="confirm_unban('{{ route('admin.customers.ban', encrypt($user->id)) }}');">
-                                                            <i class="fas fa-lock"></i>
-                                                        </a>
-                                                    @endif
-                                                    <a href="{{ route('admin.customers.login', encrypt($user->id)) }}" data-toggle="tooltip" title="{{ translate('Login this Customer') }}" class="btn btn-icon btn-bg-light  btn-color-warning  btn-active-color-warning btn-sm me-1">
-                                                        <i class="fas fa-power-off"></i>
-                                                    </a>
 
-                                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm confirm-delete" data-href="{{route("admin.customer.delete",$user)}}">
-                                                       <i class="far fa-trash-alt"></i>
+                                                @if ($user->banned != 1)
+                                                    <a class="px-1" href="#" data-toggle="tooltip" title="{{ translate('Ban this Customer') }}" onclick="confirm_ban('{{ route('admin.customers.ban', encrypt($user->id)) }}');">
+                                                        <i class="text-danger fa-lg fas fa-lock
+                                                    " ></i>
                                                     </a>
+                                                @else
+                                                    
+                                                 <a class="px-1" data-toggle="tooltip" title="{{ translate('Unban this Customer') }}"  onclick="confirm_unban('{{ route('admin.customers.ban', encrypt($user->id)) }}');">
+                                                    <i class="text-success fas fa-lock-open" ></i>
+                                                </a>
 
+                                                @endif
+                                                    
+                                                  <a data-toggle="tooltip" title="{{ translate('Login As Customer')}}" href="{{route('admin.customers.login', encrypt($user->id))}}" class="px-1"> <i class=" text-warning fa-lg fas fa-power-off
+                                                    " ></i>
+                                                   </a>
+
+                                                  <a data-toggle="tooltip" title="{{ translate('Edit Customer') }}" href="{{route('admin.customers.edit',$user->id)}}" class=""><i class="px-1 fa-lg text-primary fas fa-edit"></i></a>
+
+                                                  <a data-toggle="tooltip" title="{{ translate('Delete Customer') }}"  data-href="{{route("admin.customers.delete",$user)}}"  class="px-1 confirm-delete"><i class="text-danger fa-lg far fa-trash-alt"></i></a>   
+
+                                                  <button class="px-1 bg-white border-0"  type="button" data-toggle="modal" data-target="#profile_modal{{$user->id}}" ><i class="text-primary fa-lg far fa-user" ></i></button>
+
+                                                  <div class="modal fade" id="profile_modal{{$user->id}}"  aria-labelledby="profile_modal" aria-hidden="true">
+                                                     <div class="modal-dialog">
+                                                              <div class="modal-content" id="profile-modal-content">
+                                                                <div class="modal-body">
+                                                                  @include('admin.customers.modal', ['user' => $user])
+                                                                </div>                                          
+                                                            </div>
+                                                     </div>
+                                                  </div>
                                                 </td>
-                                                <!--end::Action=-->
                                             </tr>
+
                                         @endif
                                     @endforeach
-                                    <!--end::Table row-->
                                 </tbody>
-                                <!--end::Table body-->
                             </table>
-                            <!--end::Table-->
                         </div>
                         <div class="aiz-pagination">
                             {{ $users->appends(request()->input())->links() }}
                         </div>
-                        <!--end::Card body-->
                     </div>
                 </div>
             </form>
-            <!--end::Products-->
         </div>
-        <!--end::Container-->
     </div>
-    <!--end::Post-->
 </div>
+
+
+    
 
 
     <!-- Modal -->

@@ -60,6 +60,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
       Route::get('attribute_types/destroy/{id}', [App\Http\Controllers\Admin\AttributetypeController::class, 'destroy'])->name('attribute_types.destroy');
       Route::resource('attribute_types',App\Http\Controllers\Admin\AttributetypeController::class)->only(['index', 'store', 'edit', 'update','create']);
 
+
       //Attributes
       Route::get('attributes/destroy/{id}', [App\Http\Controllers\Admin\AttributeController::class, 'destroy'])->name('attributes.destroy');
       Route::resource('attributes',App\Http\Controllers\Admin\AttributeController::class)->only(['index','store', 'edit', 'update','create']);
@@ -69,21 +70,54 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
       Route::get('colors/destroy/{id}', [App\Http\Controllers\Admin\ColorController::class, 'destroy'])->name('colors.destroy');
       Route::resource('colors',App\Http\Controllers\Admin\ColorController::class)->only(['index', 'store', 'edit', 'update','create']);
 
+      //Roles
+      Route::get('roles/permissions/{id}', [App\Http\Controllers\Admin\RoleController::class, 'permission'])->name('roles.permissions');
+      Route::post('roles/permissions-update/{id}', [App\Http\Controllers\Admin\RoleController::class, 'permission_update'])->name('roles.permissions.update');
+      Route::get('roles/destroy/{id}', [App\Http\Controllers\Admin\RoleController::class, 'destroy'])->name('roles.destroy');
+      Route::resource('roles',App\Http\Controllers\Admin\RoleController::class)->only(['index', 'store', 'edit', 'update','create']);
 
-    //settings
-    Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');
-    Route::post('/general-setting/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('setting.update');
-    // uploader
+      //Permissions
+      Route::get('permissions/update/{id}', [App\Http\Controllers\Admin\PermissionController::class, 'destroy'])->name('permissions.destroy');
+      Route::get('permissions/destroy/{id}', [App\Http\Controllers\Admin\PermissionController::class, 'destroy'])->name('permissions.destroy');
+      Route::resource('permissions',App\Http\Controllers\Admin\PermissionController::class)->only(['index', 'store', 'edit', 'update','create']);
 
-    //customer
-    Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class);
-    Route::get('customer/delete/{id}', [App\Http\Controllers\Admin\CustomerController::class,'destroy'])->name('customer.delete');
-    Route::get('customers_ban/{customer}', [App\Http\Controllers\Admin\CustomerController::class,'ban'])->name('customers.ban');
-    Route::get('/customers/login/{id}', [App\Http\Controllers\Admin\CustomerController::class,'login'])->name('customers.login');
-    Route::post('/bulk-customer-delete', [App\Http\Controllers\Admin\CustomerController::class,'bulk_customer_delete'])->name('bulk-customer-delete');
+
+      //settings
+      Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');
+      Route::post('/general-setting/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('setting.update');
+        // uploader
+
+
+        //Customer
+  
+        Route::get('customers/delete/{id}', [App\Http\Controllers\Admin\CustomerController::class,'destroy'])->name('customers.delete');
+        Route::get('customers_ban/{customer}', [App\Http\Controllers\Admin\CustomerController::class,'ban'])->name('customers.ban');
+        Route::get('/customers/login/{id}', [App\Http\Controllers\Admin\CustomerController::class,'login'])->name('customers.login');
+        Route::post('/bulk-customer-delete', [App\Http\Controllers\Admin\CustomerController::class,'bulk_customer_delete'])->name('bulk-customer-delete');
+        Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class)->only(['index', 'store', 'edit', 'update','create']);
+
+
+        //Vendors
+        Route::get('vendors/status/{id}', [App\Http\Controllers\Admin\VendorController::class,'status'])->name('vendors.status');
+        Route::resource('vendors', App\Http\Controllers\Admin\VendorController::class);
+        
+        Route::get('vendors/delete/{id}', [App\Http\Controllers\Admin\VendorController::class,'destroy'])->name('vendors.delete');
+        Route::get('vendors/{vendor}', [App\Http\Controllers\Admin\VendorController::class,'ban'])->name('vendors.ban');
+        Route::get('/vendors/login/{id}', [App\Http\Controllers\Admin\VendorController::class,'login'])->name('vendors.login');
+
+        //Staffs
+        Route::get('staff/status/{id}', [App\Http\Controllers\Admin\StaffController::class,'status'])->name('staff.status');
+        Route::resource('staff', App\Http\Controllers\Admin\StaffController::class);
+        Route::get('staff/delete/{id}', [App\Http\Controllers\Admin\StaffController::class,'destroy'])->name('staff.delete');
+        Route::get('staff/{vendor}', [App\Http\Controllers\Admin\StaffController::class,'ban'])->name('staff.ban');
+        Route::get('/staff/login/{id}', [App\Http\Controllers\Admin\StaffController::class,'login'])->name('staff.login');
+       
+
 
     //Flash Deal
     Route::resource('flash_deals', App\Http\Controllers\Admin\FlashDealController::class);
+
+
 
     Route::get('flash_deal/product/serach', [App\Http\Controllers\Admin\FlashDealController::class,'search'])->name('flash_deal.search');
     Route::post('/flash_deals/update_status', [App\Http\Controllers\Admin\FlashDealController::class,'update_status'])->name('flash_deals.update_status');
