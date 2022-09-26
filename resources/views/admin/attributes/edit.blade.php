@@ -45,12 +45,7 @@
                                             <label class="required form-label">{{translate('Name')}}</label>
                                             <input type="text" placeholder="{{ translate('Name')}}" value="{{$data->name}}"  name="name" class="form-control mb-2" required>
                                         </div>
-                                
-                                    <div class="mb-10">
-                                        <label class="required form-label">{{translate('Slug')}}</label>
-                                        <input type="text" class="form-control mb-2" placeholder="{{translate('Slug')}}" value="{{$data->slug}}" name="slug" required  />
-                                    </div>
-                                    
+                                             
                                     <div class="mt-3 mb-10">
                                         <label class="form-label">{{ translate('Type') }}</label>
                                         <select data-control="select2" name="type_id" class="form-select form-control">

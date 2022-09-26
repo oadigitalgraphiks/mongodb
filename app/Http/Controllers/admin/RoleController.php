@@ -91,7 +91,8 @@ class RoleController extends Controller
     {
     
         $data = Role::findOrFail($id);
-        return view('admin.roles.edit', compact('data'));
+
+        return view('admin.roles.permission', compact('data'));
     }
 
 

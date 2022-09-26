@@ -28,19 +28,22 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <form action="{{ route('admin.roles.permission.update', $data->id)}}" method="POST" >  
+                <form action="{{ route('admin.roles.permissions.update', $data->id)}}" method="POST" >  
                     
                     <div class="card card-flush mt-5">
                         <div class="card-header align-items-center py-5 gap-2 gap-md-5">
                             <h5 class="mb-0 h6">Role Information</h5>
                         </div>
+
+                        
                     
                             <div class="form-group row container">
                                 <label class="col-md-3 col-from-label" for="name">Name <i class="las la-language text-danger" title="Translatable"></i></label>
                                 <div class="col-md-9">
-                                    <input type="text" placeholder="Name" id="name" name="name" class="form-control" value="Manager" required="">
+                                    <input readonly type="text" placeholder="Name" id="name" name="name" class="form-control" value="Manager" required>
                                 </div>
                             </div>
+                            
                             <div class="form-group row border mt-10">
                                                                 <div class="col-md-4" style="line-height:20px">
                                         <div class="card card-flush py-2">

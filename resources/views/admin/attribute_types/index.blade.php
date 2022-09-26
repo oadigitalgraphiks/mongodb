@@ -70,6 +70,8 @@
                                                 <td class="text-center" >{{ $item->active == '1' ? 'Active' :'Not Active'}}</td>
                                                 <td class="text-end">
                                                     <a href="{{ route('admin.attribute_types.edit',$item->id)}}" class="menu-link px-3"><i class="fa-lg text-primary fas fa-edit" ></i></a>
+                                                    <a href="{{ route('admin.attributes.index')}}?type={{$item->id}}" class="menu-link px-3"><i class="fa-lg text-primary fas fa-edit" ></i></a>
+                                                   
 
                                                     <a data-href="{{ route('admin.attribute_types.destroy',$item->id)}}" class="confirm-delete bg-white border-0 menu-link px-3">
                                                         <i  class="text-danger fa-lg far fa-trash-alt" ></i>

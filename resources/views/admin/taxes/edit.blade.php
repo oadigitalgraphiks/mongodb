@@ -68,7 +68,7 @@
         
                                     <div class="mt-3 mb-10">
                                         <label class="form-label">{{ translate('Description') }}</label>
-                                        <textarea name="description" rows="5" class="form-control mb-2">{{$data->getTranslation('description', $lang)}}</textarea>
+                                        <textarea name="description" rows="5" class="form-control mb-2">{{$data->description}}</textarea>
                                     </div>
 
                                     <div class="mt-3 mb-10">
@@ -91,7 +91,7 @@
                                             <div class="dz-message needsclick">
                                                 <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                                 <input type="hidden" name="logo" class="selected-files"
-                                                    value="{{$data->getTranslation('logo', $lang)}}">
+                                                    value="{{$data->logo}}">
                                                 <div class="ms-4">
                                                     <h3 class="fs-5 fw-bolder text-gray-900 mb-1">{{translate('Drop files here or click to
                                                         upload.')}}</h3>

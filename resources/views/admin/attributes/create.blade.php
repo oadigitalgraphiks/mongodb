@@ -45,11 +45,6 @@
                                         <input type="text" placeholder="{{ translate('Name')}}" name="name" class="form-control mb-2" required>
                                     </div>
                                 
-                                    <div class="mb-10">
-                                        <label class="required form-label">{{translate('Slug')}}</label>
-                                        <input type="text" class="form-control mb-2" placeholder="{{translate('Slug')}}" id="slug" name="slug" required  />
-                                    </div>
-
                                     <div class="mt-3 mb-10">
                                         <label class="form-label">{{ translate('Type') }}</label>
                                         <select data-control="select2" name="type_id" class="form-select form-control">

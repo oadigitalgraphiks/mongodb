@@ -8,6 +8,7 @@ use App\Models\Tax;
 use App\Models\TaxTranslation;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 
 class TaxController extends Controller
 {
@@ -90,7 +91,6 @@ class TaxController extends Controller
         if($request->lang == env("DEFAULT_LANGUAGE")){
             $data->name = $request->name;
             $data->description = $request->description;
-            $data->logo = $request->logo;
             $data->save();
         }
 
@@ -102,7 +102,6 @@ class TaxController extends Controller
         $this->translate($request->lang,$data->id,[
              'name' => $request->name,
              'description' => $request->description,
-             'logo' => $request->logo,
             ]);
 
         return back()->with('success', translate('Record Updated'));

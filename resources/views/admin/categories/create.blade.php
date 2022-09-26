@@ -44,11 +44,18 @@
                                     <div class="mb-5 fv-row">
                                         <label class="required form-label">{{translate('Name')}}</label>
                                         <input type="text" placeholder="{{ translate('Name')}}" name="name" class="form-control mb-2" required>
+                                        @if($errors->has('name'))
+                                        <div class="error text-danger">{{ $errors->first('name')}}</div>
+                                        @endif
+                                        
                                     </div>
                                 
                                     <div class="mb-10">
                                         <label class="required form-label">{{translate('Slug')}}</label>
-                                        <input type="text" class="form-control mb-2" placeholder="{{translate('Slug')}}" id="slug" name="slug" required  />
+                                        <input type="text" class="slug form-control mb-2" placeholder="{{translate('Slug')}}"  name="slug" required  />
+                                        @if($errors->has('slug'))
+                                        <div class="error text-danger">{{ $errors->first('slug')}}</div>
+                                       @endif
                                     </div>
 
                                     <div class="mt-3 mb-10">
@@ -133,12 +140,25 @@
 
                             </div>
 
-
                         </form>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+
+<script>
+       $(".slug").keyup(function() {
+            var Text = $(this).val();
+            Text = Text.toLowerCase();
+            var regExp = /\s+/g;
+            Text = Text.replace(regExp,'-');
+            $(".slug").val(Text);        
+        });
+</script>
+
+
 @endsection

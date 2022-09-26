@@ -14,6 +14,14 @@ class Product extends Model {
     protected $with = ['translations'];
     protected $guarded =[];
 
+     //Add extra attribute
+     protected $attributes = ['picture_data','edit'];
+
+     //Make it available in the json response
+     protected $appends = ['picture_data','edit'];
+   
+
+
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
         $translations = $this->translations->where('lang', $lang)->first();
@@ -37,6 +45,19 @@ class Product extends Model {
     public function brand()
     {
         return $this->belongsTo(Brand::class,'brand_id');
+    }
+
+    //implement the attribute
+    public function getPictureDataAttribute()
+    {
+
+         return uploaded_asset($this->thumbnail);
+    }
+
+    public function getEditAttribute()
+    {
+
+         return route('admin.products.edit',$this->id);
     }
 
 }

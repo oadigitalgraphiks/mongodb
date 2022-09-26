@@ -24,6 +24,10 @@ class AttributeController extends Controller
             $data = $data->where('name', 'like', '%'.$sort_search.'%');
         }
 
+        if ($request->has('type') && $request->type  != ''){
+            $data = $data->where('type_id',$request->type);
+        }
+
 
         $data = $data->get();
         return view('admin.attributes.index', compact('data'));
@@ -51,7 +55,6 @@ class AttributeController extends Controller
 
        $data = Attribute::create([
             "name" => $request->name,
-            "slug" => $request->slug,
             "logo" =>  $request->logo,
             "sorting" =>  $request->sorting,
             "active" =>  $request->active,
@@ -83,10 +86,8 @@ class AttributeController extends Controller
     {              
 
         $data = Attribute::findOrFail($id);
-
         $data->name = $request->name;
         $data->logo = $request->logo;
-        $data->slug = $request->slug;
         $data->active = $request->active;
         $data->sorting = $request->sorting;
         $data->type_id = $request->type_id;

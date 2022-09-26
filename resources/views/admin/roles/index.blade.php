@@ -74,7 +74,7 @@
                                                     </a>
 
                                                     <a href="{{ route('admin.roles.permissions',$item->id)}}" class="bg-white border-0 menu-link px-3">
-                                                        <i  class="text-danger fa-lg far fa-trash-alt" ></i>
+                                                        <i  class="text-danger fas fa-key" ></i>
                                                         </a>
                                                 </td>
                                             </tr>

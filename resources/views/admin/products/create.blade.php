@@ -68,12 +68,19 @@
 
                                             <div class="col-md-12">
                                                 <label class="required form-label">Name</label>
-                                                <input type="text" class="form-control mb-2" name="name" placeholder="Product Name" required>
+                                                <input type="text" class="form-control mb-2" name="name" placeholder="Product Name" value="{{old('name')}}" required>
+                                                @if($errors->has('name'))
+                                                 <div class="error  text-danger">{{ $errors->first('name')}}</div>
+                                                @endif
                                            </div>
 
                                            <div class="pt-3 col-md-12">
                                             <label class="required form-label">Slug</label>
-                                            <input  class="form-control mb-2" name="slug" placeholder="Product Slug" required>
+                                            <input  class="slug form-control mb-2" name="slug" placeholder="Product Slug" required value="{{old('slug')}}" >
+
+                                               @if($errors->has('slug'))
+                                                 <div class="error  text-danger">{{ $errors->first('slug')}}</div>
+                                                @endif
                                           </div>
 
                                           <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
@@ -87,7 +94,7 @@
 
                                           <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
                                             <label class="required form-label">Unit price</label>
-                                            <input type="number" min="1" step="0.01" placeholder="Unit price" name="unit_price" class="form-control mb-2"  required>
+                                            <input type="number" min="1" step="0.01" placeholder="Unit price" name="unit_price" class="form-control mb-2" value="{{old('unit_price')}}"  required>
                                           </div>
 
                                            <div class="simple_show pt-3 col-md-6 fv-row fv-plugins-icon-container">
@@ -464,6 +471,13 @@
                             </div>
 
                             <div class="pt-5">
+                                <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
+                                    <span class="m-0 form-label ">Is Active</span>
+                                    <input class="form-check-input" type="checkbox" name="active" value="1">
+                                </label>
+                            </div>
+
+                            <div class="pt-5">
                                 <label class="form-label">Low Stock Quantity Warning</label>
                                 <select required data-control="select2"  class="d-block form-select " name="stock_visibility">
                                     <option  value="show_stock_quantity" >Show Stock Quantity</option>
@@ -791,6 +805,14 @@
 
         $('.form-submit-button').click(function(){
              $('.my_product_form').submit();
+        });
+
+        $(".slug").keyup(function() {
+            var Text = $(this).val();
+            Text = Text.toLowerCase();
+            var regExp = /\s+/g;
+            Text = Text.replace(regExp,'-');
+            $(".slug").val(Text);        
         });
 
     </script>

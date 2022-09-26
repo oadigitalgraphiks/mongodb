@@ -18,7 +18,7 @@
     <div class="toolbar" id="kt_toolbar">
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
             <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{translate('Products')}}</h1>
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{translate('Stocks')}}</h1>
                 <span class="h-20px border-gray-300 border-start mx-4"></span>
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <li class="breadcrumb-item text-muted">
@@ -60,33 +60,21 @@
                                         </select>
                                     </div>
 
-                                <a href="{{route('admin.products.create')}}" class="btn btn-primary">Add New</a>
-                                <div class="mx-1 dropdown">
-                                    <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i></button>
-                                    <div class="dropdown-menu actions" aria-labelledby="dropdownMenuButton">
-                                      <button type="button" data-value="0" data-action="delete" class="dropdown-item action_button">{{translate('Delete')}} </button>
-                                    </div>
-                                </div>
                               </div>
                         </div>
 
                         <div class="card-body pt-0">
                             <div class="table-responsive">
-                                <table class="my-table table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3  " >
+                                <table class="my-table table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
                                     <thead>
-                                        <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="w-10px pe-2">
-                                                <div class="form-check form-check-sm form-check-custom form-check-solid me-3"> <input class="bulk_check form-check-input" type="checkbox"  value="1" />
-                                                </div>
-                                            </th>
+                                        <tr class="text-center  fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="w-10px pe-2">#</th>
                                             <th class="text-center">{{translate('Image')}}</th>
                                             <th class="">{{translate('Name')}}</th>
                                             <th class="">{{translate('SKU')}}</th>
                                             <th class="">{{translate('Category')}}</th>
-                                            <th class="text-center">{{translate('Featured')}}</th>
-                                            <th class="text-center">{{translate('Status')}}</th>
-                                            <th class="text-center">{{translate('Active')}}</th>
+                                            <th class="">{{translate('Stock')}}</th>
+                                            
                                             <th class="text-center min-w-150px">{{translate('Actions')}}</th>
                                         </tr>
                                     </thead>
@@ -134,7 +122,7 @@
            `);
             
             $.ajax({
-                url: "{{ route('admin.products.index')}}",
+                url: "{{ route('admin.products.stock')}}",
                 data: {
                     search:search,
                     page:currentPage,
@@ -157,35 +145,28 @@
                             $('.display_pagnination').append(`<a data-href="${pageId}" class="btn btn-icon btn-sm  border-0 btn-light m-1  ${link.active ? 'active' : ''}"> ${link.label}</a>`);
                             }
                         });
-                   
+
+                        
                        //Data
-                        response.data.forEach(item => {
+                        response.data.forEach((item,key) => {
 
                                 $('.show_data').append(`
                                         <tr class="item${item._id}" >
-                                            <td class="checkboxes" > 
-                                                <div class="row_selected_checkbox form-check form-check-sm form-check-custom form-check-solid">
-                                                <input class=" form-check-input" type="checkbox" value="${item._id}" />
-                                                </div>
-                                            </td>
+                                            <td class="checkboxes">${key + 1}</td>
                                             <td class="text-center"><img src="${item.picture_data}" /></td>
-                                            <td class="">${item.name}</td>
-                                            <td class="">${item.sku}</td>
-                                            <td class="">${item.category ? item.category.name : 'none'} Category</td>
-                                            <td class="text-center">${item.featured ? 'Enable' : 'Disable'}</td>
-                                            <td class="text-center">${item.status}</td>
-                                            <td class="text-center">${item.active ? 'Active' : 'Deactive' }</td>
+                                            <td class="text-center">${item.name}</td>
+                                            <td class="text-center">${item.sku}</td>
+                                            <td class="text-center">${item.category ? item.category.name : 'none'}</td>
+                                            <td class="text-center">
+                                             ${ 
+                                                 item.product_type == 'variation' ? item.combinations.map(element => `<span>${element.name.replace(',','-')}: ${element.qty}</span></br>`) : item.quantity }
+                                            </td>
                                             <td class="text-center min-w-150px">
-                                                <a href="${item.edit}" class="edit_btn menu-link px-3"><i class="fa-lg text-primary fas fa-edit"></i></a>
-                                                <a data-href="${item._id}" class="delete_btn bg-white border-0 menu-link px-3">
-                                                 <i  class="text-danger fa-lg far fa-trash-alt" ></i>
-                                                </a>
-
+                                               <a href="${item.edit}" class="edit_btn menu-link px-3"><i class="fa-lg text-primary fas fa-edit"></i></a>
                                             </td>
                                         </tr>       
                                 `);
-                         });
-
+                        });
 
                     }else{
 
@@ -211,43 +192,7 @@
 
         //Events
 
-        $('.bulk_check').change(function(){
-
-            if($(this).prop("checked") == true){
-                   $('.show_data .checkboxes .form-check-input').prop("checked", true);
-            }else if($(this).prop("checked") == false){
-                   $('.show_data .checkboxes .form-check-input').prop("checked", false);
-            }
-        });
-
-
-        $('.actions button').click(function(){
-
-                let action = $(this).attr("data-action"); 
-                let value = $(this).attr("data-value"); 
-                let idz = [];
-                
-                $('.show_data .checkboxes .form-check-input:checked').each(function() {
-                    idz.push($(this).val());
-                });
-
-                if(idz.length == 0){
-                    alert('Please Select Record');
-                    return false;
-                }
-
-                $.get("{{route('admin.products.bulk')}}",
-                { 
-                    idz:idz.toString(),
-                    action:action,
-                    value:value
-                }, function(data, status){
-                    getUser();
-                });  
-
-        });
-
-
+    
         $('.search-data').change(function(){
                search = $('.search-data').val(); 
                getUser();
@@ -268,33 +213,7 @@
         });
 
 
-        $(".show_data").delegate(".delete_btn", "click", function(){
-            
-            let id =  $(this).val();
-            let delurl = "{{route('admin.products.destroy','id')}}";
-            delurl = delurl.replace('id',id);
-      
-            $.confirm({
-                closeIcon: true, 
-                title: false,
-                content:'Are you sure to continue ?',
-                buttons: { 
-                        Ok:function(){
-                            $.get(delurl, function(data, status){
-                                getUser();
-                            });
-                        },
-                        Cancel: {
-                            action: function () {
-                            }
-                        }
-                    }
-            });
-
-        });
-
-
-
+     
         getUser();
 
     </script>

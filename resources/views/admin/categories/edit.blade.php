@@ -62,16 +62,22 @@
                                         <div class="mb-5 fv-row">
                                             <label class="required form-label">{{translate('Name')}}</label>
                                             <input type="text" placeholder="{{ translate('Name')}}" value="{{$data->getTranslation('name', $lang)}}"  name="name" class="form-control mb-2" required>
+                                            @if($errors->has('name'))
+                                            <div class="error text-danger">{{ $errors->first('name')}}</div>
+                                           @endif
                                         </div>
                                 
                                     <div class="mb-10">
                                         <label class="required form-label">{{translate('Slug')}}</label>
-                                        <input type="text" class="form-control mb-2" placeholder="{{translate('Slug')}}" value="{{$data->getTranslation('slug', $lang)}}" name="slug" required  />
+                                        <input type="text" class="form-control mb-2" placeholder="{{translate('Slug')}}" value="{{$data->slug}}" name="slug" required  />
+                                            @if($errors->has('slug'))
+                                            <div class="error text-danger">{{ $errors->first('slug')}}</div>
+                                        @endif
                                     </div>
         
                                     <div class="mt-3 mb-10">
                                         <label class="form-label">{{ translate('Description') }}</label>
-                                        <textarea name="description" rows="5" class="form-control mb-2">{{$data->getTranslation('description', $lang)}}</textarea>
+                                        <textarea name="description" rows="5" class="form-control mb-2">{{$data->description}}</textarea>
                                     </div>
 
                                     <div class="mt-3 mb-10">
@@ -115,7 +121,7 @@
                                             <div class="dz-message needsclick">
                                                 <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                                 <input type="hidden" name="logo" class="selected-files"
-                                                    value="{{$data->getTranslation('logo', $lang)}}">
+                                                    value="{{$data->logo}}">
                                                 <div class="ms-4">
                                                     <h3 class="fs-5 fw-bolder text-gray-900 mb-1">{{translate('Drop files here or click to
                                                         upload.')}}</h3>
@@ -134,7 +140,7 @@
                                             <div class="dz-message needsclick">
                                                 <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
                                                 <input type="hidden" name="banner" class="selected-files"
-                                                    value="{{$data->getTranslation('banner', $lang)}}">
+                                                    value="{{$data->banner}}">
                                                 <div class="ms-4">
                                                     <h3 class="fs-5 fw-bolder text-gray-900 mb-1">{{translate('Drop files here or click to
                                                         upload.')}}</h3>

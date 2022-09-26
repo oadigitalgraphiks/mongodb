@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\CategoryTranslation;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 
 class CategoryController extends Controller
 {
@@ -48,6 +49,13 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
 
+        $slug =  Str::slug($request->slug, '-');
+        $request->merge(['slug' => $slug]);
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|min:3|unique:categories,slug',
+        ]);
+
        $data = Category::create([
             "name" => $request->name,
             "slug" => $request->slug,
@@ -62,10 +70,6 @@ class CategoryController extends Controller
 
         $this->translate('en',$data->id,[
             'name' => $request->name,
-            'slug' => $request->slug,
-            'description' => $request->description,
-            'logo' => $request->logo,
-            'banner' => $request->banner,
         ]);
 
         return redirect()->route('admin.categories.index')->with('success', translate('Record Added'));
@@ -92,29 +96,32 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {              
+    {
+        $data = Category::findOrFail($id); 
+        $request->validate([
+            'name' => 'required',
+            'slug' => ['required'],
+        ]);
 
         $data = Category::findOrFail($id);
         
         if($request->lang == env("DEFAULT_LANGUAGE")){
             $data->name = $request->name;
-            $data->slug = $request->slug;
-            $data->description = $request->description;
-            $data->logo = $request->logo;
-            $data->parent = $request->parent;
-            $data->featured = $request->featured;
-            $data->active = $request->active;
-            $data->sorting = $request->sorting;
             $data->save();
         }
 
+        $data->slug = $request->slug;
+        $data->description = $request->description;
+        $data->logo = $request->logo;
+        $data->parent = $request->parent;
+        $data->featured = $request->featured;
+        $data->active = $request->active;
+        $data->sorting = $request->sorting;
+        $data->save();
+
         $this->translate($request->lang,$data->id,[
-             'name' => $request->name,
-             'slug' => $request->slug,
-             'description' => $request->description,
-             'logo' => $request->logo,
-             'banner' => $request->banner,
-            ]);
+          'name' => $request->name,
+        ]);
 
         return back()->with('success', translate('Record Updated'));
 
@@ -139,6 +146,16 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
+
+        $products = Product::where('category_id',$id)->get();
+        if(count($products) > 0 ){
+            return back()->with('warning', translate('Category Used In Product'));
+        }
+
+        if($category->children){
+            return back()->with('warning', translate('Category Used In Subcategory'));
+        }
+
         foreach ($category->translations as $translation) {
             $translation->delete();
         }

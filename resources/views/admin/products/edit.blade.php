@@ -550,7 +550,7 @@
                             <div class="pt-5">
                                 <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
                                     <span class="m-0 form-label ">Is Active</span>
-                                    <input @if($product->cash_on_delivery == 1) {{'checked'}} @endif class="form-check-input" type="checkbox" name="active" value="1">
+                                    <input @if($product->active == 1) {{'checked'}} @endif class="form-check-input" type="checkbox" name="active" value="1">
                                 </label>
                             </div>
 
@@ -763,9 +763,8 @@
                 </div>`);
 
                 $('.attribute'+res._id).select2();
-
                 setCombinations();
-
+                
             }).catch((error) => {
 
             });

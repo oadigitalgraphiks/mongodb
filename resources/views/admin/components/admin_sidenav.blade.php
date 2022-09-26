@@ -50,7 +50,7 @@
                             <div class="menu-sub menu-sub-accordion menu-active-bg"></div>
                         </div>
 
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ in_array(Request::segment(2),['products','categories','brands','taxes','attribute_types','units','colors']) ? "hover show" : "" }}">
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ in_array(Request::segment(2),['products','categories','brands','taxes','attribute_types','units','colors','product-stock','attributes']) ? "hover show" : "" }}">
                                 <a class="menu-link " href="javascript:void(0)">
                                     <span class="menu-icon"><i class="fa-lg fab fa-product-hunt"></i></span>
                                     <span class="menu-title">Products</span>
@@ -74,6 +74,17 @@
                                                 <span class="menu-title">All Products</span>
                                             </a>
                                         </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link {{Request::segment(2) == "product-stock" ? "active" : ""}}" href="{{route('admin.products.stock')}}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Stock</span>
+                                            </a>
+                                        </div>
+
+                                        
 
                                         <div class="menu-item {{Request::segment(2) == "categories" ? "active" : ""}} ">
                                             <a class="menu-link" href="{{route('admin.categories.index')}}">
@@ -109,6 +120,15 @@
                                                 <span class="menu-title">Attribute Types</span>
                                             </a>
                                         </div>
+
+                                        <div class="menu-item {{Request::segment(2) == "attributes" ? "active" : ""}}  ">
+                                            <a class="menu-link" href="{{route('admin.attributes.index')}}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Attributes</span>
+                                            </a>
+                                        </div>
                                         
                                         <div class="menu-item {{Request::segment(2) == "units" ? "active" : ""}} ">
                                             <a class="menu-link" href="{{route('admin.units.index')}}">
@@ -141,14 +161,14 @@
 
                             <div class="menu-item {{Request::segment(2) == "permissions" ? "hover show" : ""}}   ">
                                 <a class="menu-link " href="{{route('admin.permissions.index')}}" >
-                                    <span class="menu-icon"><i class="fa-lg fas fa-boxes"></i></span>
+                                    <span class="menu-icon"><i class="fas fa-key"></i></span>
                                     <span class="menu-title">Permissions</span></a>
                                 <div class="menu-sub menu-sub-accordion menu-active-bg"></div>
                             </div>
 
                             <div class="menu-item {{Request::segment(2) == "roles" ? "hover show" : ""}}   ">
                                 <a class="menu-link " href="{{route('admin.roles.index')}}" >
-                                    <span class="menu-icon"><i class="fa-lg fas fa-boxes"></i></span>
+                                    <span class="menu-icon"><i class="fas fa-mask"></i></span>
                                     <span class="menu-title">Roles</span></a>
                                 <div class="menu-sub menu-sub-accordion menu-active-bg"></div>
                             </div>
@@ -267,28 +287,7 @@
                                 <div class="menu-sub menu-sub-accordion menu-active-bg"></div>
                             </div>
 
-                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion" >
-                                <a class="menu-link" href="javascript:void(0)">
-                                    <span class="menu-icon">
-                                        <i class="fa-lg fa fa-comment-alt"></i>
-                                    </span>
-                                    <span class="menu-title">Staff</span>
-                                    <span class="menu-arrow"></span>
-                                </a>
-                                <div class="menu-sub menu-sub-accordion menu-active-bg">
-                                        <div class="menu-item">
-                                            <a class="menu-link" href="#?id=1">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">id</span>
-                                                    <span class="menu-arrow"></span>
-                                            </a>
-                                        </div>
-                                </div>
-                            </div>
-
-
+                            
                             <div data-kt-menu-trigger="click" class="menu-item menu-accordion " >
                                 <a class="menu-link" href="javascript:void(0)">
                                     <span class="menu-icon"><i class="fa-lg fas fa-wrench"></i></span>

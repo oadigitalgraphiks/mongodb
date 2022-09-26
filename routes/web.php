@@ -26,12 +26,10 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
     Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
       //Products
-      Route::get('products/delete', [App\Http\Controllers\Admin\ProductController::class, 'delete'])->name('products.delete');
-      
+      Route::get('product-stock', [App\Http\Controllers\Admin\ProductController::class, 'stock'])->name('products.stock');
+      Route::get('products/bulk', [App\Http\Controllers\Admin\ProductController::class, 'bulk'])->name('products.bulk');
       Route::get('products/destroy/{id}', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('products.destroy');
-      
       Route::get('products/attribute_type',[App\Http\Controllers\Admin\ProductController::class, 'attribute_type'])->name('products.attribute_type');
-
       Route::resource('products',App\Http\Controllers\Admin\ProductController::class)->only(['index', 'store', 'edit', 'update','create']);
 
       //Brand

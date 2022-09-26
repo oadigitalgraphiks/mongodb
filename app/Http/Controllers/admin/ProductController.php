@@ -15,6 +15,7 @@ use App\Models\Color;
 use App\Models\ProductCombination;
 use App\Models\ProductTranslation;
 use App;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -26,18 +27,30 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-    
-        $products = Product::orderBy('created_at', 'desc');
+        
+        if($request->ajax()){
+            
+            $products = Product::orderBy('created_at', 'desc');
+            if($request->has('search') && $request->search != ''){
+                $search = (string) $request->search;
+                $products = $products->where('name', 'like', '%'.$search.'%');
+            }
+            
+            $products = $products->with(['category','brand']);
+        
+            if($request->has('count') && $request->count != ''){
+                $count = $request->count;
+                $products = $products->paginate($count);
+            }else{
+                $products = $products->paginate($products->count());
+            }
+   
+            return response()->json($products);
 
-        // dd($products);
-
-        if ( $request->has('search') && $request->search != ''){
-            $products = $products->where('name', 'like', '%'.$request->search.'%');
         }
-        $products = $products->paginate(15);
 
 
-        return view('admin.products.index',compact('products'));
+        return view('admin.products.index');
     }
 
      /**
@@ -64,6 +77,15 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
+        $slug =  Str::slug($request->slug, '-');
+        $request->merge(['slug' => $slug]);
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|min:3|unique:products,slug',
+        ]);
+
+        
 
         $active = $request->has('active') ? 1 : 0;
         $cash_on_delivery = $request->has('cash_on_delivery') ? 1 : 0;
@@ -330,9 +352,12 @@ class ProductController extends Controller
         foreach ($data->translations as $translation) {
             $translation->delete();
         }
-     
+
+        ProductCombination::where('product_id',$id)->delete();
         Product::destroy($id);
-        return redirect()->route('admin.products.index')->with('success', translate('Record Deleted'));
+        return response()->json(["message" => translate('Record Deleted')]);
+
+        // return redirect()->route('admin.products.index')->with('success', translate('Record Deleted'));
     }
 
 
@@ -340,17 +365,71 @@ class ProductController extends Controller
     /*
      * Remove the specified resource from storage.
      */
-    public function delete(Request $request)
+    public function bulk(Request $request)
     {
-        if($request->has('ids') && $request->ids != ''){
-            $idz = explode(',',$request->ids);    
-            Product::whereIn('_id',$idz)->delete();
-            ProductTranslation::whereIn('product_id',$idz)->delete();
-            return back()->with('success', translate('Record Deleted'));
+        if($request->has('idz') && $request->has('action') && $request->has('value')){
+          
+            switch ($request->action) {
+               
+                case 'delete':
+
+                    // dd($request->all());
+                    $idz = explode(',',$request->idz);    
+                    Product::whereIn('_id',$idz)->delete();
+                    ProductTranslation::whereIn('product_id',$idz)->delete();
+                    return response()->json(['message' => translate('Record Deleted')],200);
+
+                
+                    # code...
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+
         }
+
+
+        return response()->json(['message' => translate('Error Found')],400);
         
     }
+  
 
+
+    
+
+    /*
+    * Show the application dashboard.
+    * @return \Illuminate\Contracts\Support\Renderable
+    */
+    public function stock(Request $request)
+    {
+    
+           if($request->ajax()){
+
+
+                $products = Product::orderBy('created_at', 'desc');
+                if($request->has('search') && $request->search != ''){
+                    $search = (string) $request->search;
+                    $products = $products->where('name', 'like', '%'.$search.'%');
+                }
+
+                $products = $products->with(['category','brand','combinations']);
+
+                if($request->has('count') && $request->count != ''){
+                    $count = $request->count;
+                    $products = $products->paginate($count);
+                }else{
+                    $products = $products->paginate($products->count());
+                }
+
+                // dd($products);
+                return response()->json($products);
+        }
+       
+        return view('admin.products.stock');
+    }
 
 
        /*
