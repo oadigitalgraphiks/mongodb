@@ -9,7 +9,7 @@
     
     }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<link rel="stylesheet" href="{{asset('/admin/assets/backend/css/confirm.css')}}">
 
 @endsection
 @section('content')
@@ -22,12 +22,12 @@
                 <span class="h-20px border-gray-300 border-start mx-4"></span>
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <li class="breadcrumb-item text-muted">
-                        <a href="{{route('admin.dashboard')}}" class="text-muted text-hover-primary">{{translate('Home')}}</a>
+                        <a href="{{route('admin.dashboard')}}" class="text-muted text-hover-primary">{{translate('home')}}</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-300 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted"> <a class="text-muted" href="{{route('admin.products.index')}}" target="_blank" rel="noopener noreferrer">{{translate('Products')}}</a> </li>
+                    <li class="breadcrumb-item text-muted"> <a class="text-muted" href="{{route('admin.products.index')}}" target="_blank" rel="noopener noreferrer">{{translate('products')}}</a> </li>
                 </ul>
             </div>
         </div>
@@ -47,14 +47,14 @@
                             </div>
 
                             <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                                    <span class="text-muted">Displaying 
-                                    <span class="current_show" >0</span> of 
-                                    <span class="count_show"  >0</span> records</span>
+                                    <span class="text-muted"> {{ translate('Displaying') }}  
+                                    <span class="current_show">0</span> {{translate('of')}} 
+                                    <span class="count_show">0</span> {{translate('records')}}  </span>
 
                                     <div class="d-flex align-items-center py-3">
                                         <select class="data_item_length form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;">
-                                            <option value="all">All</option>
-                                            <option value="10">10</option>
+                                            <option value="all">{{ translate('All')}}</option>
+                                            <option value="10"> 10</option>
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
@@ -74,8 +74,6 @@
                                             <th class="">{{translate('SKU')}}</th>
                                             <th class="">{{translate('Category')}}</th>
                                             <th class="">{{translate('Stock')}}</th>
-                                            
-                                            <th class="text-center min-w-150px">{{translate('Actions')}}</th>
                                         </tr>
                                     </thead>
                                     <tbody class="show_data fw-bold text-gray-600">
@@ -99,12 +97,10 @@
 </div>
 @endsection
 
-@section('modal')
-    @include('admin.components.delete_modal')
-@endsection
+
 
 @section('script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script src="{{asset('/admin/assets/backend/js/confirm.js')}}"></script>
     <script>
 
        let search;
@@ -149,20 +145,18 @@
                         
                        //Data
                         response.data.forEach((item,key) => {
-
+                            let editlink = "{{route('admin.products.edit','id')}}";
+                            editlink = editlink.replace('id',item._id);
                                 $('.show_data').append(`
                                         <tr class="item${item._id}" >
                                             <td class="checkboxes">${key + 1}</td>
                                             <td class="text-center"><img src="${item.picture_data}" /></td>
-                                            <td class="text-center">${item.name}</td>
+                                            <td class="text-center"><a href="${editlink}" >${item.name}</a></td>
                                             <td class="text-center">${item.sku}</td>
                                             <td class="text-center">${item.category ? item.category.name : 'none'}</td>
                                             <td class="text-center">
                                              ${ 
                                                  item.product_type == 'variation' ? item.combinations.map(element => `<span>${element.name.replace(',','-')}: ${element.qty}</span></br>`) : item.quantity }
-                                            </td>
-                                            <td class="text-center min-w-150px">
-                                               <a href="${item.edit}" class="edit_btn menu-link px-3"><i class="fa-lg text-primary fas fa-edit"></i></a>
                                             </td>
                                         </tr>       
                                 `);

@@ -18,13 +18,13 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Category::where('parent','0');
+        $data = Category::orderBy('created_at', 'desc');
         if ($request->has('search') && $request->search  != ''){
             $sort_search = $request->search;
             $data = $data->where('name', 'like', '%'.$sort_search.'%');
         }
 
-        $data = $data->with('children')->get();
+        $data = $data->paginate(10);
 
         return view('admin.categories.index', compact('data'));
     }
@@ -53,7 +53,7 @@ class CategoryController extends Controller
         $request->merge(['slug' => $slug]);
         $request->validate([
             'name' => 'required',
-            'slug' => 'required|min:3|unique:categories,slug',
+            'slug' => 'required',
         ]);
 
        $data = Category::create([
@@ -135,48 +135,75 @@ class CategoryController extends Controller
             $translation[$key] = $data[$key];
         }
         $translation->save();
-
     }
 
-
-
-    /**
+     /*
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function bulk(Request $request)
     {
-        $category = Category::findOrFail($id);
+        if($request->has('idz') && $request->has('action') && $request->has('value')){
+          
+            switch ($request->action) {
+               
+                case 'delete':
 
-        $products = Product::where('category_id',$id)->get();
-        if(count($products) > 0 ){
-            return back()->with('warning', translate('Category Used In Product'));
+                    $idz = explode(',',$request->idz);
+                    $categories = Category::whereIn('_id',$idz)->get();
+                    foreach ($categories as $category) {
+
+                        $products = Product::where('category_id',$category->id)->get();
+        
+                        if(count($products) > 0 ){
+                            return response()->json(['message' => translate('Category Used In Product')],400);
+                        }
+                        
+                        if(count($category->children) > 0 ){
+                            return response()->json(['message' => translate('Category Used In Subcategory')],400);
+                        }
+    
+                        foreach ($category->translations as $translation) {
+                            $translation->delete();
+                        }
+
+                        Category::destroy($category->id);
+                    }
+
+                    return response()->json(['message' => translate('Records Deleted')],200);
+                    break;
+
+
+                case 'active':
+
+                    $idz = explode(',',$request->idz);    
+                    $pp = Category::whereIn('_id',$idz)->get();
+                    foreach ($pp as $item) {
+                        $item->active = $request->value;
+                        $item->save();
+                    }
+                    return response()->json(['message' => translate('Activation Updated')],200);
+                    break;
+                
+                case 'featured':
+
+                        $idz = explode(',',$request->idz);    
+                        $pp = Category::whereIn('_id',$idz)->get();
+                        foreach ($pp as $item) {
+                            $item->featured = $request->value;
+                            $item->save();
+                        }
+                        return response()->json(['message' => translate('Featured Updated')],200);
+                        break;    
+
+                default:
+                break;
+            }
+
+
         }
 
-        if($category->children){
-            return back()->with('warning', translate('Category Used In Subcategory'));
-        }
 
-        foreach ($category->translations as $translation) {
-            $translation->delete();
-        }
-     
-        Category::destroy($id);
-        return redirect()->route('admin.categories.index')->with('success', translate('Record Deleted'));
-    }
-
-
-
-    /*
-     * Remove the specified resource from storage.
-     */
-    public function delete(Request $request)
-    {
-        if($request->has('ids') && $request->ids != ''){
-            $idz = explode(',',$request->ids);    
-            Category::whereIn('_id',$idz)->delete();
-            CategoryTranslation::whereIn('cateogry_id',$idz)->delete();
-            return back()->with('success', translate('Record Deleted'));
-        }
+        return response()->json(['message' => translate('Error Found')],400);
         
     }
 

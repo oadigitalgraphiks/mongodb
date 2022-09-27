@@ -9,14 +9,16 @@
                 <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{translate('Color')}}</h1>
+                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{translate('All Colors')}}</h1>
                     <span class="h-20px border-gray-300 border-start mx-4"></span>
                     <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                         <li class="breadcrumb-item text-muted">
-                            <a href="{{ route("admin.dashboard") }}" class="text-muted text-hover-primary">{{translate('Home')}}</a>
+                            <a href="{{ route("admin.dashboard") }}" class="text-muted text-hover-primary">{{translate('home')}}</a>
                         </li>
                         <li class="breadcrumb-item"><span class="bullet bg-gray-300 w-5px h-2px"></span></li>
-                        <li class="breadcrumb-item text-muted"><a class="text-muted text-hover-primary" href="{{route('admin.colors.index')}}">{{translate('Colors')}}</a></li>
+                        <li class="breadcrumb-item text-muted"><a class="text-muted text-hover-primary" href="{{route('admin.products.index')}}">{{translate('products')}}</a></li>
+                        <li class="breadcrumb-item"><span class="bullet bg-gray-300 w-5px h-2px"></span></li>
+                        <li class="breadcrumb-item text-muted"><a class="text-muted text-hover-primary" href="{{route('admin.colors.index')}}">{{translate('colors')}}</a></li>
                     </ul>
                 </div>
             </div>
@@ -42,14 +44,20 @@
                                     
                                 </div>
                                 <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+                                    <span class="text-muted"> {{ translate('Displaying') }}  
+                                        {{ ($data->currentPage() > 1) ? (($data->currentPage()-1) * $data->perPage()) : ((count($data) > 0) ? 1 : 0) }} -
+                                            
+                                        {{ ($data->currentPage() > 1) ? (($data->currentPage()-1) * $data->perPage() + count($data)) : count($data)}} {{ translate('of') }} <span class="count_show"> {{$data->total()}} </span> 
+                                        {{ translate('Records') }}</span>
+
                                     <a href="{{route('admin.colors.create')}}" class="btn btn-primary">{{translate('Add New')}}</a>
                                 </div>
                             </div>
 
                             <div class="card-body pt-0">
-                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" >
                                     <thead>
-                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <tr class="text-start  fw-bolder fs-7 text-uppercase gs-0">
                                             <th class="w-10px pe-2">#</th>
                                             <th class="">{{translate('Image')}}</th>
                                             <th class="min-w-200px">{{translate('Name')}}</th>
@@ -67,11 +75,17 @@
                                                 </td>
                                                 <td>{{ $item->getTranslation('name') }}</td>
                                                 <td class="text-center">{{ $item->sorting}}</td>
-                                                <td class="text-center" >{{ $item->active == '1' ? 'Active' :'Not Active'}}</td>
+                                                <td class="text-center" >
+                                                    <span class="fw-bolder ms-3">
+                                                        <label class=" form-check form-switch form-check-custom form-check-solid d-block">
+                                                        <input class="active_toggle form-check-input" value="{{$item->id}}" type="checkbox" {{$item->active == '1' ? 'checked' : ''}} /> </label>
+                                                        </span> 
+                                                </td>
                                                 <td class="text-end">
-                                                    <a href="{{ route('admin.colors.edit',$item->id)}}" class="menu-link px-3"><i class="fa-lg text-primary fas fa-edit" ></i></a>
-                                                    <a data-href="{{ route('admin.colors.destroy',$item->id)}}" class="confirm-delete bg-white border-0 menu-link px-3">
-                                                        <i  class="text-danger fa-lg far fa-trash-alt" ></i>
+                                                    <a href="{{ route('admin.colors.edit',$item->id)}}" class="btn btn-icon btn-bg-light px-3"><i class="fa-lg text-primary fas fa-edit" ></i></a>
+
+                                                    <a data-href="{{ route('admin.colors.destroy',$item->id)}}" class="confirm-delete btn btn-icon btn-bg-light px-3">
+                                                        <i class="text-danger fa-lg far fa-trash-alt" ></i>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -79,6 +93,10 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+
+                        <div class="pagination pt-3" >
+                            {{ $data->appends(request()->input())->links('admin.components.pagination') }}
                         </div>
                     </div>
                 </div>

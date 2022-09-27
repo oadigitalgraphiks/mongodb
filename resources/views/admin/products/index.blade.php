@@ -9,7 +9,7 @@
     
     }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<link rel="stylesheet" href="{{asset('/admin/assets/backend/css/confirm.css')}}">
 
 @endsection
 @section('content')
@@ -18,16 +18,16 @@
     <div class="toolbar" id="kt_toolbar">
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
             <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{translate('Products')}}</h1>
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{translate('All Products')}}</h1>
                 <span class="h-20px border-gray-300 border-start mx-4"></span>
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <li class="breadcrumb-item text-muted">
-                        <a href="{{route('admin.dashboard')}}" class="text-muted text-hover-primary">{{translate('Home')}}</a>
+                        <a href="{{route('admin.dashboard')}}" class="text-muted text-hover-primary">{{translate('home')}}</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-300 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted"> <a class="text-muted" href="{{route('admin.products.index')}}" target="_blank" rel="noopener noreferrer">{{translate('Products')}}</a> </li>
+                    <li class="breadcrumb-item text-muted"> <a class="text-muted" href="{{route('admin.products.index')}}" target="_blank" rel="noopener noreferrer">{{translate('products')}}</a> </li>
                 </ul>
             </div>
         </div>
@@ -66,6 +66,15 @@
                                         <i class="fas fa-ellipsis-v"></i></button>
                                     <div class="dropdown-menu actions" aria-labelledby="dropdownMenuButton">
                                       <button type="button" data-value="0" data-action="delete" class="dropdown-item action_button">{{translate('Delete')}} </button>
+                                    
+                                      <button type="button" data-value="1" data-action="active" class="dropdown-item action_button">{{translate('Active')}} </button>
+                                      <button type="button" data-value="0" data-action="active" class="dropdown-item action_button">{{translate('Deactive')}} </button>
+
+                                      <button type="button" data-value="draft" data-action="status" class="dropdown-item action_button">{{translate('Draft')}} </button>
+
+                                      <button type="button" data-value="published" data-action="status" class="dropdown-item action_button">{{translate('Published')}} </button>
+
+                                      <button type="button" data-value="pending" data-action="status" class="dropdown-item action_button">{{translate('Pending')}} </button>
                                     </div>
                                 </div>
                               </div>
@@ -75,7 +84,7 @@
                             <div class="table-responsive">
                                 <table class="my-table table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3  " >
                                     <thead>
-                                        <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <tr class="text-center  fw-bolder fs-7 text-uppercase gs-0">
                                             <th class="w-10px pe-2">
                                                 <div class="form-check form-check-sm form-check-custom form-check-solid me-3"> <input class="bulk_check form-check-input" type="checkbox"  value="1" />
                                                 </div>
@@ -111,19 +120,16 @@
 </div>
 @endsection
 
-@section('modal')
-    @include('admin.components.delete_modal')
-@endsection
+
 
 @section('script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script src="{{asset('/admin/assets/backend/js/confirm.js')}}"></script>
     <script>
 
        let search;
        let currentPage = 1;
        let perPage = '';
 
-   
        const getUser = () => {
 
            $('.show_data').empty();
@@ -172,12 +178,22 @@
                                             <td class="">${item.name}</td>
                                             <td class="">${item.sku}</td>
                                             <td class="">${item.category ? item.category.name : 'none'} Category</td>
-                                            <td class="text-center">${item.featured ? 'Enable' : 'Disable'}</td>
+                                            <td class="text-center">
+                                                <span class="fw-bolder ms-3">
+                                                <label class=" form-check form-switch form-check-custom form-check-solid d-block">
+                                                <input class="featured_toggle form-check-input" value="${item._id}" type="checkbox" ${item.featured == '1' ? 'checked' : '' } /> </label>
+                                                </span> 
+                                                
+                                            </td>
                                             <td class="text-center">${item.status}</td>
-                                            <td class="text-center">${item.active ? 'Active' : 'Deactive' }</td>
+                                            <td class="text-center"><span class="fw-bolder ms-3">
+                                                <label class=" form-check form-switch form-check-custom form-check-solid d-block">
+                                                <input class="active_toggle form-check-input" value="${item._id}" type="checkbox" ${item.active == '1' ? 'checked' : '' } /> </label>
+                                                </span> 
+                                            </td>
                                             <td class="text-center min-w-150px">
-                                                <a href="${item.edit}" class="edit_btn menu-link px-3"><i class="fa-lg text-primary fas fa-edit"></i></a>
-                                                <a data-href="${item._id}" class="delete_btn bg-white border-0 menu-link px-3">
+                                                <a href="${item.edit}" class="edit_btn btn btn-icon btn-bg-light px-3"><i class="fa-lg text-primary fas fa-edit"></i></a>
+                                                <a data-href="${item._id}" class="delete_btn btn btn-icon btn-bg-light px-3">
                                                  <i  class="text-danger fa-lg far fa-trash-alt" ></i>
                                                 </a>
 
@@ -199,8 +215,7 @@
 
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    $('.show_data').empty();
-                    
+                    $('.show_data').empty();                    
                 } 
 
             });
@@ -236,14 +251,28 @@
                     return false;
                 }
 
-                $.get("{{route('admin.products.bulk')}}",
-                { 
-                    idz:idz.toString(),
-                    action:action,
-                    value:value
-                }, function(data, status){
-                    getUser();
-                });  
+                $.confirm({
+                closeIcon: true, 
+                title: false,
+                content:'Are you sure to continue ?',
+                buttons: { 
+                        Ok:function(){
+                                $.get("{{route('admin.products.bulk')}}",
+                                { 
+                                    idz:idz.toString(),
+                                    action:action,
+                                    value:value
+                                }, function(data, status){
+                                    AIZ.plugins.notify('success','Action Performed Successfully');
+                                    getUser();
+                                });  
+                        },
+                        Cancel: {
+                            action: function () {
+                            }
+                        }
+                    }
+                });
 
         });
 
@@ -267,31 +296,98 @@
                getUser();
         });
 
+        
 
+        // onDelete
         $(".show_data").delegate(".delete_btn", "click", function(){
-            
             let id =  $(this).val();
-            let delurl = "{{route('admin.products.destroy','id')}}";
-            delurl = delurl.replace('id',id);
-      
             $.confirm({
                 closeIcon: true, 
                 title: false,
                 content:'Are you sure to continue ?',
                 buttons: { 
                         Ok:function(){
-                            $.get(delurl, function(data, status){
-                                getUser();
-                            });
+
+                            $.get("{{route('admin.products.bulk')}}",
+                                    { 
+                                        idz:id,
+                                        action:'delete',
+                                        value:0
+                                    }, function(data, status){                   
+                                        AIZ.plugins.notify('success','Record Deleted');
+                                        getUser();
+                                });
                         },
                         Cancel: {
                             action: function () {
                             }
                         }
                     }
-            });
+                });
+ 
+        });
+
+        
+
+        $(".show_data").delegate(".featured_toggle", "change", function(){
+
+            let id =  $(this).val();
+            if($(this).prop("checked") == true){
+                        
+                        $.get("{{route('admin.products.bulk')}}",
+                        { 
+                            idz:id,
+                            action:'featured',
+                            value:1
+                        }, function(data, status){
+                            // AIZ.plugins.notify('success','Success');
+                        });
+
+            }else if($(this).prop("checked") == false){
+                    
+                    $.get("{{route('admin.products.bulk')}}",
+                    { 
+                        idz:id,
+                        action:'featured',
+                        value:0
+                    }, function(data, status){ 
+                    });
+            }
 
         });
+
+
+        $(".show_data").delegate(".active_toggle", "change", function(){
+
+            let id =  $(this).val();
+            if($(this).prop("checked") == true){
+                        
+                        $.get("{{route('admin.products.bulk')}}",
+                        { 
+                            idz:id,
+                            action:'active',
+                            value:1
+                        }, function(data, status){
+                            // AIZ.plugins.notify('success','Success');
+                        });
+
+            }else if($(this).prop("checked") == false){
+                    
+                    $.get("{{route('admin.products.bulk')}}",
+                    { 
+                        idz:id,
+                        action:'active',
+                        value:0
+                    }, function(data, status){ 
+                    });
+            }
+
+        });
+
+
+
+
+        
 
 
 

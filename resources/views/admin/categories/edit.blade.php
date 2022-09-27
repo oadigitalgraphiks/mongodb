@@ -12,14 +12,16 @@
                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                 <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
-                  <a class="text-muted" href="{{route('admin.categories.index')}}">Categories</a></h1>
+                  <a class="text-dark" href="{{route('admin.categories.index')}}">{{ translate('Edit Categories')}}</a></h1>
                 <span class="h-20px border-gray-300 border-start mx-4"></span>
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <li class="breadcrumb-item text-muted">
-                        <a href="{{ route("admin.dashboard") }}" class="text-muted text-hover-primary">Home</a>
+                        <a href="{{ route("admin.dashboard") }}" class="text-muted text-hover-primary">{{ translate('Home')}}</a>
                     </li>
                     <li class="breadcrumb-item"><span class="bullet bg-gray-300 w-5px h-2px"></span></li>
-                    <li class="breadcrumb-item text-muted"> <a class="text-muted text-hover-primary"  href="{{route('admin.products.index')}}">Products</a></li>
+                    <li class="breadcrumb-item text-muted"><a class="text-muted text-hover-primary"  href="{{route('admin.products.index')}}">{{ translate('Products')}}</a></li>
+                    <li class="breadcrumb-item"><span class="bullet bg-gray-300 w-5px h-2px"></span></li>
+                    <li class="breadcrumb-item text-muted"><a class="text-muted text-hover-primary"  href="{{route('admin.categories.index')}}">{{ translate('Categories')}}</a></li>
                 </ul>
             </div>
         </div>
@@ -61,7 +63,7 @@
                                 <div class="card-body pt-0">
                                         <div class="mb-5 fv-row">
                                             <label class="required form-label">{{translate('Name')}}</label>
-                                            <input type="text" placeholder="{{ translate('Name')}}" value="{{$data->getTranslation('name', $lang)}}"  name="name" class="form-control mb-2" required>
+                                            <input type="text" placeholder="{{ translate('Name')}}" value="{{$data->getTranslation('name', $lang)}}"  name="name" class="title form-control mb-2" required>
                                             @if($errors->has('name'))
                                             <div class="error text-danger">{{ $errors->first('name')}}</div>
                                            @endif
@@ -69,7 +71,7 @@
                                 
                                     <div class="mb-10">
                                         <label class="required form-label">{{translate('Slug')}}</label>
-                                        <input type="text" class="form-control mb-2" placeholder="{{translate('Slug')}}" value="{{$data->slug}}" name="slug" required  />
+                                        <input readonly type="text" class="slug form-control mb-2" placeholder="{{translate('Slug')}}" value="{{$data->slug}}" name="slug" required  />
                                             @if($errors->has('slug'))
                                             <div class="error text-danger">{{ $errors->first('slug')}}</div>
                                         @endif
@@ -95,16 +97,16 @@
                                     <div class="mt-3 mb-10">
                                         <label class="form-label">{{ translate('Active') }}</label>
                                         <select data-control="select2" name="active" class="form-select form-control">
-                                            <option @if($data->active == '1') {{'selected'}} @endif value="0">Active</option> 
-                                            <option @if($data->active == '0') {{'selected'}} @endif value="1">Not Active</option>
+                                            <option @if($data->active == '1') {{'selected'}} @endif value="1"> {{ translate('Active') }} </option> 
+                                            <option @if($data->active == '0') {{'selected'}} @endif value="0"> {{ translate('Not Active') }}</option>
                                         </select>
                                     </div>
 
                                     <div class="mt-3 mb-10">
                                         <label class="form-label">{{ translate('Featured') }}</label>
                                         <select data-control="select2" name="featured" class="form-select form-control">
-                                            <option @if($data->featured == '0') {{'selected'}} @endif value="0">No</option> 
-                                            <option @if($data->featured == '1') {{'selected'}} @endif value="1">Yes</option>
+                                            <option @if($data->featured == '0') {{'selected'}} @endif value="0"> {{ translate('No') }}</option> 
+                                            <option @if($data->featured == '1') {{'selected'}} @endif value="1"> {{ translate('Yes') }}</option>
                                         </select>
                                     </div>
 
@@ -164,4 +166,19 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+       
+        $(".title").keyup(function() {
+            var Text = $(this).val();
+            Text = Text.toLowerCase();
+            var regExp = /\s+/g;
+            Text = Text.replace(regExp,'-');
+            $(".slug").val(Text);        
+        });
+
+        $('.title').trigger('keyup');
+    </script>
 @endsection

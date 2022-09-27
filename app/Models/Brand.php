@@ -9,21 +9,20 @@ use App;
 class Brand extends Model {
 
     protected $connection = 'mongodb';
-    // protected $primaryKey = 'id';
     protected $collection = 'brands';
-
-    protected $with = ['brand_translations'];
-
+    protected $with = ['translations'];
     protected $guarded = [];
+
 
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
-        $brand_translation = $this->brand_translations->where('lang', $lang)->first();
-        return $brand_translation != null ? $brand_translation->$field : $this->$field;
+        $translation = $this->translations->where('lang', $lang)->first();
+        return $translation != null ? $translation->$field : $this->$field;
     }
 
-    public function brand_translations(){
-      return $this->hasMany(BrandTranslation::class);
+    public function translations(){
+      return $this->hasMany(BrandTranslation::class,'brand_id');
     }
+
 
 }

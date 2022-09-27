@@ -50,7 +50,7 @@
                             <div class="menu-sub menu-sub-accordion menu-active-bg"></div>
                         </div>
 
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ in_array(Request::segment(2),['products','categories','brands','taxes','attribute_types','units','colors','product-stock','attributes']) ? "hover show" : "" }}">
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ in_array(Request::segment(2),['products','categories','brands','taxes','attribute_types','units','colors','product-stock','attributes','reviews']) ? "hover show" : "" }}">
                                 <a class="menu-link " href="javascript:void(0)">
                                     <span class="menu-icon"><i class="fa-lg fab fa-product-hunt"></i></span>
                                     <span class="menu-title">Products</span>
@@ -149,7 +149,7 @@
                                         </div>
 
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{route('admin.products.create')}}">
+                                            <a class="menu-link" href="{{route('admin.reviews.index')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>

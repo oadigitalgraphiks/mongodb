@@ -28,20 +28,20 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
       //Products
       Route::get('product-stock', [App\Http\Controllers\Admin\ProductController::class, 'stock'])->name('products.stock');
       Route::get('products/bulk', [App\Http\Controllers\Admin\ProductController::class, 'bulk'])->name('products.bulk');
-      Route::get('products/destroy/{id}', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('products.destroy');
       Route::get('products/attribute_type',[App\Http\Controllers\Admin\ProductController::class, 'attribute_type'])->name('products.attribute_type');
       Route::resource('products',App\Http\Controllers\Admin\ProductController::class)->only(['index', 'store', 'edit', 'update','create']);
 
       //Brand
-      Route::post('/bulk-brand-delete', [App\Http\Controllers\Admin\BrandController::class,'bulk_brand_delete'])->name('bulk-brand-delete');
-      Route::get('brands/{id}/destory', [App\Http\Controllers\Admin\BrandController::class,'destroy'])->name('brands.destory');
+      Route::get('/brands/bulk', [App\Http\Controllers\Admin\BrandController::class,'bulk'])->name('brands.bulk');
       Route::resource('brands',App\Http\Controllers\Admin\BrandController::class);
 
-      // Categories
-      Route::get('categories/delete', [App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('categories.delete');
-      Route::get('categories/destroy/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
-      Route::resource('categories',App\Http\Controllers\Admin\CategoryController::class)->only(['index', 'store', 'edit', 'update','create']);
+      //Reviews
+      Route::get('reviews/bulk', [App\Http\Controllers\Admin\ReviewController::class,'bulk'])->name('reviews.bulk');
+      Route::resource('reviews',App\Http\Controllers\Admin\ReviewController::class)->only(['index', 'edit', 'update']);
 
+      // Categories
+      Route::get('categories/delete', [App\Http\Controllers\Admin\CategoryController::class, 'bulk'])->name('categories.bulk');
+      Route::resource('categories',App\Http\Controllers\Admin\CategoryController::class)->only(['index', 'store', 'edit', 'update','create']);
 
       //Units
       Route::get('units/delete', [App\Http\Controllers\Admin\UnitController::class, 'delete'])->name('units.delete');
@@ -87,7 +87,6 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
 
         //Customer
-  
         Route::get('customers/delete/{id}', [App\Http\Controllers\Admin\CustomerController::class,'destroy'])->name('customers.delete');
         Route::get('customers_ban/{customer}', [App\Http\Controllers\Admin\CustomerController::class,'ban'])->name('customers.ban');
         Route::get('/customers/login/{id}', [App\Http\Controllers\Admin\CustomerController::class,'login'])->name('customers.login');

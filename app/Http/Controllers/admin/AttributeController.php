@@ -29,7 +29,7 @@ class AttributeController extends Controller
         }
 
 
-        $data = $data->get();
+        $data = $data->paginate(5);
         return view('admin.attributes.index', compact('data'));
 
     }

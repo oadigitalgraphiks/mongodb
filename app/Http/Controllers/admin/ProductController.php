@@ -373,19 +373,46 @@ class ProductController extends Controller
                
                 case 'delete':
 
-                    // dd($request->all());
                     $idz = explode(',',$request->idz);    
                     Product::whereIn('_id',$idz)->delete();
                     ProductTranslation::whereIn('product_id',$idz)->delete();
-                    return response()->json(['message' => translate('Record Deleted')],200);
-
-                
-                    # code...
+                    return response()->json(['message' => translate('Records Deleted')],200);
                     break;
+
+                case 'active':
+
+                    $idz = explode(',',$request->idz);    
+                    $pp = Product::whereIn('_id',$idz)->get();
+                    foreach ($pp as $item) {
+                        $item->active = $request->value;
+                        $item->save();
+                    }
+                    return response()->json(['message' => translate('Activation Updated')],200);
+                    break;
+                
+                case 'featured':
+
+                        $idz = explode(',',$request->idz);    
+                        $pp = Product::whereIn('_id',$idz)->get();
+                        foreach ($pp as $item) {
+                            $item->featured = $request->value;
+                            $item->save();
+                        }
+                        return response()->json(['message' => translate('Featured Updated')],200);
+                        break;    
+
+                case 'status':
+                    $idz = explode(',',$request->idz);    
+                    $pp = Product::whereIn('_id',$idz)->get();
+                    foreach ($pp as $item) {
+                        $item->status = $request->value;
+                        $item->save();
+                    }
+                    return response()->json(['message' => translate('Status Updated')],200);
+                    break;            
                 
                 default:
-                    # code...
-                    break;
+                break;
             }
 
         }

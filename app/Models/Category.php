@@ -27,4 +27,8 @@ class Category extends Model {
       return $this->hasMany(Category::class,'parent');
     }
 
+    public function parent_category(){
+      return $this->hasOne(Category::class,'parent');
+    }
+
 }

@@ -25,7 +25,7 @@ class ColorController extends Controller
             $data = $data->where('name', 'like', '%'.$sort_search.'%');
         }
 
-        $data = $data->get();
+        $data = $data->paginate(5);
         return view('admin.colors.index', compact('data'));
 
     }

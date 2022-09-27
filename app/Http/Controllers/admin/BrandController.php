@@ -19,14 +19,14 @@ class BrandController extends Controller
      */
     public function index(Request $request)
     {
-        $sort_search =null;
+        
         $brands = Brand::orderBy('name', 'asc');
         if ($request->has('search') && $request->search != null){
             $sort_search = $request->search;
             $brands = $brands->where('name', 'like', '%'.$sort_search.'%');
         }
-        $brands = $brands->paginate(15);
-        return view('admin.brands.index', compact('brands', 'sort_search'));
+        $data = $brands->paginate(10);
+        return view('admin.brands.index', compact('data'));
     }
 
     /**
@@ -57,7 +57,11 @@ class BrandController extends Controller
             $brand->slug = Str::slug($request->name);
         }
         $brand->logo = $request->logo;
+
+        $brand->active = 1;
+        $brand->featured = 0;
         $brand->save();
+
         $brand_translation = BrandTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'brand_id' => $brand->id]);
         $brand_translation->name = $request->name;
         $brand_translation->save();
@@ -119,33 +123,71 @@ class BrandController extends Controller
         return back()->with('success',translate('Brand has been updated successfully'));
     }
 
-    /**
+
+
+
+     /*
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function bulk(Request $request)
     {
-        $brand = Brand::where('_id',$id)->first();
-        if (Product::where('brand_id', $brand->id)->count() > 0) {
-            return redirect()->back()->with('warning',translate('Brand can`t not be deleted.Products exist in this brand'));
-        }
-        if ($brand->brand_translations->count() > 0) {
-            foreach ($brand->brand_translations as $key => $brand_translation) {
-                $brand_translation->delete();
+
+
+        if($request->has('idz') && $request->has('action') && $request->has('value')){
+
+       
+          
+            switch ($request->action) {
+               
+                case 'delete':
+
+                    $idz = explode(',',$request->idz);
+                    $brands = Brand::whereIn('_id',$idz)->get();
+                 
+                    foreach ($brands as $brand) {
+
+                           foreach ($brand->translations as  $tr) {
+                            $tr->delete();
+                           }
+                        // dd($brand->translations->toArray());
+                        //    $brand->translations->delete();
+                           Brand::destroy($brand->id);
+                    }
+                    return response()->json(['message' => translate('Records Deleted')],200);
+                    break;
+
+
+                case 'active':
+
+                    $idz = explode(',',$request->idz);    
+                    $pp = Brand::whereIn('_id',$idz)->get();
+                    foreach ($pp as $item) {
+                        $item->active = $request->value;
+                        $item->save();
+                    }
+                    return response()->json(['message' => translate('Activation Updated')],200);
+                    break;
+                
+                case 'featured':
+
+                        $idz = explode(',',$request->idz);    
+                        $pp = Brand::whereIn('_id',$idz)->get();
+                        foreach ($pp as $item) {
+                            $item->featured = $request->value;
+                            $item->save();
+                        }
+                        return response()->json(['message' => translate('Featured Updated')],200);
+                        break;    
+
+                default:
+                break;
             }
+
+
         }
-        Brand::destroy($id);
-        return redirect()->route('admin.brands.index')->with('danger',translate('Brand has been deleted successfully'));
+
+
+        return response()->json(['message' => translate('Error Found')],400);   
     }
 
-    public function bulk_brand_delete(Request $request) {
-        if($request->id) {
-            foreach ($request->id as $brand_id) {
-                $this->destroy($brand_id);
-            }
-        }
-        return 1;
-    }
 }

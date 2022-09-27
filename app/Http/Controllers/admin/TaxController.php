@@ -25,7 +25,7 @@ class TaxController extends Controller
             $data = $data->where('name', 'like', '%'.$sort_search.'%');
         }
 
-        $data = $data->get();
+        $data = $data->paginate(10);
         return view('admin.taxes.index', compact('data'));
 
     }
