@@ -100,7 +100,7 @@ class BrandController extends Controller
     {
         $brand = Brand::findOrFail($id);
         $request->validate([
-            'slug'         => 'unique:brands,slug,'.$brand->id,
+            'slug' => 'unique:brands,slug,'.$brand->id.',_id',
         ]);
 
         if($request->lang == env("DEFAULT_LANGUAGE")){

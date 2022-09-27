@@ -19,6 +19,8 @@ Route::get('/register', [App\Http\Controllers\AuthController::class, 'register']
 Route::post('/login-submit', [App\Http\Controllers\AuthController::class, 'login_submit'])->name('login_submit');
 Route::post('/register-submit', [App\Http\Controllers\AuthController::class, 'register_submit'])->name('register_submit');
 
+Route::get('cache-cache', [App\Http\Controllers\Admin\SettingController::class,'clearCache'])->name('cache.clear');
+Route::post('/language', [App\Http\Controllers\Admin\LanguageController::class,'changeLanguage'])->name('language.change');
 Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
     Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
@@ -58,14 +60,13 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
     //country
     Route::resource('countries', App\Http\Controllers\Admin\CountryController::class);
     Route::post('/countries/status', [App\Http\Controllers\Admin\CountryController::class,'updateStatus'])->name('countries.status');
-    Route::get('country/store',function(){
-        // return Http::get('http://localhost/dynamic/fmbshop/api/v2/countries');
-        // $country = new Country;
-        // $country->code = $request->code;
-        // $country->name = $request->name;
-        // $country->status = $request->stauts;
-        // $country->save();
-    });
+
+    //languages
+    Route::get('/languages/destroy/{id}', [App\Http\Controllers\Admin\LanguageController::class,'destroy'])->name('languages.destroy');
+    Route::post('/languages/update_rtl_status', [App\Http\Controllers\Admin\LanguageController::class,'update_rtl_status'])->name('languages.update_rtl_status');
+    Route::post('/languages/key_value_store', [App\Http\Controllers\Admin\LanguageController::class,'key_value_store'])->name('languages.key_value_store');
+    Route::resource('/languages', App\Http\Controllers\Admin\LanguageController::class);
+
     //customer
     Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class);
     Route::get('customer/delete/{id}', [App\Http\Controllers\Admin\CustomerController::class,'destroy'])->name('customer.delete');
@@ -81,7 +82,9 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
     Route::post('/flash_deals/update_featured', [App\Http\Controllers\Admin\FlashDealController::class,'update_featured'])->name('flash_deals.update_featured');
     Route::post('/flash_deals/product_discount', [App\Http\Controllers\Admin\FlashDealController::class,'product_discount'])->name('flash_deals.product_discount');
     Route::post('/flash_deals/product_discount_edit', [App\Http\Controllers\Admin\FlashDealController::class,'product_discount_edit'])->name('flash_deals.product_discount_edit');
+
 });
+Route::post('/env_key_update', [App\Http\Controllers\Admin\SettingController::class,'env_key_update'])->name('env_key_update.update');
 
 Route::get('countries',[App\Http\Controllers\Admin\CountryController::class,'countryapi']);
 

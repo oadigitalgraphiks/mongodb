@@ -399,8 +399,7 @@
                     </div>
                 </div>
 
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion {{ subareActiveRoutes(['admin.general_setting.index','admin.countries.index','admin.countries.create','admin.countries.edit'])}}">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ subareActiveRoutes(['admin.general_setting.index','admin.countries.index','admin.countries.create','admin.countries.edit','admin.languages.index','admin.languages.create','admin.languages.edit'])}}">
                     <a class="menu-link"
                         href="javascript:void(0)">
                         <span class="menu-icon">
@@ -435,6 +434,14 @@
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title">{{translate("Countries")}}</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ areActiveRoutes(['admin.languages.index','admin.languages.create','admin.languages.edit'])}}" href="{{route("admin.languages.index")}}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{translate("Languages")}}</span>
                             </a>
                         </div>
                     </div>

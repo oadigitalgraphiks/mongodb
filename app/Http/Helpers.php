@@ -100,14 +100,3 @@ if (!function_exists('formatBytes')) {
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
 }
-
-if (!function_exists("flash")) {
-    function flash($message = null, $level = 'info')
-    {
-        Session::forget('flash_notification');
-        if (! is_null($message)) {
-            $message = Session::put('flash_notification',array($message,$level));
-            return $message;
-        }
-    }
-}

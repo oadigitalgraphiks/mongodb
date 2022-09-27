@@ -84,11 +84,11 @@
                                                 </div>
                                             </td>
                                             <td class="text-end">
-                                                <a href="{{ route('admin.brands.edit',$brand->id) }}" data-toggle="tooltip" title="{{ translate('Edit Brand') }}" class="btn btn-icon btn-bg-light  btn-color-primary btn-active-color-primary btn-sm me-1">
+                                                <a href="{{ route('admin.brands.edit',$brand->id) }}" data-toggle="tooltip" title="{{ translate('Edit Brand') }}" class="btn btn-icon btn-bg-light btn-color-primary btn-active-color-primary btn-sm me-1">
                                                     <i class="far fa-edit"></i>
                                                 </a>
 
-                                                <a href="javascript:void(0)" data-href="{{ route('admin.brands.destory', $brand->id) }}" data-toggle="tooltip" title="{{ translate('Delete Brand') }}" class="btn btn-icon btn-bg-light  btn-color-danger btn-active-color-danger btn-sm me-1 confirm-delete">
+                                                <a href="javascript:void(0)" data-href="{{ route('admin.brands.destory', $brand->id) }}" data-toggle="tooltip" title="{{ translate('Delete Brand') }}" class="btn btn-icon btn-bg-light btn-color-danger btn-active-color-danger btn-sm me-1 confirm-delete">
                                                     <i class="far fa-trash-alt"></i>
                                                 </a>
                                             </td>
