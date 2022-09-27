@@ -9,7 +9,7 @@ use App;
 class Brand extends Model {
 
     protected $connection = 'mongodb';
-    // protected $primaryKey = 'id';
+
     protected $collection = 'brands';
 
     protected $with = ['brand_translations'];

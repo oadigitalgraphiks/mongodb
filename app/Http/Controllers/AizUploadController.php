@@ -238,13 +238,11 @@ class AizUploadController extends Controller
         try{
             unlink(public_path().'/'.$upload->file_name);
             $upload->delete();
-            // flash(translate('File deleted successfully'))->success();
         }
         catch(\Exception $e){
             $upload->delete();
-            // flash(translate('File deleted successfully'))->success();
         }
-        return back();
+        return back()->with('success',translate('File deleted successfully'));
     }
 
     public function get_preview_files(Request $request){

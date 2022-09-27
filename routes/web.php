@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -22,14 +21,14 @@ Route::post('/register-submit', [App\Http\Controllers\AuthController::class, 're
 
 Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
-    Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
     Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+    Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
       //Products
       Route::get('products/delete', [App\Http\Controllers\Admin\ProductController::class, 'delete'])->name('products.delete');
-      
+
       Route::get('products/destroy/{id}', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('products.destroy');
-      
+
       Route::get('products/attribute_type',[App\Http\Controllers\Admin\ProductController::class, 'attribute_type'])->name('products.attribute_type');
 
       Route::resource('products',App\Http\Controllers\Admin\ProductController::class)->only(['index', 'store', 'edit', 'update','create']);
@@ -46,19 +45,27 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
 
       Route::resource('categories',App\Http\Controllers\Admin\CategoryController::class)->only(['index', 'store', 'edit', 'update','create']);
 
-
+        //   Attribute
+        Route::resource('attributes',App\Http\Controllers\Admin\AttributeController::class);
       //Units
       Route::get('units/delete', [App\Http\Controllers\Admin\UnitController::class, 'delete'])->name('units.delete');
       Route::get('units/destroy/{id}', [App\Http\Controllers\Admin\UnitController::class, 'destroy'])->name('units.destroy');
       Route::resource('units',App\Http\Controllers\Admin\UnitController::class)->only(['index', 'store', 'edit', 'update','create']);
 
-
-
     //settings
     Route::get('/general-setting', [App\Http\Controllers\Admin\SettingController::class, 'general_setting'])->name('general_setting.index');
     Route::post('/general-setting/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('setting.update');
-    // uploader
-
+    //country
+    Route::resource('countries', App\Http\Controllers\Admin\CountryController::class);
+    Route::post('/countries/status', [App\Http\Controllers\Admin\CountryController::class,'updateStatus'])->name('countries.status');
+    Route::get('country/store',function(){
+        // return Http::get('http://localhost/dynamic/fmbshop/api/v2/countries');
+        // $country = new Country;
+        // $country->code = $request->code;
+        // $country->name = $request->name;
+        // $country->status = $request->stauts;
+        // $country->save();
+    });
     //customer
     Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class);
     Route::get('customer/delete/{id}', [App\Http\Controllers\Admin\CustomerController::class,'destroy'])->name('customer.delete');
@@ -76,6 +83,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group (function() {
     Route::post('/flash_deals/product_discount_edit', [App\Http\Controllers\Admin\FlashDealController::class,'product_discount_edit'])->name('flash_deals.product_discount_edit');
 });
 
+Route::get('countries',[App\Http\Controllers\Admin\CountryController::class,'countryapi']);
 
 Route::any('/uploaded-files/file-info', [App\Http\Controllers\AizUploadController::class,'file_info'])->name('uploaded-files.info');
 Route::resource('uploaded-files', App\Http\Controllers\AizUploadController::class);
@@ -84,6 +92,7 @@ Route::post('/aiz-uploader/upload', [App\Http\Controllers\AizUploadController::c
 Route::get('/aiz-uploader/get_uploaded_files', [App\Http\Controllers\AizUploadController::class,'get_uploaded_files']);
 Route::post('/aiz-uploader/get_file_by_ids', [App\Http\Controllers\AizUploadController::class,'get_preview_files']);
 Route::get('/aiz-uploader/download/{id}', [App\Http\Controllers\AizUploadController::class,'attachment_download'])->name('download_attachment');
+Route::get('/uploaded-files/destroy/{id}', [App\Http\Controllers\AizUploadController::class,'destroy'])->name('uploaded-files.destroy');
 
 
 // Auth::routes();
